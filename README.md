@@ -1,4 +1,4 @@
-# NEBackup (es)
+# Lines manager (es)
 Plugin para GLPI
 
 
@@ -6,7 +6,7 @@ Plugin para GLPI
 Consulta https://github.com/jsamaniegog/linesmanager/wiki para mas información.
 
 
-# NEBackup (en)
+# Lines manager (en)
 GLPI plugin
 
 
