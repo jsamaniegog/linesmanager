@@ -1,0 +1,266 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-03-10 10:54+0100\n"
+"PO-Revision-Date: 2017-03-10 10:54+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_n:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: front/category.form.php:24 front/linegroup.form.php:24
+#: front/pickupgroup.form.php:24 front/range.form.php:24 inc/line.class.php:148
+msgid "No permission"
+msgstr ""
+
+#: front/category.form.php:61 front/line.form.php:73
+#: front/linegroup.form.php:61 front/pickupgroup.form.php:61
+#: front/range.form.php:93
+msgid "Error on save"
+msgstr ""
+
+#: front/line.form.php:79
+msgid "Please, manage the lines from the corresponding assets."
+msgstr ""
+
+#: hook.php:42
+msgid "Only receive calls"
+msgstr ""
+
+#: hook.php:43
+msgid "Internal calls within the same center"
+msgstr ""
+
+#: hook.php:44
+msgid "Internal calls within the company"
+msgstr ""
+
+#: hook.php:45
+msgid "External calls"
+msgstr ""
+
+#: hook.php:51
+msgid "All calls"
+msgstr ""
+
+#: hook.php:64
+msgid "Lines manager"
+msgstr ""
+
+#: inc/algorithm.class.php:41 inc/linegroup.class.php:52
+#, fuzzy
+msgid "Algorithm"
+msgid_plural "Algorithms"
+msgstr[0] ""
+"#-#-#-#-#  0extracted.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  1extracted.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+msgstr[1] "#-#-#-#-#  0extracted.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+
+#: inc/category.class.php:39
+msgid "Category name"
+msgstr ""
+
+#: inc/category.class.php:40 inc/line.class.php:88 inc/line.class.php:115
+msgid "Description"
+msgstr ""
+
+#: inc/category.class.php:51
+msgid "Category"
+msgid_plural "Categories"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/entity.class.php:36
+msgid "Entity"
+msgid_plural "Entities"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/entity.class.php:44 inc/line.class.php:226 setup.php:55
+msgid "Lines Manager"
+msgstr ""
+
+#: inc/line.class.php:74 inc/linegroup.class.php:40 inc/numplan.class.php:55
+#: inc/pickupgroup.class.php:40
+msgid "Number"
+msgstr ""
+
+#: inc/line.class.php:86
+msgid "Name"
+msgstr ""
+
+#: inc/line.class.php:87
+msgid "Surname"
+msgstr ""
+
+#: inc/line.class.php:89
+msgid "User ID"
+msgstr ""
+
+#: inc/line.class.php:90
+msgid "Login/Logout"
+msgstr ""
+
+#: inc/line.class.php:91
+msgid "Autoanswer"
+msgstr ""
+
+#: inc/line.class.php:92
+msgid "Lock callin"
+msgstr ""
+
+#: inc/line.class.php:93
+msgid "Lock callout"
+msgstr ""
+
+#: inc/line.class.php:94
+msgid "Forward timeout"
+msgstr ""
+
+#: inc/line.class.php:165 inc/line.class.php:193
+msgid "Line"
+msgid_plural "Lines"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/line.class.php:271
+msgid "New line"
+msgstr ""
+
+#: inc/line.class.php:375
+#, php-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/line.class.php:406
+msgid "Mandatory field: "
+msgstr ""
+
+#: inc/line.class.php:413
+msgid "Numeric field: "
+msgstr ""
+
+#: inc/linegroup.class.php:50
+msgid "Group name"
+msgstr ""
+
+#: inc/linegroup.class.php:72
+msgid "Line group"
+msgid_plural "Line groups"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/numplan.class.php:60 inc/range.class.php:51
+msgid "Range"
+msgid_plural "Ranges"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/pickupgroup.class.php:50
+msgid "Pickup group name"
+msgstr ""
+
+#: inc/pickupgroup.class.php:61
+msgid "Pickup group"
+msgid_plural "Pickup groups"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/profile.class.php:86
+msgid "Manage lines"
+msgstr ""
+
+#: inc/range.class.php:39
+msgid "Range from"
+msgstr ""
+
+#: inc/range.class.php:40 inc/range.class.php:149
+msgid "To"
+msgstr ""
+
+#: inc/range.class.php:56
+msgid "The vlaues must be numbers."
+msgstr ""
+
+#: inc/range.class.php:59
+msgid "Number 'from' must be less or equal than 'to'."
+msgstr ""
+
+#: inc/range.class.php:62
+msgid "Numbers must be greater than 0."
+msgstr ""
+
+#: inc/range.class.php:82
+msgid "The specified range is already in use by: "
+msgstr ""
+
+#: inc/range.class.php:124
+msgid "Warning"
+msgstr ""
+
+#: inc/range.class.php:126
+msgid "Be careful, when you save or delete ranges the lines can be deleted."
+msgstr ""
+
+#: inc/range.class.php:144
+msgid "Assigned ranges"
+msgstr ""
+
+#: inc/range.class.php:148
+msgid "From"
+msgstr ""
+
+#: inc/range.class.php:151
+msgid ""
+"Are you sure you want to delete the selected records ?, all lines with these "
+"numbers will be deleted."
+msgstr ""
+
+#: inc/utilform.class.php:237
+msgid "Remove"
+msgstr ""
+
+#: inc/utilform.class.php:237
+msgid "Are you sure you want to remove the selected records?."
+msgstr ""
+
+#: inc/utilform.class.php:240
+msgid "Delete permanently"
+msgstr ""
+
+#: inc/utilform.class.php:240
+msgid "Are you sure you want to delete the selected records?."
+msgstr ""
+
+#: inc/utilform.class.php:258
+msgid "Yes"
+msgstr ""
+
+#: inc/utilform.class.php:258
+msgid "No"
+msgstr ""
+
+#: inc/utilform.class.php:277
+msgid "not associated records found."
+msgstr ""
+
+#: inc/utilform.class.php:439
+msgid "Click to edit item"
+msgstr ""
+
+#: setup.php:69
+msgid "This plugin requires GLPI >= 0.90"
+msgstr ""
+
+#: setup.php:90
+msgid "Installed / not configured"
+msgstr ""
