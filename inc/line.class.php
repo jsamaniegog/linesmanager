@@ -138,13 +138,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'autoanswerpass' => array('name' => __("Autoanswer Password", "linesmanager"), 'type' => 'numeric'),
             'lockcallin' => array('name' => __("Lock callin", "linesmanager"), 'type' => 'bool'),
             'lockcallout' => array('name' => __("Lock callout", "linesmanager"), 'type' => 'bool'),
-            'forwardtimeout' => array(
-                'name' => __("Forward timeout", "linesmanager"),
-                'type' => 'specific',
-                'specifictype' => 'time',
-                'minutes' => false,
-                'hours' => false
-            ),
             'linegroup' => array(
                 'name' => PluginLinesmanagerLinegroup::getTypeName(),
                 'type' => 'dropdown',
@@ -182,10 +175,17 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerForward,
                     'field_id' => 'id',
-                    'field_name' => array('numplan', 'category'),
-                    'field_tooltip' => array('numplan', 'category'),
+                    'field_name' => array('numplan', 'category', 'other'),
+                    'field_tooltip' => array('numplan', 'category', 'other'),
                     'string_format' => array('category' => PluginLinesmanagerCategory::getTypeName() . ' %s')
                 )
+            ),
+            'forwardtimeout' => array(
+                'name' => __("Forward timeout", "linesmanager"),
+                'type' => 'specific',
+                'specifictype' => 'time',
+                'minutes' => false,
+                'hours' => false
             ),
             'timeslot' => array(
                 'name' => PluginLinesmanagerTimeslot::getTypeName(),
@@ -295,17 +295,17 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $i++;
                 continue;
             }
-            
+
             // first all values that match with tab array
             $tab[$i] = $attribute;
-            
+
             if ($prefix != "") {
                 $tab[$i]['name'] = $prefix . " - " . $tab[$i]['name'];
             }
 
             // for dropdowns
             if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
-                
+
                 // table to get data
                 $tab[$i]['table'] = $attribute['foreingkey']['item']::getTable();
 
@@ -324,8 +324,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $tab[$i]['condition'] = (isset($attribute['foreingkey']['condition'])) ?
                     $attribute['foreingkey']['condition'] :
                     "";
-                
-                
             } else {
                 // normal fields
                 $tab[$i]['table'] = $this->getTable();
@@ -553,6 +551,87 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
         $result = $DB->query($query);
         return $result->fetch_assoc()['count'];
+    }
+
+    /**
+     * Actions done after the ADD of the item in the database
+     *
+     * @return nothing
+     * */
+    function post_addItem() {
+        $this->updateContactInformation();
+    }
+
+    /**
+     * Actions done after the UPDATE of the item in the database
+     *
+     * @param $history store changes history ? (default 1)
+     *
+     * @return nothing
+     * */
+    function post_updateItem($history = 1) {
+        $this->updateContactInformation();
+    }
+
+    /**
+     * This function update the contact information of the itemtype liked.
+     */
+    function updateContactInformation() {
+        global $DB;
+        
+        if (isset($this->fields['itemtype'])
+            and in_array($this->fields['itemtype'], PluginLinesmanagerUtilsetup::getAssets())
+        ) {
+            $itemtype = $this->fields['itemtype'];
+            
+            $query = "SELECT description, n.number, lg_n.number as linegroup "
+                . "FROM glpi_plugin_linesmanager_lines l "
+                . "LEFT JOIN glpi_plugin_linesmanager_numplans n ON l.numplan = n.id "
+                . "LEFT JOIN glpi_plugin_linesmanager_linegroups lg ON l.linegroup = lg.id "
+                . "LEFT JOIN glpi_plugin_linesmanager_numplans lg_n ON lg.numplan = lg_n.id "
+                . "WHERE itemtype='$itemtype' AND items_id=" . $this->fields['items_id'];
+            
+            $contact     = "";
+            $contact_num = "";
+            $rows = $DB->request($query);
+            $has_number = false;
+            foreach ($rows as $data) {
+                if ($has_number === false) {
+                    $has_number = true;
+                } else {
+                    // separator between contacts and contacts numbers
+                    $contact     .= ",";
+                    $contact_num .= ",";
+                }
+                
+                $contact     .= $data['description'];
+                $contact_num .= $data['number'];
+            }
+            
+            $has_linegroup = false;
+            foreach ($rows as $data) {
+                if (is_numeric($data['linegroup'])) {
+                    if ($has_linegroup === false) {
+                        // separator between number and linegroup
+                        $contact_num .= " / ";
+                        $has_linegroup = true;
+                    } else {
+                        // separator between linegroups
+                        $contact_num .= ",";
+                    }
+                    
+                    $contact_num .= $data['linegroup'];
+                }
+            }
+            
+            if ($contact != "" and $contact_num != "") {
+                $query  = "UPDATE " . $itemtype::getTable() . " ";
+                $query .= "SET contact='$contact', contact_num='$contact_num' ";
+                $query .= "WHERE id=". $this->fields['items_id'];
+
+                $DB->query($query);
+            }
+        }
     }
 
 }

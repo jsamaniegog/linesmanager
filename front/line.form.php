@@ -49,11 +49,9 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
                 foreach ($_POST['line'] as $line_id) {
                     $result = $line->delete(array('id' => $line_id));
                 }
-                HTML::back();
             }
 
             $result = $line->delete($_POST);
-            Html::redirect(PluginLinesmanagerLine::getFormURL());
         }
 
         // disconnect line from an item

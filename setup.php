@@ -25,14 +25,17 @@
 function plugin_init_linesmanager() {
     global $PLUGIN_HOOKS, $CFG_GLPI;
 
+    include_once("inc/utilsetup.class.php");
+    
     //Plugin::registerClass('PluginLinesmanagerConfig', array('addtabon' => 'Config'));
     Plugin::registerClass('PluginLinesmanagerEntity', array('addtabon' => array('Entity')));
     Plugin::registerClass('PluginLinesmanagerProfile', array('addtabon' => array('Profile')));
     Plugin::registerClass('PluginLinesmanagerLine', array('addtabon' => PluginLinesmanagerUtilsetup::getAssets()));
     Plugin::registerClass('PluginLinesmanagerAlgorithm');
     Plugin::registerClass('PluginLinesmanagerUtilform');
+    //Plugin::registerClass('PluginLinesmanagerUtilsetup');
 
-    if (Session::haveRight('plugin_linesmanager_line', UPDATE)) {
+    /*if (Session::haveRight('plugin_linesmanager_line', UPDATE)) {
         //$PLUGIN_HOOKS['config_page']['linesmanager'] = 'front/config.php';
         // añade menú. ver uso de CommonGLPI::getMenuContent()
         $PLUGIN_HOOKS['menu_toadd']['linesmanager'] = array(
@@ -40,11 +43,13 @@ function plugin_init_linesmanager() {
                 
             )
         );
-    }
+    }*/
 
     $PLUGIN_HOOKS['post_show_item']['linesmanager'] = array('PluginLinesmanagerLine', 'post_show_item');
 
     $PLUGIN_HOOKS['csrf_compliant']['linesmanager'] = true;
+    
+    $PLUGIN_HOOKS['webservices']['linesmanager'] = 'plugin_linesmanager_registerMethods';
 }
 
 /**

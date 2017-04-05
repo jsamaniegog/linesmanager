@@ -81,7 +81,7 @@ if (isset($_POST['update']) or isset($_POST['add']) or isset($_POST['purge'])) {
             if (isset($_POST['id'])) {
                 $numplan->deleteByCriteria(array('range' => $_POST['id']));
                 $range->delete($_POST);
-            } {
+            } else {
                 // $_POST['range'] must contains array of ids
                 foreach ($_POST['range'] as $range_id) {
                     $numplan->deleteByCriteria(array('range' => $range_id));

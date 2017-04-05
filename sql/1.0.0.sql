@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_forwards` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     `numplan` integer default NULL,
     `category` integer default NULL,
-    UNIQUE(numplan,category)
+    `other` VARCHAR(100) default NULL
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_timeperiods` ( 

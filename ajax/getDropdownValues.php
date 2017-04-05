@@ -26,7 +26,7 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
-$datas = PluginLinesmanagerUtilform::getDatasToLoadAjaxDropdown($_POST);
+$datas = PluginLinesmanagerUtilform::getDatasToLoadAjaxDropdown($_REQUEST);
 
 $ret['results'] = $datas;
 $ret['count'] = count($datas);

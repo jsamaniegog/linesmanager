@@ -24,10 +24,10 @@
  */
 class PluginLinesmanagerUtilsetup {
 
-    // Type reservation : https://forge.indepnet.net/projects/plugins/wiki/PluginTypesReservation
+    // Type reservation : http://forge.indepnet.net/projects/plugins/wiki/PluginTypesReservation
     // Reserved range   : [10126, 10135]
-    const RESERVED_TYPE_RANGE_MIN = 5000;
-    const RESERVED_TYPE_RANGE_MAX = 5050;
+    const RESERVED_TYPE_RANGE_MIN = 10141;
+    const RESERVED_TYPE_RANGE_MAX = 10165;
 
     /**
      * Return an array with the assets where include the plugin.

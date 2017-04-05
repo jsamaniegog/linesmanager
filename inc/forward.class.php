@@ -49,14 +49,15 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
             ),
             'category' => array(
                 'name' => PluginLinesmanagerCategory::getTypeName(),
-                'default' => 4,
+                //'default' => 4,
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerCategory,
                     'field_id' => 'id',
                     'field_name' => 'name',
                     'field_tooltip' => array('name', 'description')
                 )
-            )
+            ),
+            'other' => array('name' => __("Others", "linesmanager")),
         );
     }
 

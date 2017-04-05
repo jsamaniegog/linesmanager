@@ -769,7 +769,7 @@ class PluginLinesmanagerUtilform {
         
         $query .= "FROM " . $fk::getTable() . " ";
         
-        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText']) . ")";
+        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText']) . ") ";
         
         // filter used values: need belongsTo in foreing key item
         // the value asigned is not filtered
@@ -799,6 +799,12 @@ class PluginLinesmanagerUtilform {
 
         if ($attribute['foreingkey']['condition'] != "") {
             $query .= "AND " . $attribute['foreingkey']['condition'] . " ";
+        }
+        
+        if (isset($attribute['foreingkey']['orderby'])) {
+            $query .= "ORDER BY " . $attribute['foreingkey']['orderby'] . " ";
+        } else {
+            $query .= "ORDER BY $field_name_q ";
         }
         
         $query .= "LIMIT " . intval(($attribute['page'] - 1) * $attribute['page_limit']) . "," . $attribute['page_limit'];
