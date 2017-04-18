@@ -73,7 +73,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // only show numbers assigned to active entities
         $this->condition_to_load_numplan = "`range` in (SELECT id "
             . "FROM " . PluginLinesmanagerRange::getTable() . " "
-            . "WHERE entities_id in (" . implode(",", $_SESSION['glpiactiveentities']) . "))";
+            . "WHERE entities_id in (" . implode(",", $_SESSION['glpiactiveentities']) . ") AND only_pickup=0)";
 
         // form width 2 columns
         $this->view_options = array(
@@ -122,7 +122,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'category' => array(
                 'name' => PluginLinesmanagerCategory::getTypeName(),
                 'mandatory' => true,
-                'default' => 4,
+                //'default' => 4,
                 'type' => 'dropdown',
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerCategory,
@@ -198,13 +198,14 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'string_format' => array('category' => PluginLinesmanagerCategory::getTypeName() . ' %s')
                 )
             ),
+            'vip' => array('name' => "V.I.P.", 'type' => 'bool'),
             'ddiin' => array(
                 'name' => __("Input DDI", "linesmanager"),
                 'type' => 'dropdown',
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerDdi,
                     'field_id' => 'id',
-                    'field_name' => 'numplan',
+                    'field_name' => array('numplan', 'other'),
                     'field_tooltip' => array('name', 'description')
                 )
             ),
@@ -214,7 +215,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerDdi,
                     'field_id' => 'id',
-                    'field_name' => 'numplan',
+                    'field_name' => array('numplan', 'other'),
                     'field_tooltip' => array('name', 'description')
                 )
             )
@@ -348,12 +349,22 @@ class PluginLinesmanagerLine extends CommonDropdown {
      */
     function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
         $array_ret = array();
+
         if ($item->getID() > -1) {
             if (self::canView()) {
-                $array_ret[0] = self::createTabEntry(PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()));
+                $count = null;
+                if ($_SESSION['glpishow_count_on_tabs']) {
+                    $count = self::count("itemtype='" . get_class($item) . "' AND items_id=" . $item->getID());
+                }
+                $array_ret[0] = self::createTabEntry(PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()), $count);
             }
         }
+
         return $array_ret;
+    }
+
+    static function countForItem($id) {
+        return 10;
     }
 
     /**
@@ -578,20 +589,20 @@ class PluginLinesmanagerLine extends CommonDropdown {
      */
     function updateContactInformation() {
         global $DB;
-        
+
         if (isset($this->fields['itemtype'])
             and in_array($this->fields['itemtype'], PluginLinesmanagerUtilsetup::getAssets())
         ) {
             $itemtype = $this->fields['itemtype'];
-            
+
             $query = "SELECT description, n.number, lg_n.number as linegroup "
                 . "FROM glpi_plugin_linesmanager_lines l "
                 . "LEFT JOIN glpi_plugin_linesmanager_numplans n ON l.numplan = n.id "
                 . "LEFT JOIN glpi_plugin_linesmanager_linegroups lg ON l.linegroup = lg.id "
                 . "LEFT JOIN glpi_plugin_linesmanager_numplans lg_n ON lg.numplan = lg_n.id "
                 . "WHERE itemtype='$itemtype' AND items_id=" . $this->fields['items_id'];
-            
-            $contact     = "";
+
+            $contact = "";
             $contact_num = "";
             $rows = $DB->request($query);
             $has_number = false;
@@ -600,14 +611,14 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     $has_number = true;
                 } else {
                     // separator between contacts and contacts numbers
-                    $contact     .= ",";
+                    $contact .= ",";
                     $contact_num .= ",";
                 }
-                
-                $contact     .= $data['description'];
+
+                $contact .= $data['description'];
                 $contact_num .= $data['number'];
             }
-            
+
             $has_linegroup = false;
             foreach ($rows as $data) {
                 if (is_numeric($data['linegroup'])) {
@@ -619,15 +630,23 @@ class PluginLinesmanagerLine extends CommonDropdown {
                         // separator between linegroups
                         $contact_num .= ",";
                     }
-                    
+
                     $contact_num .= $data['linegroup'];
                 }
             }
-            
+
+            // hack for simcard plugin
+            if ($itemtype == 'PluginSimcardSimcard') {
+                $sc = new PluginSimcardSimcard_Item();
+                $sc->getFromDBByQuery("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id']);
+                $itemtype = $sc->fields['itemtype'];
+                $this->fields['items_id'] = $sc->fields['items_id'];
+            }
+
             if ($contact != "" and $contact_num != "") {
-                $query  = "UPDATE " . $itemtype::getTable() . " ";
+                $query = "UPDATE " . $itemtype::getTable() . " ";
                 $query .= "SET contact='$contact', contact_num='$contact_num' ";
-                $query .= "WHERE id=". $this->fields['items_id'];
+                $query .= "WHERE id=" . $this->fields['items_id'];
 
                 $DB->query($query);
             }

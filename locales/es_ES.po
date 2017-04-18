@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-03-28 14:43+0200\n"
-"PO-Revision-Date: 2017-03-28 14:46+0200\n"
+"POT-Creation-Date: 2017-04-17 10:49+0200\n"
+"PO-Revision-Date: 2017-04-17 10:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -19,8 +19,8 @@ msgstr ""
 #: front/extensionmobility.form.php:24 front/forward.form.php:24
 #: front/linegroup.form.php:24 front/numplan.form.php:23
 #: front/pickupgroup.form.php:24 front/range.form.php:24
-#: front/timeperiod.form.php:24 front/timeslot.form.php:24 import.php:15
-#: inc/line.class.php:244
+#: front/timeperiod.form.php:24 front/timeslot.form.php:24
+#: inc/line.class.php:245
 msgid "No permission"
 msgstr "Permiso denegado"
 
@@ -64,10 +64,6 @@ msgstr "Turno de mañana"
 msgid "8h-15h, Mon-Fri, Cat. 6"
 msgstr "8h-15h, Lun-Vie, Cat. 6"
 
-#: hook.php:101
-msgid "Lines manager"
-msgstr "Gestor de líneas"
-
 #: inc/algorithm.class.php:41 inc/linegroup.class.php:56
 msgid "Algorithm"
 msgid_plural "Algorithms"
@@ -90,7 +86,8 @@ msgid_plural "Categories"
 msgstr[0] "Categoría"
 msgstr[1] "Categorías"
 
-#: inc/ddi.class.php:39 inc/line.class.php:118
+#: inc/ddi.class.php:39 inc/line.class.php:118 inc/range.class.php:39
+#: inc/range.class.php:155
 msgid "Name"
 msgstr "Nombre"
 
@@ -99,6 +96,10 @@ msgstr "Nombre"
 #: inc/pickupgroup.class.php:40
 msgid "Number"
 msgstr "Número"
+
+#: inc/ddi.class.php:53 inc/forward.class.php:61
+msgid "Others"
+msgstr "Otros"
 
 #: inc/ddi.class.php:64
 msgid "DDI"
@@ -130,11 +131,7 @@ msgid_plural "Extension mobilities"
 msgstr[0] "Extension mobility"
 msgstr[1] "Extension mobility"
 
-#: inc/forward.class.php:60
-msgid "Others"
-msgstr "Otros"
-
-#: inc/forward.class.php:71
+#: inc/forward.class.php:72
 msgid "Forward"
 msgid_plural "Forwards"
 msgstr[0] "Desvío"
@@ -168,33 +165,33 @@ msgstr "Bloqueo llamadas entrantes"
 msgid "Lock callout"
 msgstr "Bloqueo llamadas salientes"
 
-#: inc/line.class.php:142
+#: inc/line.class.php:184
 msgid "Forward timeout"
 msgstr "Tiempo de espera para desviar"
 
-#: inc/line.class.php:202
+#: inc/line.class.php:203
 msgid "Input DDI"
 msgstr "DDI de entrada"
 
-#: inc/line.class.php:212
+#: inc/line.class.php:213
 msgid "Output DDI"
 msgstr "DDI de salida"
 
-#: inc/line.class.php:261 inc/line.class.php:289
+#: inc/line.class.php:262 inc/line.class.php:290
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:404
+#: inc/line.class.php:403
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:509
+#: inc/line.class.php:508
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:516
+#: inc/line.class.php:515
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
@@ -208,7 +205,7 @@ msgid_plural "Line groups"
 msgstr[0] "Grupo de salto"
 msgstr[1] "Grupos de salto"
 
-#: inc/numplan.class.php:64 inc/range.class.php:51
+#: inc/numplan.class.php:64 inc/range.class.php:53
 msgid "Range"
 msgid_plural "Ranges"
 msgstr[0] "Rango"
@@ -228,48 +225,52 @@ msgstr[1] "Grupos de captura"
 msgid "Manage lines"
 msgstr "Administrar líneas"
 
-#: inc/range.class.php:39
+#: inc/range.class.php:40
 msgid "Range from"
 msgstr "Rango desde"
 
-#: inc/range.class.php:40 inc/range.class.php:149
+#: inc/range.class.php:41 inc/range.class.php:157
 msgid "To"
 msgstr "Hasta"
 
-#: inc/range.class.php:56
+#: inc/range.class.php:42
+msgid "Only pickup groups"
+msgstr "Solo grupos de captura"
+
+#: inc/range.class.php:58
 msgid "The vlaues must be numbers."
 msgstr "Los valores deben ser números."
 
-#: inc/range.class.php:59
+#: inc/range.class.php:61
 msgid "Number 'from' must be less or equal than 'to'."
 msgstr "El número 'desde' debe ser menor o igual que 'hasta'."
 
-#: inc/range.class.php:62
+#: inc/range.class.php:64
 msgid "Numbers must be greater than 0."
 msgstr "Los números deben ser mayores que 0."
 
-#: inc/range.class.php:82
+#: inc/range.class.php:89
 msgid "The specified range is already in use by: "
 msgstr "El rango especificado ya está en uso por: "
 
-#: inc/range.class.php:124
+#: inc/range.class.php:131
 msgid "Warning"
 msgstr "Alerta"
 
-#: inc/range.class.php:126
+#: inc/range.class.php:133
 msgid "Be careful, when you save or delete ranges the lines can be deleted."
 msgstr ""
 "Tenga cuidado, al guardar o borrar rangos las líneas pueden ser eliminadas."
 
-#: inc/range.class.php:144
+#: inc/range.class.php:151
 msgid "Assigned ranges"
 msgstr "Rangos asignados"
 
-#: inc/range.class.php:148
+#: inc/range.class.php:156
 msgid "From"
 msgstr "Desde"
 
-#: inc/range.class.php:151
+#: inc/range.class.php:159
 msgid ""
 "Are you sure you want to delete the selected records ?, all lines with these "
 "numbers will be deleted."
@@ -391,6 +392,9 @@ msgstr "Este complemento requiere GLPI >= 0.90"
 #: setup.php:95
 msgid "Installed / not configured"
 msgstr "Instalado / no configurado"
+
+#~ msgid "Lines manager"
+#~ msgstr "Gestor de líneas"
 
 #~ msgid "Click to edit item"
 #~ msgstr "Pulsa aquí para editar el elemento"

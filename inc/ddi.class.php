@@ -40,7 +40,7 @@ class PluginLinesmanagerDdi extends PluginLinesmanagerLine {
             'description' => array('name' => __("Description", "linesmanager")),
             'numplan' => array('name' => __("Number", "linesmanager"),
                 'add' => false,
-                'mandatory' => true,
+                //'mandatory' => true,
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerNumplan,
                     'condition' => $this->condition_to_load_numplan,
@@ -50,7 +50,7 @@ class PluginLinesmanagerDdi extends PluginLinesmanagerLine {
                     'field_tooltip' => 'number'
                 )
             ),
-            
+            'other' => array('name' => __("Others", "linesmanager"))
         );
     }
 

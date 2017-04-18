@@ -52,11 +52,11 @@ class PluginLinesmanagerCategory extends PluginLinesmanagerLine {
         return _n('Category', 'Categories', $nb, 'linesmanager');
     }
     
-    static function canPurge() {
+    /*static function canPurge() {
         return false;
-    }
+    }*/
     
-    static function canCreate() {
+    /*static function canCreate() {
         return false;
-    }
+    }*/
 }

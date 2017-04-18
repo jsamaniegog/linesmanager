@@ -34,6 +34,8 @@ class PluginLinesmanagerPickupgroup extends PluginLinesmanagerLine {
     function __construct() {
         parent::__construct();
 
+        $condition_to_load_numplan = str_replace("only_pickup=0", "only_pickup=1", $this->condition_to_load_numplan);
+        
         $this->attributes = array(
             'id' => array('name' => 'id', 'hidden' => true),
             'numplan' => array(
@@ -41,8 +43,8 @@ class PluginLinesmanagerPickupgroup extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'foreingkey' => array(
                     'item' => PluginLinesmanagerNumplan,
-                    'condition' => $this->condition_to_load_numplan,
-                    //'filterUsedValues' => true,
+                    'condition' => $condition_to_load_numplan,
+                    'filterUsedValues' => true,
                     'field_id' => 'id',
                     'field_name' => 'number',
                     'field_tooltip' => 'number'

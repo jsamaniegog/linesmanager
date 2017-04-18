@@ -23,8 +23,10 @@
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_ranges` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     `entities_id` int(11) NOT NULL default 0, 
+    `name` varchar(100) NOT NULL default '',
     `min_number` int(11) NOT NULL,
-    `max_number` int(11) NOT NULL
+    `max_number` int(11) NOT NULL,
+    `only_pickup` tinyint(1) default '0'
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ALTER TABLE `glpi_plugin_linesmanager_ranges` ADD UNIQUE(`min_number`, `max_number`);
 ALTER TABLE `glpi_plugin_linesmanager_ranges` ADD UNIQUE(`min_number`);
@@ -59,12 +61,14 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_lines` (
     `forwardtimeout` time default null,
     `timeslot` integer default null,
     `ddiin` integer default NULL,
-    `ddiout` integer default NULL
+    `ddiout` integer default NULL,
+    `vip` tinyint(1) default '0'
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_categories` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
-    `name` ENUM('0','1','2','3','4','5','6','7','8','9') UNIQUE NOT NULL, 
+    /*`name` ENUM('0','1','2','3','4','5','6','7','8','9') UNIQUE NOT NULL, */
+    `name` varchar(100) NOT NULL default '',
     `description` VARCHAR(200) NOT NULL
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -129,5 +133,6 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_ddis` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     `name` varchar(200) NOT NULL default '',
     `description` varchar(200) default '',
-    `numplan` integer NOT NULL
+    `numplan` integer NOT NULL,
+    `other` VARCHAR(100) default NULL
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

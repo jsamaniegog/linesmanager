@@ -687,9 +687,9 @@ class PluginLinesmanagerUtilform {
                 "id" => "check_" . $name,
                 "checked" => $checked
             ));
-            echo "<label";
-            echo "title='" . __("This check box filter used values if it is checked.", "linesmanager");
-            echo "' for='check_" . $name . "'>&nbsp;" . __("Filter used values", "linesmanager");
+            echo "<label ";
+            echo "title='" . __("This check box filter used values if it is checked.", "linesmanager") . "' ";
+            echo "for='check_" . $name . "'>&nbsp;" . __("Filter used values", "linesmanager");
             echo "</label></div>";
             echo Html::scriptBlock('$("#check_' . $name.'").change(function() {
                 $.ajax({
@@ -764,20 +764,36 @@ class PluginLinesmanagerUtilform {
 
         $field_name_q = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_name);
         $field_id_q = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_id);
-
-        $query = "SELECT $field_id_q, $field_name_q ";
+        
+        $field_name_qt = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_name, $fk::getTable());
+        $field_id_qt = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_id, $fk::getTable());
+        
+        $query = "SELECT $field_id_qt, $field_name_qt ";
         
         $query .= "FROM " . $fk::getTable() . " ";
         
-        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText']) . ") ";
+        $names = (is_array($attribute['foreingkey']['field_name'])) ?
+            $attribute['foreingkey']['field_name'] :
+            array($attribute['foreingkey']['field_name']) ;
+        foreach ($names as $name) {
+            if (PluginLinesmanagerUtilform::isForeingkey($fk->attributes[$name])) {
+                $fk2 = $fk->attributes[$name]['foreingkey']['item'];
+                $query .= "LEFT JOIN " . $fk2::getTable() . " ON " . $fk2::getTable() . ".id = " . $fk::getTable() . "." . $name . " ";
+            }
+        }
+        
+        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText'], $fk) . ") ";
         
         // filter used values: need belongsTo in foreing key item
         // the value asigned is not filtered
-        if ( (isset($attribute['foreingkey']['filterUsedValues']) 
-                and (bool)$attribute['foreingkey']['filterUsedValues'] === true
+        if ((isset($attribute['foreingkey']['filterUsedValues']) 
+                and $attribute['foreingkey']['filterUsedValues'] !== "false" )
+            and
+            ( (isset($attribute['foreingkey']['filterUsedValues']) 
+                and $attribute['foreingkey']['filterUsedValues'] === "true"
                 and !isset($attribute['foreingkey']['showFilterUsedValuesCheckbox']) )
             or (isset($_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$attribute['field']]) 
-                and $_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$attribute['field']] === true)
+                and $_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$attribute['field']] === true) )
         ) {
             
             $attribute['foreingkey']['condition'] .= ($attribute['foreingkey']['condition'] != "") ? " AND " : " ";
@@ -804,7 +820,7 @@ class PluginLinesmanagerUtilform {
         if (isset($attribute['foreingkey']['orderby'])) {
             $query .= "ORDER BY " . $attribute['foreingkey']['orderby'] . " ";
         } else {
-            $query .= "ORDER BY $field_name_q ";
+            $query .= "ORDER BY     $field_name_qt ";
         }
         
         $query .= "LIMIT " . intval(($attribute['page'] - 1) * $attribute['page_limit']) . "," . $attribute['page_limit'];
@@ -832,30 +848,50 @@ class PluginLinesmanagerUtilform {
     /**
      * Return the fields with SQL comas.
      * @param string|array $fields
+     * @param string $table_name Table name for prefix
      * @return string
      */
-    static function getFieldsInQuotationMarksForSql($fields) {
+    static function getFieldsInQuotationMarksForSql($fields, $table_name = "") {
+        
+        if ($table_name != "") {
+            $table_name .= ".";
+        }
+        
         $string = "";
         if (is_array($fields)) {
             foreach ($fields as $key => $value) {
-                $string .= ($string == "") ? "`$value`" : ",`$value`";
+                $string .= ($string == "") ? "$table_name`$value`" : ",$table_name`$value`";
             }
         } else {
-            $string = "`$fields`";
+            $string = "$table_name`$fields`";
         }
 
         return $string;
     }
 
-    static function getWhereConcatStringForLike($fields_coma_separated, $search_text) {
+    static function getWhereConcatStringForLike($fields_coma_separated, $search_text, $item) {
         $string = "";
 
         $fields = explode(",", $fields_coma_separated);
         $and = false;
         foreach ($fields as $key => $value) {
-            if ($and)
-                $string .= " AND";
-            $string .= " ($value like '$search_text%') OR ($value is null) ";
+            
+            if ($and) {
+                $string .= " OR";
+            }
+            
+            $value_no_quoted = str_replace("`", "", $value);
+            $value = $item::getTable() . "." . $value;
+            if ($search_text == "") {
+                $ornull = "OR ($value is null)";
+            }
+            
+            if (PluginLinesmanagerUtilform::isForeingkey($item->attributes[$value_no_quoted])) {
+                $item2 = $item->attributes[$value_no_quoted]['foreingkey']['item'];
+                $value = $item2::getTable() . "." . $item->attributes[$value_no_quoted]['foreingkey']['field_name'];
+            }
+            
+            $string .= " ($value like '$search_text%') $ornull ";
             $and = true;
         }
 

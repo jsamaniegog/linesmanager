@@ -43,6 +43,7 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
                     'condition' => $this->condition_to_load_numplan,
                     'filterUsedValues' => true,
                     'field_id' => 'id',
+                    'filterUsedValues' => false,
                     'field_name' => 'number',
                     'field_tooltip' => 'number'
                 )

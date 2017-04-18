@@ -96,13 +96,13 @@ function plugin_linesmanager_install() {
     }
 
     // register a cron for task execution
-    $res = CronTask::Register(
+    /*$res = CronTask::Register(
             "PluginLinesmanagerCron", "linesmanager", 86400, array(
             'comment' => __('Lines manager', 'linesmanager'),
             'mode' => CronTask::MODE_EXTERNAL
             )
-    );
-
+    );*/
+    //CronTask::Unregister("Linesmanager");
     return true;
 }
 

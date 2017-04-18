@@ -36,8 +36,10 @@ class PluginLinesmanagerRange extends CommonDBTM {
 
         $this->attributes = array(
             'entities_id' => array('name' => 'entities_id', 'hidden' => true, 'type' => 'number'),
+            'name' => array('name' => __("Name", "linesmanager"), 'mandatory' => true, 'type' => 'string'),
             'min_number' => array('name' => __("Range from", "linesmanager"), 'mandatory' => true, 'type' => 'number'),
-            'max_number' => array('name' => __("To", "linesmanager"), 'mandatory' => true, 'type' => 'number')
+            'max_number' => array('name' => __("To", "linesmanager"), 'mandatory' => true, 'type' => 'number'),
+            'only_pickup' => array('name' => __("Only pickup groups", "linesmanager"), 'mandatory' => true, 'type' => 'bool')
         );
     }
     
@@ -62,14 +64,19 @@ class PluginLinesmanagerRange extends CommonDBTM {
             return __("Numbers must be greater than 0.", "linesmanager");
         }
 
-        $ranges = $this->find(
-            "id != " . $arguments['id'] 
-            . " AND ((min_number <= " . $arguments['min_number'] . " "
+        $condition = "((min_number <= " . $arguments['min_number'] . " "
             . " AND max_number >= " . $arguments['min_number'] . ") "
             . " OR (min_number <= " . $arguments['max_number'] . " "
             . " AND max_number >= " . $arguments['max_number'] . ") "
             . " OR (min_number >= " . $arguments['min_number'] . " "
-            . " AND max_number <= " . $arguments['max_number'] . "))", "id", "1"
+            . " AND max_number <= " . $arguments['max_number'] . "))";
+        
+        if (isset($arguments['id'])) {
+            $condition = "id != " . $arguments['id'] . " AND " . $condition;
+        }
+        
+        $ranges = $this->find(
+            $condition, "id", "1"
         );
         
         if (count($ranges) != 0) {
@@ -140,11 +147,12 @@ class PluginLinesmanagerRange extends CommonDBTM {
         $table_id = "table_ranges";
         
         echo "<table id='$table_id' class='tab_cadre_fixehov'>";
-        echo "<tr class='noHover'><th colspan=3>";
+        echo "<tr class='noHover'><th colspan=4>";
         echo __("Assigned ranges", 'linesmanager');
         echo "</th></tr>";
         
         echo "<tr>";
+        echo "<th>" . __("Name", "linesmanager") . "</th>";
         echo "<th>" . __("From", "linesmanager") . "</th>";
         echo "<th>" . __("To", "linesmanager") . "</th>";
         if (Session::haveRight("entity", UPDATE)) {
@@ -153,7 +161,9 @@ class PluginLinesmanagerRange extends CommonDBTM {
         echo "</tr>";
         
         foreach ($ranges as $id => $range) {
-            echo "<tr id='$id'><td align=center>" . $range['min_number'] . "</td>";
+            echo "<tr id='$id'>";
+            echo "<td align=center>" . $range['name'] . "</td>";
+            echo "<td align=center>" . $range['min_number'] . "</td>";
             echo "<td align=center>" . $range['max_number'] . "</td>";
             if (Session::haveRight("entity", UPDATE)) {
                 echo "<td align=center><input type='checkbox' name='range[]' value='$id'></td></tr>";
