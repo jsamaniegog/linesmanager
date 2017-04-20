@@ -343,7 +343,10 @@ class PluginLinesmanagerUtilform {
 
             // valores campos
             foreach ($records as $id => $line) {
-                echo "<tr id='" . $id . "'>";
+                
+                $css_row = ($line['vip']) ? "background-color:#fff294;" : "" ;
+                
+                echo "<tr id='" . $id . "' style='$css_row'>";
                 foreach ($item->attributes as $dbfield_name => $attribute) {
 
                     if ($attribute['hidden'])

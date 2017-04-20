@@ -118,7 +118,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'name' => array('name' => __("Name", "linesmanager"), 'mandatory' => true),
             'surname' => array('name' => __("Surname", "linesmanager"), 'mandatory' => true),
             'description' => array('name' => __("Description", "linesmanager"), 'mandatory' => true),
-            'user_id' => array('name' => __("User ID", "linesmanager"), 'mandatory' => true),
+            'user_id' => array('name' => __("User ID", "linesmanager")),
             'category' => array(
                 'name' => PluginLinesmanagerCategory::getTypeName(),
                 'mandatory' => true,
@@ -638,9 +638,14 @@ class PluginLinesmanagerLine extends CommonDropdown {
             // hack for simcard plugin
             if ($itemtype == 'PluginSimcardSimcard') {
                 $sc = new PluginSimcardSimcard_Item();
-                $sc->getFromDBByQuery("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id']);
-                $itemtype = $sc->fields['itemtype'];
-                $this->fields['items_id'] = $sc->fields['items_id'];
+                if ($sc->getFromDBByQuery("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id'])) {
+                    $itemtype = $sc->fields['itemtype'];
+                    $this->fields['items_id'] = $sc->fields['items_id'];
+                    
+                } else {
+                    $contact = "";
+                    $contact_num = "";
+                }
             }
 
             if ($contact != "" and $contact_num != "") {
