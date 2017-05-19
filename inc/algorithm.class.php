@@ -26,11 +26,18 @@ if (!defined('GLPI_ROOT')) {
  *
  * @author Javier Samaniego García <jsamaniegog@gmail.com>
  */
-class PluginLinesmanagerAlgorithm extends CommonDBTM {
+class PluginLinesmanagerAlgorithm extends PluginLinesmanagerLine {
 
-    // From CommonDBTM
-    static $rightname = 'plugin_linesmanager_line';
+    function __construct() {
+        parent::__construct();
 
+        $this->attributes = array(
+            'id' => array('name' => 'id', 'hidden' => true),
+            'name' => array('name' => __("Algorithm name", "linesmanager"), 'mandatory' => true),
+            'description' => array('name' => __("Description", "linesmanager"), 'mandatory' => true),
+        );
+    }
+    
     /**
      * Get name of this type
      *

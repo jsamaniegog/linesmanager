@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $timeperiod = new PluginLinesmanagerTimeperiod();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerTimeperiod::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerTimeperiod);
+Html::header(PluginLinesmanagerTimeperiod::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerTimeperiod');
 
 $timeperiod->display(array('id' => $_GET["id"]));
 

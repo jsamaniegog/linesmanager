@@ -23,7 +23,7 @@ $dropdown = new PluginLinesmanagerCategory();
 include (GLPI_ROOT . "/front/dropdown.common.php");
 /*Session::checkRight(PluginLinesmanagerCategory::$rightname, UPDATE);
 
-Html::header(PluginLinesmanagerCategory::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerCategory);
+Html::header(PluginLinesmanagerCategory::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerCategory');
 
 Search::show(PluginLinesmanagerCategory);
 

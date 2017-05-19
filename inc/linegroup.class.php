@@ -41,7 +41,7 @@ class PluginLinesmanagerLinegroup extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerNumplan,
+                    'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
                     //'filterUsedValues' => true,
                     'field_id' => 'id',
@@ -58,7 +58,7 @@ class PluginLinesmanagerLinegroup extends PluginLinesmanagerLine {
                 'default' => "1",
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerAlgorithm,
+                    'item' => 'PluginLinesmanagerAlgorithm',
                     'field_id' => 'id',
                     'field_name' => 'name',
                     'field_tooltip' => 'description'

@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $timeslot = new PluginLinesmanagerTimeslot();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerTimeslot::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerTimeslot);
+Html::header(PluginLinesmanagerTimeslot::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerTimeslot');
 
 $timeslot->display(array('id' => $_GET["id"]));
 

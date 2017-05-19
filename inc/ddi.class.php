@@ -42,7 +42,7 @@ class PluginLinesmanagerDdi extends PluginLinesmanagerLine {
                 'add' => false,
                 //'mandatory' => true,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerNumplan,
+                    'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
                     //'filterUsedValues' => true,
                     'field_id' => 'id',

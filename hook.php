@@ -158,7 +158,9 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
                     )
                 );
             } else {
-                $sopt[$key]['joinparams'] = array('jointype' => 'itemtype_item');
+                if ($key != 'common') {
+                    $sopt[$key]['joinparams'] = array('jointype' => 'itemtype_item');
+                }
             }
         }
 
@@ -230,7 +232,7 @@ function plugin_linesmanager_addSelect($itemtype, $ID, $num) {
 
     // only for itemlink
     if ($searchopt['datatype'] === 'itemlink') {
-        return "concat(" . $searchopt['table'] . $alias . "." . $searchopt['field'] . ", '" . Search::SHORTSEP . "', " . $searchopt['table'] . $field . ".id) as ITEM_" . $num . ", ";
+        return "concat(" . $searchopt['table'] . $alias . "." . $searchopt['field'] . ", '" . Search::SHORTSEP . "', " . $searchopt['table'] . ".id) as ITEM_" . $num . ", ";
     }
 
     if ($concat != "") {
@@ -255,7 +257,7 @@ function plugin_linesmanager_addLeftJoin($itemtype, $ref_table, $new_table, $lin
         return null;
 
     if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
-        $itemtype = PluginLinesmanagerLine;
+        $itemtype = 'PluginLinesmanagerLine';
         $ref_table = PluginLinesmanagerLine::getTable();
     }
 

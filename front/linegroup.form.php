@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $linegroup = new PluginLinesmanagerLinegroup();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerLinegroup::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerLinegroup);
+Html::header(PluginLinesmanagerLinegroup::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerLinegroup');
 
 $linegroup->display(array('id' => $_GET["id"]));
 

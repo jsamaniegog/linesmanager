@@ -42,7 +42,7 @@ class PluginLinesmanagerTimeslot extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'default' => 4,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerCategory,
+                    'item' => 'PluginLinesmanagerCategory',
                     'field_id' => 'id',
                     'field_name' => 'name',
                     'field_tooltip' => 'description'
@@ -53,7 +53,7 @@ class PluginLinesmanagerTimeslot extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'default' => 4,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerTimeperiod,
+                    'item' => 'PluginLinesmanagerTimeperiod',
                     'field_id' => 'id',
                     'field_name' => 'description',
                     'field_tooltip' => array('time_start', 'time_end', 

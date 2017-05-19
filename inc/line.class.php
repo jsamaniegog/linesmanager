@@ -106,7 +106,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'forcegroupby' => true,
                 'massiveaction' => false,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerNumplan,
+                    'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
                     'filterUsedValues' => true,
                     'showFilterUsedValuesCheckbox' => true,
@@ -125,7 +125,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 //'default' => 4,
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerCategory,
+                    'item' => 'PluginLinesmanagerCategory',
                     'field_id' => 'id',
                     'field_name' => array('name', 'description'),
                     'field_tooltip' => 'description',
@@ -142,7 +142,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => PluginLinesmanagerLinegroup::getTypeName(),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerLinegroup,
+                    'item' => 'PluginLinesmanagerLinegroup',
                     'field_id' => 'id',
                     'field_name' => 'numplan',
                     'field_tooltip' => array('name', 'algorithm')
@@ -152,7 +152,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => PluginLinesmanagerPickupgroup::getTypeName(),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerPickupgroup,
+                    'item' => 'PluginLinesmanagerPickupgroup',
                     'field_id' => 'id',
                     'field_name' => 'numplan',
                     'field_tooltip' => 'name'
@@ -162,7 +162,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => PluginLinesmanagerExtensionmobility::getTypeName(),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerExtensionmobility,
+                    'item' => 'PluginLinesmanagerExtensionmobility',
                     'field_id' => 'id',
                     'field_name' => array('loginduration', 'category'),
                     'field_tooltip' => array('description', 'loginduration', 'category'),
@@ -173,7 +173,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => PluginLinesmanagerForward::getTypeName(),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerForward,
+                    'item' => 'PluginLinesmanagerForward',
                     'field_id' => 'id',
                     'field_name' => array('numplan', 'category', 'other'),
                     'field_tooltip' => array('numplan', 'category', 'other'),
@@ -191,7 +191,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => PluginLinesmanagerTimeslot::getTypeName(),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerTimeslot,
+                    'item' => 'PluginLinesmanagerTimeslot',
                     'field_id' => 'id',
                     'field_name' => array('timeperiod', 'category'),
                     'field_tooltip' => array('description', 'timeperiod', 'category'),
@@ -203,7 +203,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => __("Input DDI", "linesmanager"),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerDdi,
+                    'item' => 'PluginLinesmanagerDdi',
                     'field_id' => 'id',
                     'field_name' => array('numplan', 'other'),
                     'field_tooltip' => array('name', 'description')
@@ -213,7 +213,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'name' => __("Output DDI", "linesmanager"),
                 'type' => 'dropdown',
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerDdi,
+                    'item' => 'PluginLinesmanagerDdi',
                     'field_id' => 'id',
                     'field_name' => array('numplan', 'other'),
                     'field_tooltip' => array('name', 'description')
@@ -269,7 +269,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param array $options
      * @return type
      */
-    static function getSpecificValueToSelect($field, $name, $values, array $options = array()) {
+    static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
         // todo: no funciona para modificación masiva
         switch ($field) {
             case 'forwardtimeout' :
@@ -283,7 +283,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * View parent.
      * @return array
      */
-    function getSearchOptions($i = 1, $prefix = "") {
+    function getSearchOptions($i = 1, $prefix = "", $nb=0) {
 
         $tab = array();
 
@@ -374,7 +374,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param type $withtemplate
      * @return boolean
      */
-    static function displayTabContentForItem(CommonDBTM $item, $tabnum = 1, $withtemplate = 0) {
+    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
         $line = new PluginLinesmanagerLine();
 
         // opening form
@@ -434,13 +434,13 @@ class PluginLinesmanagerLine extends CommonDropdown {
     /**
      * Show lines form to add or edit.
      * @global type $DB
-     * @param type $id
+     * @param type $ID
      * @param array $options
      *  - item: if is set the form contents three hidden variables with id of
      * item and the item type.
      * @return boolean
      */
-    function showForm($id, $options = array()) {
+    function showForm($ID, $options = array()) {
         global $DB;
 
         if (!self::canUpdate()) {
@@ -448,7 +448,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         }
 
         // get data
-        $this->getFromDB($id);
+        $this->getFromDB($ID);
 
         $options['formoptions'] = "id='form_linesmanager'";
 
@@ -529,7 +529,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         return true;
     }
 
-    function delete($input, $force = 0, $history = 1) {
+    function delete(array $input, $force=0, $history=1) {
         global $DB;
 
         // search and update to null the records with the foreing key deleted

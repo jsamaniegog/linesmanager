@@ -96,7 +96,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         return true;
     }
 
-    function showForm($id, $options = array()) {
+    function showForm($ID, $options = array()) {
         global $DB;
 
         // check rights
@@ -105,9 +105,13 @@ class PluginLinesmanagerRange extends CommonDBTM {
         }
         
         // get data
-        $this->getFromDB($id);
+        $this->getFromDB($ID);
         
         echo '<div id="div_form_range">';
+        
+        // hack to load ID -1 without Notice in logs and for hidden id of entity
+        $this->fields['id'] = $ID;
+        $this->fields['entities_id'] = ($ID == -1) ? $options['entities_id'] : $this->fields['entities_id'] ;
         
         // show header table and init form
         $this->showFormHeader($options);
@@ -133,7 +137,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
             . __('Be careful, when you save or delete ranges the lines can be deleted.', 'linesmanager') 
             . "</span><br><br>";
         
-        $this->showForm($options);
+        $this->showForm(-1, $options);
         
         PluginLinesmanagerUtilform::showHtmlFormOpen($this);
         $this->showRangesList($options);
@@ -147,7 +151,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         $table_id = "table_ranges";
         
         echo "<table id='$table_id' class='tab_cadre_fixehov'>";
-        echo "<tr class='noHover'><th colspan=4>";
+        echo "<tr class='noHover'><th colspan=5>";
         echo __("Assigned ranges", 'linesmanager');
         echo "</th></tr>";
         
@@ -155,16 +159,19 @@ class PluginLinesmanagerRange extends CommonDBTM {
         echo "<th>" . __("Name", "linesmanager") . "</th>";
         echo "<th>" . __("From", "linesmanager") . "</th>";
         echo "<th>" . __("To", "linesmanager") . "</th>";
+        echo "<th>" . __("Only pickup groups", "linesmanager") . "</th>";
         if (Session::haveRight("entity", UPDATE)) {
             echo "<th width='10%'>" . Html::submit(_x('button','Delete permanently'), array('name' => 'purge', 'confirm' => __("Are you sure you want to delete the selected records ?, all lines with these numbers will be deleted.", "linesmanager")));
         }
         echo "</tr>";
         
         foreach ($ranges as $id => $range) {
+            $range['only_pickup'] = ($range['only_pickup'] == 1) ? __('Yes') : __('No') ;
             echo "<tr id='$id'>";
             echo "<td align=center>" . $range['name'] . "</td>";
             echo "<td align=center>" . $range['min_number'] . "</td>";
             echo "<td align=center>" . $range['max_number'] . "</td>";
+            echo "<td align=center>" . $range['only_pickup'] . "</td>";
             if (Session::haveRight("entity", UPDATE)) {
                 echo "<td align=center><input type='checkbox' name='range[]' value='$id'></td></tr>";
             }

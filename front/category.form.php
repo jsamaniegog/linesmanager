@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $category = new PluginLinesmanagerCategory();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerCategory::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', PluginLinesmanagerCategory);
+Html::header(PluginLinesmanagerCategory::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', 'PluginLinesmanagerCategory');
 
 $category->display(array('id' => $_GET["id"]));
 

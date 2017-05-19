@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $pickupgroup = new PluginLinesmanagerPickupgroup();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerPickupgroup::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerPickupgroup);
+Html::header(PluginLinesmanagerPickupgroup::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerPickupgroup');
 
 $pickupgroup->display(array('id' => $_GET["id"]));
 

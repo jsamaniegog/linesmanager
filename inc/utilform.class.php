@@ -125,12 +125,19 @@ class PluginLinesmanagerUtilform {
      * @param array $values Array of field values (ususally $this->fields)
      */
     static function showHtmlRowFormFields($attributes, $values, $view_options = array()) {
-
+        // default loops (columns)
+        $loops = 2;
+        
         if (isset($view_options['columns'])) {
             $loops = $view_options['columns'];
         }
 
         foreach ($attributes as $dbfield_name => $attribute) {
+            
+            if (!isset($values[$dbfield_name])) {
+                $values[$dbfield_name] = '';
+            }
+            
             // formating value with sprintf
             if (isset($attribute['string_format'])) {
                 $values[$dbfield_name] = sprintf($attribute['string_format'], $values[$dbfield_name]);
@@ -265,23 +272,23 @@ class PluginLinesmanagerUtilform {
 
         $tab = array();
 
-        if ($options['null'] !== false) {
+        if (!isset($options['null']) or $options['null'] !== false) {
             $tab["NULL"] = "----";
         }
 
-        if ($options['timezero'] !== false) {
+        if (!isset($options['timezero']) or $options['timezero'] !== false) {
             $tab[sprintf("00:00:%02d", 0)] = sprintf(_n('%d second', '%d seconds', 0), 0);
         }
 
         // Seconds
-        if ($options['seconds'] !== false) {
+        if (!isset($options['seconds']) or $options['seconds'] !== false) {
             for ($i = 5; $i <= 60; $i += 5) {
                 $tab[sprintf("00:00:%02d", $i)] = sprintf(_n('%d second', '%d seconds', $i), $i);
             }
         }
 
         // Minutes
-        if ($options['minutes'] !== false) {
+        if (!isset($options['minutes']) or $options['minutes'] !== false) {
             $tab[sprintf("00:%02d:00", $i)] = sprintf(_n('%d minute', '%d minutes', 1), 1);
             for ($i = 5; $i < 60; $i += 5) {
                 $tab[sprintf("00:%02d:00", $i)] = sprintf(_n('%d minute', '%d minutes', $i), $i);
@@ -289,7 +296,7 @@ class PluginLinesmanagerUtilform {
         }
 
         // Hours
-        if ($options['hours'] !== false) {
+        if (!isset($options['hours']) or $options['hours'] !== false) {
             for ($i = 1; $i <= 24; $i++) {
                 $tab[sprintf("%02d:00:00", $i)] = sprintf(_n('%d hour', '%d hours', $i), $i);
             }
@@ -297,7 +304,7 @@ class PluginLinesmanagerUtilform {
 
         $options['value'] = $value;
         
-        if ($options['display'] === false) {
+        if (isset($options['display']) and $options['display'] === false) {
             return Dropdown::showFromArray($name, $tab, $options);
         }
         
@@ -324,7 +331,7 @@ class PluginLinesmanagerUtilform {
             echo "<tr>";
             foreach ($item->attributes as $dbfield_name => $attribute) {
 
-                if ($attribute['hidden'])
+                if (isset($attribute['hidden']) and $attribute['hidden'])
                     continue;
 
                 echo "<th>" . $attribute['name'] . "</th>";
@@ -349,14 +356,14 @@ class PluginLinesmanagerUtilform {
                 echo "<tr id='" . $id . "' style='$css_row'>";
                 foreach ($item->attributes as $dbfield_name => $attribute) {
 
-                    if ($attribute['hidden'])
+                    if (isset($attribute['hidden']) and $attribute['hidden'])
                         continue;
 
                     if (isset($attribute['foreingkey'])) {
                         $line[$dbfield_name] = self::getForeingkeyName($line[$dbfield_name], $attribute);
                     }
 
-                    if ($attribute['type'] == 'bool') {
+                    if (isset($attribute['type']) and $attribute['type'] == 'bool') {
                         $value = ($line[$dbfield_name] == 1) ? __('Yes') : __('No');
                         echo "<td align=center>" . $value . "</td>";
                     } else {
@@ -465,20 +472,21 @@ class PluginLinesmanagerUtilform {
      *  - style: can be: 
      *              hyphen(default): names separated by hyphen
      *              fieldvalue: return a string with "field: value" format
-     * @return type
+     * @return string
      */
     static function getForeingkeyName($item_id, $attribute, $fk = null, $key = 'field_name', $options = array()) {
-        if ($item_id === null)
-            return null;
+        if ($item_id === null or $item_id == 0) {
+            return '';
+        }
 
         $fk = ($fk == null) ? self::getForeingkeyInstance($attribute) : $fk;
         if (empty($fk->fields)) {
             $fk->getFromDB($item_id);
         }
-
+        
         // the name of the field where we search
         $field_name = $attribute['foreingkey'][$key];
-
+        
         // si el nombre que queremos mostrar es también foreingkey
         if (!is_array($field_name) and self::isForeingkey($fk->attributes[$field_name])) {
             $name = self::getForeingkeyName(
@@ -486,9 +494,13 @@ class PluginLinesmanagerUtilform {
             );
 
             // formating value with sprintf
-            return self::getStringFormat(
-                    $name, $attribute['foreingkey']['string_format'], $field_name
-            );
+            if (isset($attribute['foreingkey']['string_format'])) {
+                return self::getStringFormat(
+                        $name, $attribute['foreingkey']['string_format'], $field_name
+                );
+            } else {
+                return $name;
+            }
         } else {
             // if the name we are serveral fields
             if (is_array($field_name)) {
@@ -502,17 +514,21 @@ class PluginLinesmanagerUtilform {
                     //$nametoadd = self::getForeingkeyName($item_id, $attribute2, $fk, $key);
                     $nametoadd = self::getForeingkeyName($item_id, $attribute2, $fk, "field_name");
 
+                    // guión entre nombres
+                    if (!isset($options['style'])) {
+                        $options['style'] = 'hyphen';
+                    }
+                    
                     // nombre del campo si precisa
                     switch ($options['style']) {
                         case 'fieldvalue':
                             if ($name != "") $name .= "<br>";
                             $name .= $fk->attributes[$field]['name'];
                             break;
-                        
+
                         default: break;
                     }
-
-                    // guión entre nombres
+                    
                     if ($name != "" and $nametoadd != "") {
                         switch ($options['style']) {
                             case 'fieldvalue':
@@ -531,10 +547,15 @@ class PluginLinesmanagerUtilform {
             }
 
             // formating value with sprintf
-            $fk->fields[$field_name] = self::getStringFormat(
-                    $fk->fields[$field_name], $attribute['foreingkey']['string_format'], $field_name
-            );
+            if (isset($attribute['foreingkey']['string_format'])) {
+                $fk->fields[$field_name] = self::getStringFormat(
+                        $fk->fields[$field_name], $attribute['foreingkey']['string_format'], $field_name
+                );
+            }
 
+            if (!isset($fk->fields[$field_name])) {
+                return '';
+            }
             return $fk->fields[$field_name];
         }
     }
@@ -706,7 +727,8 @@ class PluginLinesmanagerUtilform {
         // showing tooltip
         if ($fk->canView()) {
             $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip',array('style' => 'fieldvalue'));
-            $options['link'] = ($fk->canEdit()) ? $fk->getFormURLWithID($value) : null ;
+            
+            $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null ;
             echo "&nbsp;";
             echo "<span id='$box_tooltip_id'>";
             echo Html::showToolTip($tooltip_to_show, $options);
@@ -816,7 +838,7 @@ class PluginLinesmanagerUtilform {
             $attribute['foreingkey']['condition'] .= " )";
         }
 
-        if ($attribute['foreingkey']['condition'] != "") {
+        if (isset($attribute['foreingkey']['condition']) and $attribute['foreingkey']['condition'] != "") {
             $query .= "AND " . $attribute['foreingkey']['condition'] . " ";
         }
         

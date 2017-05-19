@@ -28,6 +28,8 @@ Session::checkLoginUser();
 
 $line = new PluginLinesmanagerLine();
 
+$options = array();
+
 if (isset($_POST['itemtype'])) {
     $options['item'] = new $_POST['itemtype']();
     $options['item']->getFromDB($_POST['items_id']);

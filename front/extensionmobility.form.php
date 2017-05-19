@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $extensionmobility = new PluginLinesmanagerExtensionmobility();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerExtensionmobility::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', PluginLinesmanagerExtensionmobility);
+Html::header(PluginLinesmanagerExtensionmobility::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', 'PluginLinesmanagerExtensionmobility');
 
 $extensionmobility->display(array('id' => $_GET["id"]));
 

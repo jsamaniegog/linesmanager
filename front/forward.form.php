@@ -25,6 +25,8 @@ if (!PluginLinesmanagerLine::canUpdate()) {
     HTML::back();
 }
 
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $forward = new PluginLinesmanagerForward();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -64,7 +66,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerForward::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', PluginLinesmanagerForward);
+Html::header(PluginLinesmanagerForward::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', 'PluginLinesmanagerForward');
 
 $forward->display(array('id' => $_GET["id"]));
 

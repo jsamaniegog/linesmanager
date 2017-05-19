@@ -42,7 +42,7 @@ class PluginLinesmanagerPickupgroup extends PluginLinesmanagerLine {
                 'name' => __("Number", "linesmanager"),
                 'mandatory' => true,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerNumplan,
+                    'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $condition_to_load_numplan,
                     'filterUsedValues' => true,
                     'field_id' => 'id',

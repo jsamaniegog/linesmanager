@@ -39,7 +39,7 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
             'numplan' => array('name' => __("Number", "linesmanager"),
                 'add' => false,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerNumplan,
+                    'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
                     'filterUsedValues' => true,
                     'field_id' => 'id',
@@ -52,7 +52,7 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
                 'name' => PluginLinesmanagerCategory::getTypeName(),
                 //'default' => 4,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerCategory,
+                    'item' => 'PluginLinesmanagerCategory',
                     'field_id' => 'id',
                     'field_name' => 'name',
                     'field_tooltip' => array('name', 'description')

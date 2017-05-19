@@ -50,7 +50,7 @@ class PluginLinesmanagerExtensionmobility extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'default' => 4,
                 'foreingkey' => array(
-                    'item' => PluginLinesmanagerCategory,
+                    'item' => 'PluginLinesmanagerCategory',
                     'field_id' => 'id',
                     'field_name' => 'name',
                     'field_tooltip' => 'description'

@@ -20,6 +20,8 @@ global $DB, $CFG_GLPI;
 
 include ("../../../inc/includes.php");
 
+//$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
 $line = new PluginLinesmanagerLine();
 
 if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
@@ -77,7 +79,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
 Session::addMessageAfterRedirect(__("Please, manage the lines from the corresponding assets.", "linesmanager"), false, INFO);
 HTML::back();
 
-/*Html::header(PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', PluginLinesmanagerLine);
+/*Html::header(PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerLine');
 
 $line->display(array('id' => $_GET["id"]));
 
