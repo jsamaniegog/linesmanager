@@ -621,7 +621,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
             $has_linegroup = false;
             foreach ($rows as $data) {
-                if (is_numeric($data['linegroup'])) {
+                if (is_numeric($data['linegroup']) and (!isset($previous) or !in_array($data['linegroup'], $previous))) {
                     if ($has_linegroup === false) {
                         // separator between number and linegroup
                         $contact_num .= " / ";
@@ -632,6 +632,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     }
 
                     $contact_num .= $data['linegroup'];
+                    
+                    $previous[] = $data['linegroup'];
                 }
             }
 
