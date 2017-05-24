@@ -45,7 +45,7 @@ function plugin_init_linesmanager() {
         );
     }*/
 
-    $PLUGIN_HOOKS['post_show_item']['linesmanager'] = array('PluginLinesmanagerLine', 'post_show_item');
+    //$PLUGIN_HOOKS['post_show_item']['linesmanager'] = array('PluginLinesmanagerLine', 'post_show_item');
 
     $PLUGIN_HOOKS['csrf_compliant']['linesmanager'] = true;
     

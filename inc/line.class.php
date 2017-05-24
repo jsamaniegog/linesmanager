@@ -585,6 +585,15 @@ class PluginLinesmanagerLine extends CommonDropdown {
     }
 
     /**
+     * Actions done after the DELETE of the item in the database
+     *
+     * @return nothing
+     * */
+    function post_deleteFromDB() {
+        $this->updateContactInformation();
+    }
+    
+    /**
      * This function update the contact information of the itemtype liked.
      */
     function updateContactInformation() {
