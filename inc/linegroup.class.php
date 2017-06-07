@@ -43,7 +43,7 @@ class PluginLinesmanagerLinegroup extends PluginLinesmanagerLine {
                 'foreingkey' => array(
                     'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
-                    //'filterUsedValues' => true,
+                    'filterUsedValues' => true,
                     'field_id' => 'id',
                     'field_name' => 'number',
                     'field_tooltip' => 'number'
