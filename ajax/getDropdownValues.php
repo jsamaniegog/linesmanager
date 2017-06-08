@@ -26,7 +26,11 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
-$datas = PluginLinesmanagerUtilform::getDatasToLoadAjaxDropdown($_REQUEST);
+foreach (filter_input_array(INPUT_POST) as $key => $value) {
+    $_REQUEST[$key] = str_replace("\\", "", $value);
+}
+
+$datas = PluginLinesmanagerUtilform::getDatasToLoadAjaxDropdown(filter_input_array(INPUT_POST));
 
 $ret['results'] = $datas;
 $ret['count'] = count($datas);

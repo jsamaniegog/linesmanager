@@ -23,6 +23,7 @@
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_ranges` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     `entities_id` int(11) NOT NULL default 0, 
+    `is_recursive` tinyint(1) NOT NULL default 0,
     `name` varchar(100) NOT NULL default '',
     `min_number` int(11) NOT NULL,
     `max_number` int(11) NOT NULL,

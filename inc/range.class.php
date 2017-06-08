@@ -112,6 +112,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         // hack to load ID -1 without Notice in logs and for hidden id of entity
         $this->fields['id'] = $ID;
         $this->fields['entities_id'] = ($ID == -1) ? $options['entities_id'] : $this->fields['entities_id'] ;
+        $this->fields['is_recursive'] = (isset($this->fields['is_recursive'])) ? $this->fields['is_recursive'] : 0;
         
         // show header table and init form
         $this->showFormHeader($options);
@@ -160,6 +161,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         echo "<th>" . __("From", "linesmanager") . "</th>";
         echo "<th>" . __("To", "linesmanager") . "</th>";
         echo "<th>" . __("Only pickup groups", "linesmanager") . "</th>";
+        echo "<th>" . __("Child entities") . "</th>";
         if (Session::haveRight("entity", UPDATE)) {
             echo "<th width='10%'>" . Html::submit(_x('button','Delete permanently'), array('name' => 'purge', 'confirm' => __("Are you sure you want to delete the selected records ?, all lines with these numbers will be deleted.", "linesmanager")));
         }
@@ -167,11 +169,13 @@ class PluginLinesmanagerRange extends CommonDBTM {
         
         foreach ($ranges as $id => $range) {
             $range['only_pickup'] = ($range['only_pickup'] == 1) ? __('Yes') : __('No') ;
+            $range['is_recursive'] = ($range['is_recursive'] == 1) ? __('Yes') : __('No') ;
             echo "<tr id='$id'>";
             echo "<td align=center>" . $range['name'] . "</td>";
             echo "<td align=center>" . $range['min_number'] . "</td>";
             echo "<td align=center>" . $range['max_number'] . "</td>";
             echo "<td align=center>" . $range['only_pickup'] . "</td>";
+            echo "<td align=center>" . $range['is_recursive'] . "</td>";
             if (Session::haveRight("entity", UPDATE)) {
                 echo "<td align=center><input type='checkbox' name='range[]' value='$id'></td></tr>";
             }
