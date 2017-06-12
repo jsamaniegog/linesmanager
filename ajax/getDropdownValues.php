@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2017 Javier Samaniego García <jsamaniegog@gmail.com>
  *
