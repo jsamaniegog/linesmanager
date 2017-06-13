@@ -27,7 +27,7 @@ function plugin_init_linesmanager() {
 
     include_once("inc/utilsetup.class.php");
     
-    //Plugin::registerClass('PluginLinesmanagerConfig', array('addtabon' => 'Config'));
+    Plugin::registerClass('PluginLinesmanagerConfig', array('addtabon' => 'Config'));
     Plugin::registerClass('PluginLinesmanagerEntity', array('addtabon' => array('Entity')));
     Plugin::registerClass('PluginLinesmanagerProfile', array('addtabon' => array('Profile')));
     Plugin::registerClass('PluginLinesmanagerLine', array('addtabon' => PluginLinesmanagerUtilsetup::getAssets()));

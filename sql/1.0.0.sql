@@ -20,6 +20,12 @@
     `right` int(11) NOT NULL
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;*/
 
+CREATE TABLE `glpi_plugin_linesmanager_configs` (
+        `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        `type` varchar(32) NOT NULL default '' UNIQUE,
+        `value` varchar(32) NOT NULL default ''
+)ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_ranges` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     `entities_id` int(11) NOT NULL default 0, 

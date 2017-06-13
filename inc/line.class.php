@@ -430,10 +430,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
             );
         }
 
-        // todo: solo funciona la primera vez que se carga el formulario, es decir cuando no hay líneas asociadas
-        // functionalities only for this screen
-        self::showJsInterfaceFunctions($item);
-
         return true;
     }
 
@@ -474,6 +470,10 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // showFormButtons close the form
         $this->showFormButtons($options);
 
+        // todo: solo funciona la primera vez que se carga el formulario, es decir cuando no hay líneas asociadas
+        // functionalities only for this screen
+        self::showJsInterfaceFunctions($this);
+        
         return true;
     }
 
@@ -482,15 +482,21 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param array $options Must recive: "item" and "params" in the array.
      */
     private static function showJsInterfaceFunctions($item) {
+        $config_datas = PluginLinesmanagerConfig::getConfigData();
+        
         // autocomplete user_id
-        $js = "$('#form_linesmanager [name=\"numplan\"]').change(function() {"
-            . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id']) . "' + $(this).select2('data').text);"
-            . "});";
+        if ($config_datas['automate_user_id']) {
+            $js = "$('#form_linesmanager [name=\"numplan\"]').change(function() {"
+                . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id']) . "' + $(this).select2('data').text);"
+                . "});";
+        }
 
         // autocomplete description
-        $js .= "$('#form_linesmanager input[name=\"name\"],#form_linesmanager input[name=\"surname\"]').change(function() {"
-            . "    $('#form_linesmanager input[name=\"description\"]').val($('#form_linesmanager input[name=\"name\"]').val() + ' ' + $('#form_linesmanager input[name=\"surname\"]').val());"
-            . "});";
+        if ($config_datas['automate_description']) {
+            $js .= "$('#form_linesmanager input[name=\"name\"],#form_linesmanager input[name=\"surname\"]').change(function() {"
+                . "    $('#form_linesmanager input[name=\"description\"]').val($('#form_linesmanager input[name=\"name\"]').val() + ' ' + $('#form_linesmanager input[name=\"surname\"]').val());"
+                . "});";
+        }
 
         echo Html::scriptBlock($js);
     }
