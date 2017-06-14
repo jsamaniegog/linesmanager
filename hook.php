@@ -380,7 +380,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         $val = "like '%$val%'";
     }
     
-    $where = "(";
+    $where = $link . " (";
     
     foreach ($field_name_array as $key => $field_name) {
         
@@ -398,7 +398,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
             $field_name = $attribute['foreingkey']['field_name'];
         }
 
-        $where .= $link . $nott . " " . $table . $alias . "." . $field_name . " $val ";
+        $where .= $nott . " " . $table . $alias . "." . $field_name . " $val ";
     }
     
     return $where . ")";
