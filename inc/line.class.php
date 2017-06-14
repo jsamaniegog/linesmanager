@@ -275,7 +275,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param array $options
      * @return type
      */
-    static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+    static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = array()) {
         // todo: no funciona para modificación masiva
         switch ($field) {
             case 'forwardtimeout' :
@@ -289,7 +289,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * View parent.
      * @return array
      */
-    function getSearchOptions($i = 1, $prefix = "", $nb=0) {
+    function getSearchOptions($i = 1, $prefix = "", $nb = 0) {
 
         $tab = array();
 
@@ -317,11 +317,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $tab[$i]['table'] = $attribute['foreingkey']['item']::getTable();
 
                 // field we want to show
-                if (is_array($attribute['foreingkey']['field_name'])) {
-                    $tab[$i]['field'] = $attribute['foreingkey']['field_name'][0];
-                } else {
-                    $tab[$i]['field'] = $attribute['foreingkey']['field_name'];
-                }
+                $tab[$i]['field'] = $attribute['foreingkey']['field_name'];
 
                 // field that contains the id
                 //$tab[$i]['linkfield'] = $attribute['foreingkey']['field_id'];
@@ -473,7 +469,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // todo: solo funciona la primera vez que se carga el formulario, es decir cuando no hay líneas asociadas
         // functionalities only for this screen
         self::showJsInterfaceFunctions($this);
-        
+
         return true;
     }
 
@@ -483,7 +479,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      */
     private static function showJsInterfaceFunctions($item) {
         $config_datas = PluginLinesmanagerConfig::getConfigData();
-        
+
         // autocomplete user_id
         if ($config_datas['automate_user_id']) {
             $js = "$('#form_linesmanager [name=\"numplan\"]').change(function() {"
@@ -541,7 +537,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         return true;
     }
 
-    function delete(array $input, $force=0, $history=1) {
+    function delete(array $input, $force = 0, $history = 1) {
         global $DB;
 
         // search and update to null the records with the foreing key deleted
@@ -604,7 +600,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
     function post_deleteFromDB() {
         $this->updateContactInformation();
     }
-    
+
     /**
      * This function update the contact information of the itemtype liked.
      */
@@ -642,7 +638,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
             $has_linegroup = false;
             foreach ($rows as $data) {
-                if (is_numeric($data['linegroup']) and (!isset($previous) or !in_array($data['linegroup'], $previous))) {
+                if (is_numeric($data['linegroup']) and ( !isset($previous) or ! in_array($data['linegroup'], $previous))) {
                     if ($has_linegroup === false) {
                         // separator between number and linegroup
                         $contact_num .= " / ";
@@ -653,7 +649,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     }
 
                     $contact_num .= $data['linegroup'];
-                    
+
                     $previous[] = $data['linegroup'];
                 }
             }
@@ -664,7 +660,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 if ($sc->getFromDBByQuery("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id'])) {
                     $itemtype = $sc->fields['itemtype'];
                     $this->fields['items_id'] = $sc->fields['items_id'];
-                    
                 } else {
                     $contact = "";
                     $contact_num = "";

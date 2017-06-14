@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-04-17 10:49+0200\n"
-"PO-Revision-Date: 2017-04-17 10:50+0200\n"
+"POT-Creation-Date: 2017-06-13 13:34+0200\n"
+"PO-Revision-Date: 2017-06-13 13:36+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -15,24 +15,32 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_n:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: front/category.form.php:24 front/ddi.form.php:24
+#: front/category.form.php:24 front/config.form.php:29 front/ddi.form.php:24
 #: front/extensionmobility.form.php:24 front/forward.form.php:24
 #: front/linegroup.form.php:24 front/numplan.form.php:23
 #: front/pickupgroup.form.php:24 front/range.form.php:24
 #: front/timeperiod.form.php:24 front/timeslot.form.php:24
-#: inc/line.class.php:245
+#: inc/line.class.php:251
 msgid "No permission"
 msgstr "Permiso denegado"
 
-#: front/category.form.php:61 front/ddi.form.php:61
-#: front/extensionmobility.form.php:61 front/forward.form.php:61
-#: front/line.form.php:71 front/linegroup.form.php:61
-#: front/pickupgroup.form.php:61 front/range.form.php:93
-#: front/timeperiod.form.php:61 front/timeslot.form.php:61
+#: front/category.form.php:63 front/config.form.php:40 front/ddi.form.php:63
+#: front/extensionmobility.form.php:63 front/forward.form.php:63
+#: front/line.form.php:73 front/linegroup.form.php:63
+#: front/pickupgroup.form.php:63 front/range.form.php:93
+#: front/timeperiod.form.php:63 front/timeslot.form.php:63
 msgid "Error on save"
 msgstr "Error al guardar"
 
-#: front/line.form.php:77
+#: front/config.form.php:32
+msgid "Saving configuration..."
+msgstr "Guardando configuración..."
+
+#: front/config.form.php:44
+msgid "Configuration saved"
+msgstr "Configuración guardada"
+
+#: front/line.form.php:79
 msgid "Please, manage the lines from the corresponding assets."
 msgstr "Por favor, administre las líneas desde los activos correspondientes."
 
@@ -64,7 +72,17 @@ msgstr "Turno de mañana"
 msgid "8h-15h, Mon-Fri, Cat. 6"
 msgstr "8h-15h, Lun-Vie, Cat. 6"
 
-#: inc/algorithm.class.php:41 inc/linegroup.class.php:56
+#: inc/algorithm.class.php:36
+msgid "Algorithm name"
+msgstr "Nombre del algoritmo"
+
+#: inc/algorithm.class.php:37 inc/category.class.php:41 inc/ddi.class.php:40
+#: inc/extensionmobility.class.php:46 inc/extensionmobility.class.php:49
+#: inc/line.class.php:126 inc/timeperiod.class.php:39 inc/timeslot.class.php:39
+msgid "Description"
+msgstr "Descripción"
+
+#: inc/algorithm.class.php:48 inc/linegroup.class.php:56
 msgid "Algorithm"
 msgid_plural "Algorithms"
 msgstr[0] "Algoritmo"
@@ -74,26 +92,33 @@ msgstr[1] "Algoritmos"
 msgid "Category name"
 msgstr "Nombre de la categoría"
 
-#: inc/category.class.php:41 inc/ddi.class.php:40
-#: inc/extensionmobility.class.php:46 inc/extensionmobility.class.php:49
-#: inc/line.class.php:120 inc/timeperiod.class.php:39 inc/timeslot.class.php:39
-msgid "Description"
-msgstr "Descripción"
-
 #: inc/category.class.php:52
 msgid "Category"
 msgid_plural "Categories"
 msgstr[0] "Categoría"
 msgstr[1] "Categorías"
 
-#: inc/ddi.class.php:39 inc/line.class.php:118 inc/range.class.php:39
-#: inc/range.class.php:155
+#: inc/config.class.php:27 inc/config.class.php:33 inc/config.class.php:50
+#: inc/entity.class.php:44 setup.php:60
+msgid "Lines Manager"
+msgstr "Gestor de líneas"
+
+#: inc/config.class.php:53
+msgid "Automate description based on name and surname: "
+msgstr "Automatizar descripción en función de el nombre y los apellidos: "
+
+#: inc/config.class.php:58
+msgid "Automate user id based on entity and number: "
+msgstr "Automatizar ID de usuario en función de la entidad y el número: "
+
+#: inc/ddi.class.php:39 inc/line.class.php:124 inc/range.class.php:39
+#: inc/range.class.php:160
 msgid "Name"
 msgstr "Nombre"
 
-#: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:85
+#: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:91
 #: inc/linegroup.class.php:40 inc/numplan.class.php:59
-#: inc/pickupgroup.class.php:40
+#: inc/pickupgroup.class.php:42
 msgid "Number"
 msgstr "Número"
 
@@ -112,10 +137,6 @@ msgid "Entity"
 msgid_plural "Entities"
 msgstr[0] "Entidad"
 msgstr[1] "Entidades"
-
-#: inc/entity.class.php:44 setup.php:60
-msgid "Lines Manager"
-msgstr "Gestor de líneas"
 
 #: inc/entity.class.php:76
 msgid "New range"
@@ -137,61 +158,61 @@ msgid_plural "Forwards"
 msgstr[0] "Desvío"
 msgstr[1] "Desvíos incondicionales"
 
-#: inc/line.class.php:119
+#: inc/line.class.php:125
 msgid "Surname"
 msgstr "Apellidos"
 
-#: inc/line.class.php:121
+#: inc/line.class.php:127
 msgid "User ID"
 msgstr "ID de usuario"
 
-#: inc/line.class.php:136
+#: inc/line.class.php:142
 msgid "Login/Logout"
 msgstr "Iniciar/Cerrar Sesión"
 
-#: inc/line.class.php:137
+#: inc/line.class.php:143
 msgid "Autoanswer"
 msgstr "Contestador automático"
 
-#: inc/line.class.php:138
+#: inc/line.class.php:144
 msgid "Autoanswer Password"
 msgstr "Contraseña Contestador"
 
-#: inc/line.class.php:139
+#: inc/line.class.php:145
 msgid "Lock callin"
 msgstr "Bloqueo llamadas entrantes"
 
-#: inc/line.class.php:140
+#: inc/line.class.php:146
 msgid "Lock callout"
 msgstr "Bloqueo llamadas salientes"
 
-#: inc/line.class.php:184
+#: inc/line.class.php:190
 msgid "Forward timeout"
 msgstr "Tiempo de espera para desviar"
 
-#: inc/line.class.php:203
+#: inc/line.class.php:209
 msgid "Input DDI"
 msgstr "DDI de entrada"
 
-#: inc/line.class.php:213
+#: inc/line.class.php:219
 msgid "Output DDI"
 msgstr "DDI de salida"
 
-#: inc/line.class.php:262 inc/line.class.php:290
+#: inc/line.class.php:268 inc/line.class.php:296
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:403
+#: inc/line.class.php:419
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:508
+#: inc/line.class.php:530
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:515
+#: inc/line.class.php:537
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
@@ -211,11 +232,11 @@ msgid_plural "Ranges"
 msgstr[0] "Rango"
 msgstr[1] "Rangos"
 
-#: inc/pickupgroup.class.php:50
+#: inc/pickupgroup.class.php:52
 msgid "Pickup group name"
 msgstr "Nombre del grupo de captura"
 
-#: inc/pickupgroup.class.php:61
+#: inc/pickupgroup.class.php:63
 msgid "Pickup group"
 msgid_plural "Pickup groups"
 msgstr[0] "Grupo de captura"
@@ -229,11 +250,11 @@ msgstr "Administrar líneas"
 msgid "Range from"
 msgstr "Rango desde"
 
-#: inc/range.class.php:41 inc/range.class.php:157
+#: inc/range.class.php:41 inc/range.class.php:162
 msgid "To"
 msgstr "Hasta"
 
-#: inc/range.class.php:42
+#: inc/range.class.php:42 inc/range.class.php:163
 msgid "Only pickup groups"
 msgstr "Solo grupos de captura"
 
@@ -253,30 +274,42 @@ msgstr "Los números deben ser mayores que 0."
 msgid "The specified range is already in use by: "
 msgstr "El rango especificado ya está en uso por: "
 
-#: inc/range.class.php:131
+#: inc/range.class.php:136
 msgid "Warning"
 msgstr "Alerta"
 
-#: inc/range.class.php:133
+#: inc/range.class.php:138
 msgid "Be careful, when you save or delete ranges the lines can be deleted."
 msgstr ""
 "Tenga cuidado, al guardar o borrar rangos las líneas pueden ser eliminadas."
 
-#: inc/range.class.php:151
+#: inc/range.class.php:156
 msgid "Assigned ranges"
 msgstr "Rangos asignados"
 
-#: inc/range.class.php:156
+#: inc/range.class.php:161
 msgid "From"
 msgstr "Desde"
 
-#: inc/range.class.php:159
+#: inc/range.class.php:164
+msgid "Child entities"
+msgstr ""
+
+#: inc/range.class.php:166
 msgid ""
 "Are you sure you want to delete the selected records ?, all lines with these "
 "numbers will be deleted."
 msgstr ""
 "¿Está seguro que desea eliminar los registros seleccionados?, se eliminarán "
 "todas las líneas con estos números."
+
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:367
+msgid "Yes"
+msgstr "Sí"
+
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:367
+msgid "No"
+msgstr "No"
 
 #: inc/timeperiod.class.php:41
 msgid "Time start"
@@ -322,66 +355,58 @@ msgid_plural "Time slots"
 msgstr[0] "Franja horaria"
 msgstr[1] "Intervalos de tiempo"
 
-#: inc/utilform.class.php:273 inc/utilform.class.php:279
+#: inc/utilform.class.php:280 inc/utilform.class.php:286
 #, php-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:285 inc/utilform.class.php:287
+#: inc/utilform.class.php:292 inc/utilform.class.php:294
 #, php-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:294
+#: inc/utilform.class.php:301
 #, php-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:336
+#: inc/utilform.class.php:343
 msgid "Remove"
 msgstr "Quitar"
 
-#: inc/utilform.class.php:336
+#: inc/utilform.class.php:343
 msgid "Are you sure you want to remove the selected records?."
 msgstr "¿Estás seguro de que deseas quitar los registros seleccionados?"
 
-#: inc/utilform.class.php:339
+#: inc/utilform.class.php:346
 msgid "Delete permanently"
 msgstr ""
 
-#: inc/utilform.class.php:339
+#: inc/utilform.class.php:346
 msgid "Are you sure you want to delete the selected records?."
 msgstr "¿Estás seguro de que deseas eliminar los registros seleccionados?"
 
-#: inc/utilform.class.php:357
-msgid "Yes"
-msgstr "Sí"
-
-#: inc/utilform.class.php:357
-msgid "No"
-msgstr "No"
-
-#: inc/utilform.class.php:376
+#: inc/utilform.class.php:386
 msgid "not associated records found."
 msgstr "no se encuentran registros asociados."
 
-#: inc/utilform.class.php:685 inc/utilform.class.php:691
+#: inc/utilform.class.php:709 inc/utilform.class.php:715
 msgid "This check box filter used values if it is checked."
 msgstr ""
 "Marque esta casilla para filtrar los valores ya utilizados, desmarque para "
 "ver todos."
 
-#: inc/utilform.class.php:692
+#: inc/utilform.class.php:716
 msgid "Filter used values"
 msgstr "Filtrar valores usados"
 
-#: inc/utilform.class.php:720
+#: inc/utilform.class.php:745
 msgid "New item"
 msgstr ""
 

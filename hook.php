@@ -208,11 +208,9 @@ function plugin_linesmanager_addSelect($itemtype, $ID, $num) {
         }
 
         // the fields
-        $concat = "concat(";
+        $concat = "concat_ws(' - '";
         for ($i = 0; $i < count($field_array); $i++) {
-            if ($i != 0) {
-                $concat .= ", ' - ', ";
-            }
+            $concat .= ",";
 
             $table_name = $searchopt['table'];
             $field_name = $field_array[$i];
@@ -232,13 +230,14 @@ function plugin_linesmanager_addSelect($itemtype, $ID, $num) {
 
     // only for itemlink
     if ($searchopt['datatype'] === 'itemlink') {
-        return "concat(" . $searchopt['table'] . $alias . "." . $searchopt['field'] . ", '" . Search::SHORTSEP . "', " . $searchopt['table'] . ".id) as ITEM_" . $num . ", ";
+        return "concat_ws('" . Search::SHORTSEP . "', " . $searchopt['table'] . $alias . "." . $searchopt['field'] . ", " . $searchopt['table'] . ".id) as ITEM_" . $num . ", ";
     }
 
     if ($concat != "") {
         return $concat . " as ITEM_" . $num . ", ";
     } else {
-        return $searchopt['table'] . $alias . "." . $searchopt['field'] . " as ITEM_" . $num . ", ";
+        //return $searchopt['table'] . $alias . "." . $searchopt['field'] . " as ITEM_" . $num . ", ";
+        return $searchopt['table'] . "." . $searchopt['field'] . " as ITEM_" . $num . ", ";
     }
 }
 
@@ -344,32 +343,56 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
 
     $fk = getItemTypeForTable($searchopt['table']);
     $fk = new $fk();
-    $attribute = $fk->attributes[$searchopt['field']];
 
+    /*if (isset($searchopt['foreingkey']) and is_array($searchopt['foreingkey']['field_name'])) {
+        $field_array[] = $searchopt['foreingkey']['field_name'];
+    }
+
+    foreach ($linkfield_array as $lf_key => $linkfield) {
+
+    }*/
+    
     $table = $fk::getTable();
     $alias = $searchopt['linkfield'];
-    $field_name = $searchopt['field'];
+    $alias = ($alias != "") ? "_" . $alias : $alias ;
+    if (is_array($searchopt['field'])) {
+        $field_name_array = $searchopt['field'];
+    } else {
+        $field_name_array[] = $searchopt['field'];
+    }
     
     $nott = ($nott === 1) ? " NOT" : "";
 
     if (strtolower($val) === 'null') {
-        $val = "is NULL";
+        if ($searchtype == 'notequals') {
+            $val = "is not NULL";
+        } else {
+            $val = "is NULL";
+        }
     } else {
-        $val = "like '$val%'";
+        $val = "like '%$val%'";
     }
     
-    if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
-        $table = $fk->attributes[$searchopt['field']]['foreingkey']['item'];
-        $table = $table::getTable();
-        
-        $field_name = $attribute['foreingkey']['field_name'];
-    }
-        
-    $alias = ($alias != "") ? "_" . $alias : $alias ;
+    $where = "(";
     
-    $where = $link . $nott . " " . $table . $alias . "." . $field_name . " $val ";
-    
-    return $where;
-}
+    foreach ($field_name_array as $key => $field_name) {
+        
+        if ($key != 0) {
+            $where .= " OR ";
+        }
+        
+        $attribute = $fk->attributes[$field_name];
+        $table = $searchopt['table'];
+        
+        if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
+            $table = $fk->attributes[$field_name]['foreingkey']['item'];
+            $table = $table::getTable();
 
-?>
+            $field_name = $attribute['foreingkey']['field_name'];
+        }
+
+        $where .= $link . $nott . " " . $table . $alias . "." . $field_name . " $val ";
+    }
+    
+    return $where . ")";
+}
