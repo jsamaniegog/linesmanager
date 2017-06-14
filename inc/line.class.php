@@ -482,14 +482,14 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
         // autocomplete user_id
         if ($config_datas['automate_user_id']) {
-            $js = "$('#form_linesmanager [name=\"numplan\"]').change(function() {"
+            $js = "$('#form_linesmanager[action*=\"line.form.php\"] [name=\"numplan\"]').change(function() {"
                 . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id']) . "' + $(this).select2('data').text);"
                 . "});";
         }
 
         // autocomplete description
         if ($config_datas['automate_description']) {
-            $js .= "$('#form_linesmanager input[name=\"name\"],#form_linesmanager input[name=\"surname\"]').change(function() {"
+            $js .= "$('#form_linesmanager[action*=\"line.form.php\"] input[name=\"name\"],#form_linesmanager[action*=\"line.form.php\"] input[name=\"surname\"]').change(function() {"
                 . "    $('#form_linesmanager input[name=\"description\"]').val($('#form_linesmanager input[name=\"name\"]').val() + ' ' + $('#form_linesmanager input[name=\"surname\"]').val());"
                 . "});";
         }

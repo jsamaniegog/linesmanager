@@ -369,6 +369,13 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         } else {
             $val = "is NULL";
         }
+     
+    } else if($searchtype == 'equals') {
+        $val = "= '$val'";
+        
+    } else if($searchtype == 'notequals') {
+        $val = "= '$val'";
+        
     } else {
         $val = "like '%$val%'";
     }
