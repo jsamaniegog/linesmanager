@@ -61,6 +61,34 @@ class PluginLinesmanagerUtilform {
     }
 
     /**
+     * Javascript to show history of an item in a element like a <div>.
+     * @global type $CFG_GLPI
+     * @param type $data
+     * @param type $element
+     * @return string JavaScript code.
+     */
+    static function getJsAjaxShowHistory($item, $id, $element = 'div_history') {
+        global $CFG_GLPI;
+        
+        $data['item_type'] = $item::getType();
+        $data['items_id'] = -1;
+        
+        $data = json_encode($data);
+
+        return '$.ajax({
+            url:  "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/showHistory.php",
+            success: function(html) {
+                $("#' . $element . '").html(html);
+            },
+            method: "POST",
+            data: {id: ' . $id . ', ' . substr($data, 1, strlen($data) - 2) . '},
+            beforeSend: function( xhr ) {
+                $("#' . $element . '").html("' . self::getLoadingDiv() . '");
+            }
+        });';
+    }
+    
+    /**
      * Prints a <div> tag to load form by ajax. See getJsAjaxRowClickLoadForm 
      * doc.
      * @param string $name The item name in singular. It will be the id of the div.
@@ -80,9 +108,14 @@ class PluginLinesmanagerUtilform {
      * 
      * @param string $id ID of the div.
      * @param array $options Html options.
+     * @param bool $closeDiv true if you want close the div.
      */
-    static function showHtmlDivOpen($id, $options = array()) {
+    static function showHtmlDivOpen($id, $options = array(), $closeDiv = false) {
         echo "<div id='$id' " . Html::parseAttributes($options) . ">";
+        
+        if ($closeDiv === true) {
+            self::showHtmlDivClose();
+        }
     }
 
     /**
@@ -106,9 +139,11 @@ class PluginLinesmanagerUtilform {
      * in some forms of this Plugin.
      * @return string
      */
-    static function getJsAjaxRowClickLoadForm($table_id, $item, $attr = "id", $last_unbind = true) {
+    static function getJsAjaxRowClickLoadForm($table_id, $item, $js_onclick_row = "", $attr = "id", $last_unbind = true) {
         $js = "$( '#$table_id > tbody > tr > td' ).click(function() {";
         $js .= self::getJsAjaxLoadForm($item, "$(this).parent().attr('$attr')");
+        $js .= $js_onclick_row;
+        $js .= "$( '#$table_id').attr('selected_id', $(this).parent().attr('$attr'));";
         $js .= "});";
 
         if ($last_unbind) {
@@ -318,8 +353,9 @@ class PluginLinesmanagerUtilform {
      * @param type $condition
      * @param array $buttons Can be: remove or delete or purge
      * @param array $table_options HTML table options.
+     * @param string $js_onclick_row Javascript that will be executed when a row is clicked
      */
-    static function showHtmlList($table_id, PluginLinesmanagerLine $item, $condition = "", $buttons = array(), $table_options = array()) {
+    static function showHtmlList($table_id, PluginLinesmanagerLine $item, $condition = "", $buttons = array(), $table_options = array(), $js_onclick_row = "") {
 
         $records = $item->find($condition);
 
@@ -380,7 +416,7 @@ class PluginLinesmanagerUtilform {
 
             // javascript to load form when a row of the table is clicked
             echo Html::scriptBlock(
-                PluginLinesmanagerUtilform::getJsAjaxRowClickLoadForm($table_id, $item)
+                PluginLinesmanagerUtilform::getJsAjaxRowClickLoadForm($table_id, $item, $js_onclick_row)
             );
         } else {
             echo "<tr><th>" . $item::getTypeName(Session::getPluralNumber()) . ': ' . __('not associated records found.', 'linesmanager') . "</th></tr>";

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-06-13 13:34+0200\n"
-"PO-Revision-Date: 2017-06-13 13:36+0200\n"
+"POT-Creation-Date: 2017-06-15 11:52+0200\n"
+"PO-Revision-Date: 2017-06-15 11:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -14,6 +14,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_n:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: ajax/showHistory.php:32
+msgid ""
+"<p>Please select a row and then click the button again to show the log of a "
+"line</p>"
+msgstr ""
+"<p>Por favor seleccione una fila y luego pulse sobre el botón de nuevo para "
+"ver los registros de una línea</p>"
 
 #: front/category.form.php:24 front/config.form.php:29 front/ddi.form.php:24
 #: front/extensionmobility.form.php:24 front/forward.form.php:24
@@ -204,15 +212,19 @@ msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:419
+#: inc/line.class.php:417
+msgid "History"
+msgstr ""
+
+#: inc/line.class.php:434
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:530
+#: inc/line.class.php:545
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:537
+#: inc/line.class.php:552
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
@@ -303,11 +315,11 @@ msgstr ""
 "¿Está seguro que desea eliminar los registros seleccionados?, se eliminarán "
 "todas las líneas con estos números."
 
-#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:367
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:403
 msgid "Yes"
 msgstr "Sí"
 
-#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:367
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:403
 msgid "No"
 msgstr "No"
 
@@ -355,58 +367,58 @@ msgid_plural "Time slots"
 msgstr[0] "Franja horaria"
 msgstr[1] "Intervalos de tiempo"
 
-#: inc/utilform.class.php:280 inc/utilform.class.php:286
+#: inc/utilform.class.php:315 inc/utilform.class.php:321
 #, php-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:292 inc/utilform.class.php:294
+#: inc/utilform.class.php:327 inc/utilform.class.php:329
 #, php-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:301
+#: inc/utilform.class.php:336
 #, php-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:343
+#: inc/utilform.class.php:379
 msgid "Remove"
 msgstr "Quitar"
 
-#: inc/utilform.class.php:343
+#: inc/utilform.class.php:379
 msgid "Are you sure you want to remove the selected records?."
 msgstr "¿Estás seguro de que deseas quitar los registros seleccionados?"
 
-#: inc/utilform.class.php:346
+#: inc/utilform.class.php:382
 msgid "Delete permanently"
 msgstr ""
 
-#: inc/utilform.class.php:346
+#: inc/utilform.class.php:382
 msgid "Are you sure you want to delete the selected records?."
 msgstr "¿Estás seguro de que deseas eliminar los registros seleccionados?"
 
-#: inc/utilform.class.php:386
+#: inc/utilform.class.php:422
 msgid "not associated records found."
 msgstr "no se encuentran registros asociados."
 
-#: inc/utilform.class.php:709 inc/utilform.class.php:715
+#: inc/utilform.class.php:745 inc/utilform.class.php:751
 msgid "This check box filter used values if it is checked."
 msgstr ""
 "Marque esta casilla para filtrar los valores ya utilizados, desmarque para "
 "ver todos."
 
-#: inc/utilform.class.php:716
+#: inc/utilform.class.php:752
 msgid "Filter used values"
 msgstr "Filtrar valores usados"
 
-#: inc/utilform.class.php:745
+#: inc/utilform.class.php:781
 msgid "New item"
 msgstr ""
 

@@ -263,7 +263,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      *
      * @return text name of this type by language of the user connected
      *
-     * */
+     */
     static function getTypeName($nb = 1) {
         return _n('Line', 'Lines', $nb, 'linesmanager');
     }
@@ -388,7 +388,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
         // show list of associated records
         PluginLinesmanagerUtilform::showHtmlList(
-            "table_lines", $line, $condition, array('purge')
+            "table_lines", $line, $condition, array('purge'), array(), "$('#div_history').html('');"
         );
 
         echo Html::scriptBlock(
@@ -407,6 +407,25 @@ class PluginLinesmanagerLine extends CommonDropdown {
             $line->showForm(-1, $options);
         }
         PluginLinesmanagerUtilform::showHtmlDivClose();
+
+        // div to load the history (logs)
+        PluginLinesmanagerUtilform::showHtmlDivOpen("div_history", array(), true);
+
+        // history button
+        echo sprintf(
+            ' <input class="submit" type="button" value="'
+            . __("Log")
+            . '" name="%1$s" %2$s>', Html::cleanInputText('new'), Html::parseAttributes(
+                array(
+                    'name' => 'history',
+                    'onClick' => PluginLinesmanagerUtilform::getJsAjaxShowHistory(
+                        get_class($this), 
+                        "$('#table_lines').attr('selected_id')",
+                        "div_history"
+                    )
+                )
+            )
+        );
 
         // boton para mostrar el formulario de añadir elemento
         if (self::canCreate()) {
