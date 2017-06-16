@@ -63,33 +63,33 @@ class PluginLinesmanagerPickupgroup extends PluginLinesmanagerLine {
         return _n('Pickup group', 'Pickup groups', $nb, 'linesmanager');
     }
 
-    
+    /**
+     * Prepare input datas for adding the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     */
+    function prepareInputForAdd($input) {
+        if ($input['name'] == "") {
+            $input['name'] = PluginLinesmanagerUtilform::getForeingkeyName($input['numplan'], $this->attributes['numplan']);
+        }
+        return $input;
+    }
 
     /**
-     * 
-     * @param type $item
-     * @param type $line
-     */
-    /*public function showFormTab($item, $line) {
-        // this prints a select box and div tag to load when a element is seleted
-        $this->showSelectLines("pickupgroup", $item);
-
-        // show table records list
-        $this->showLineGroupsList($item);
-
-        if (self::canUpdate())
-            Html::closeForm();
-    }*/
-
-    /**
-     * Show table list of lines. This method don't start and end the form.
-     */
-    /*public function showLineGroupsList($item) {
-        PluginLinesmanagerUtilform::showHtmlList(
-            "table_pickupgroups", $this, "line IN (SELECT id FROM " . PluginLinesmanagerLine::getTable() . " "
-            . "WHERE itemtype = '" . $item->getType() . "' "
-            . " AND items_id = " . $item->getID() . ")"
-        );
-    }*/
+     * Prepare input datas for updating the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     * */
+    function prepareInputForUpdate($input) {
+        if ($input['name'] == "") {
+            $input['name'] = PluginLinesmanagerUtilform::getForeingkeyName($input['numplan'], $this->attributes['numplan']);
+        }
+        
+        return $input;
+    }
 
 }

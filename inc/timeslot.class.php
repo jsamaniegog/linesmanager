@@ -73,5 +73,28 @@ class PluginLinesmanagerTimeslot extends PluginLinesmanagerLine {
     static function getTypeName($nb = 1) {
         return _n('Time slot', 'Time slots', $nb, 'linesmanager');
     }
+    
+    /**
+     * Prepare input datas for adding the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     */
+    function prepareInputForAdd($input) {
+        $input['name'] = $input['description'];
+        return $input;
+    }
 
+    /**
+     * Prepare input datas for updating the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     * */
+    function prepareInputForUpdate($input) {
+        $input['name'] = $input['description'];
+        return $input;
+    }
 }

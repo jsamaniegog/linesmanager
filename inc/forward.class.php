@@ -30,7 +30,7 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
     static public $belongsTo = array(
         "PluginLinesmanagerLine"
     );
-    
+
     function __construct() {
         parent::__construct();
 
@@ -71,4 +71,55 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
     static function getTypeName($nb = 1) {
         return _n('Forward', 'Forwards', $nb, 'linesmanager');
     }
+
+    /**
+     * Return the name.
+     */
+    private function getNameString($input) {
+        $pieces = array();
+        
+        $piece = PluginLinesmanagerUtilform::getForeingkeyName($input['numplan'], $this->attributes['numplan']);
+        if ($piece != "") {
+            $piece = "Number: " . $piece;
+            $pieces[] = $piece;
+        }
+        $piece = PluginLinesmanagerUtilform::getForeingkeyName($input['category'], $this->attributes['category']);
+        if ($piece != "") {
+            $piece = PluginLinesmanagerCategory::getTypeName() . ": " . $piece;
+            $pieces[] = $piece;
+        }
+        $piece = $input['other'];
+        if ($piece != "") {
+            $piece = "Other: " . $piece;
+            $pieces[] = $piece;
+        }
+        
+        return implode(", ", $pieces);
+    }
+
+
+    /**
+     * Prepare input datas for adding the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     */
+    function prepareInputForAdd($input) {
+        $input['name'] = $this->getNameString($input);
+        return $input;
+    }
+
+    /**
+     * Prepare input datas for updating the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     * */
+    function prepareInputForUpdate($input) {
+        $input['name'] = $this->getNameString($input);
+        return $input;
+    }
+
 }

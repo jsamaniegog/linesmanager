@@ -77,31 +77,33 @@ class PluginLinesmanagerLinegroup extends PluginLinesmanagerLine {
         return _n('Line group', 'Line groups', $nb, 'linesmanager');
     }
 
-    /**
-     * 
-     * @param type $item
-     * @param type $line
+     /**
+     * Prepare input datas for adding the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
      */
-    /*public function showFormTab($item, $line) {
-        // this prints a select box and div tag to load when a element is seleted
-        $this->showSelectLines("linegroup", $item);
-
-        // show table records list
-        $this->showLineGroupsList($item);
-
-        if (self::canUpdate())
-            Html::closeForm();
-    }*/
+    function prepareInputForAdd($input) {
+        if ($input['name'] == "") {
+            $input['name'] = PluginLinesmanagerUtilform::getForeingkeyName($input['numplan'], $this->attributes['numplan']);
+        }
+        return $input;
+    }
 
     /**
-     * Show table list of lines. This method don't start and end the form.
-     */
-    /*public function showLineGroupsList($item) {
-        PluginLinesmanagerUtilform::showHtmlList(
-            "table_linegroups", $this, "line IN (SELECT id FROM " . PluginLinesmanagerLine::getTable() . " "
-            . "WHERE itemtype = '" . $item->getType() . "' "
-            . " AND items_id = " . $item->getID() . ")"
-        );
-    }*/
+     * Prepare input datas for updating the item
+     *
+     * @param $input datas used to update the item
+     *
+     * @return the modified $input array
+     * */
+    function prepareInputForUpdate($input) {
+        if ($input['name'] == "") {
+            $input['name'] = PluginLinesmanagerUtilform::getForeingkeyName($input['numplan'], $this->attributes['numplan']);
+        }
+        
+        return $input;
+    }
 
 }

@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_categories` (
 
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_extensionmobilities` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    `name` varchar(200) NOT NULL,
     `loginduration` time default '08:00:00',  /*at week cisco default value*/
     `description` VARCHAR(200) NOT NULL,
     `category` integer default NULL
@@ -90,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_extensionmobilities` (
 
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_forwards` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    `name` varchar(200) NOT NULL,
     `numplan` integer default NULL,
     `category` integer default NULL,
     `other` VARCHAR(100) default NULL
@@ -110,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_timeperiods` (
 
 CREATE TABLE IF NOT EXISTS `glpi_plugin_linesmanager_timeslots` ( 
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    `name` varchar(200) NOT NULL,
     `description` VARCHAR(200) NOT NULL,
     `timeperiod` integer default NULL,
     `category` integer default NULL
