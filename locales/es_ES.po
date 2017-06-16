@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-06-15 11:52+0200\n"
-"PO-Revision-Date: 2017-06-15 11:53+0200\n"
+"POT-Creation-Date: 2017-06-16 13:49+0200\n"
+"PO-Revision-Date: 2017-06-16 13:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_n:1,2\n"
@@ -164,7 +164,7 @@ msgstr[1] "Extension mobility"
 msgid "Forward"
 msgid_plural "Forwards"
 msgstr[0] "Desvío"
-msgstr[1] "Desvíos incondicionales"
+msgstr[1] "Desvíos"
 
 #: inc/line.class.php:125
 msgid "Surname"
@@ -213,18 +213,18 @@ msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
 #: inc/line.class.php:417
-msgid "History"
+msgid "Log"
 msgstr ""
 
-#: inc/line.class.php:434
+#: inc/line.class.php:432
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:545
+#: inc/line.class.php:543
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:552
+#: inc/line.class.php:550
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 

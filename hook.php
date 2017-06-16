@@ -131,6 +131,7 @@ function plugin_linesmanager_getDropdown() {
         'PluginLinesmanagerTimeperiod' => PluginLinesmanagerTimeperiod::getTypeName(Session::getPluralNumber()),
         'PluginLinesmanagerTimeslot' => PluginLinesmanagerTimeslot::getTypeName(Session::getPluralNumber()),
         'PluginLinesmanagerDdi' => PluginLinesmanagerDdi::getTypeName(Session::getPluralNumber()),
+        'PluginLinesmanagerForward' => PluginLinesmanagerForward::getTypeName(Session::getPluralNumber()),
     );
 }
 

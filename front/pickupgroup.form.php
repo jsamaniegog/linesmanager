@@ -66,7 +66,13 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerPickupgroup::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerPickupgroup');
+Html::header(
+    PluginLinesmanagerPickupgroup::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerPickupgroup'
+);
 
 $pickupgroup->display(array('id' => $_GET["id"]));
 

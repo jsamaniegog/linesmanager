@@ -66,7 +66,13 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerTimeperiod::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerTimeperiod');
+Html::header(
+    PluginLinesmanagerTimeperiod::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerTimeperiod'
+);
 
 $timeperiod->display(array('id' => $_GET["id"]));
 

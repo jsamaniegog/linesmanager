@@ -66,7 +66,13 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerDdi::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', 'PluginLinesmanagerDdi');
+Html::header(
+    PluginLinesmanagerDdi::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerDdi'
+);
 
 $ddi->display(array('id' => $_GET["id"]));
 

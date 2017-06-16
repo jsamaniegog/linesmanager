@@ -66,7 +66,13 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
     HTML::back();
 }
 
-Html::header(PluginLinesmanagerForward::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'dropdowns', 'PluginLinesmanagerForward');
+Html::header(
+    PluginLinesmanagerForward::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerForward'
+);
 
 $forward->display(array('id' => $_GET["id"]));
 

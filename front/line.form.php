@@ -79,7 +79,13 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
 Session::addMessageAfterRedirect(__("Please, manage the lines from the corresponding assets.", "linesmanager"), false, INFO);
 HTML::back();
 
-/*Html::header(PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()), $_SERVER['PHP_SELF'], 'tools', 'PluginLinesmanagerLine');
+/*Html::header(
+    PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerLine'
+);
 
 $line->display(array('id' => $_GET["id"]));
 
