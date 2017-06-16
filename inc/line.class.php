@@ -621,7 +621,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @return nothing
      * */
     function post_updateItem($history = 1) {
-        $this->updateContactInformation();
+        $this->updateContactInformation($history);
     }
 
     /**
@@ -642,7 +642,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
     /**
      * This function update the contact information of the itemtype liked.
      */
-    function updateContactInformation() {
+    function updateContactInformation($history = 1) {
         global $DB;
 
         if (isset($this->fields['itemtype'])
@@ -666,8 +666,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     $has_number = true;
                 } else {
                     // separator between contacts and contacts numbers
-                    $contact .= ",";
-                    $contact_num .= ",";
+                    $contact .= ", ";
+                    $contact_num .= ", ";
                 }
 
                 $contact .= $data['description'];
@@ -683,7 +683,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                         $has_linegroup = true;
                     } else {
                         // separator between linegroups
-                        $contact_num .= ",";
+                        $contact_num .= ", ";
                     }
 
                     $contact_num .= $data['linegroup'];
@@ -705,11 +705,37 @@ class PluginLinesmanagerLine extends CommonDropdown {
             }
 
             if ($contact != "" and $contact_num != "") {
+                $query = "SELECT contact, contact_num ";
+                $query .= "FROM " . $itemtype::getTable() . " ";
+                $query .= "WHERE id=" . $this->fields['items_id'];
+
+                $result = $DB->query($query);
+                $data = $result->fetch_assoc();
+                
                 $query = "UPDATE " . $itemtype::getTable() . " ";
                 $query .= "SET contact='$contact', contact_num='$contact_num' ";
                 $query .= "WHERE id=" . $this->fields['items_id'];
 
                 $DB->query($query);
+                
+                // logs
+                if ($history == 1) {
+                    $item = new $itemtype();
+
+                    if ($data['contact'] != $contact) {
+                        $changes[0] = $item->getSearchOptionByField('field', 'contact')['id'];
+                        $changes[1] = $data['contact'];
+                        $changes[2] = $contact;
+                        Log::history($this->fields['items_id'], $itemtype, $changes);
+                    }
+
+                    if ($data['contact_num'] != $contact_num) {
+                        $changes[0] = $item->getSearchOptionByField('field', 'contact_num')['id'];
+                        $changes[1] = $data['contact_num'];
+                        $changes[2] = $contact_num;
+                        Log::history($this->fields['items_id'], $itemtype, $changes);
+                    }
+                }
             }
         }
     }
