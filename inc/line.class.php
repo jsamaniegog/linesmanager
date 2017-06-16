@@ -419,9 +419,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 array(
                     'name' => 'history',
                     'onClick' => PluginLinesmanagerUtilform::getJsAjaxShowHistory(
-                        get_class($this), 
-                        "$('#table_lines').attr('selected_id')",
-                        "div_history"
+                        get_class($this), "$('#table_lines').attr('selected_id')", "div_history"
                     )
                 )
             )
@@ -591,6 +589,15 @@ class PluginLinesmanagerLine extends CommonDropdown {
         return $result->fetch_assoc()['count'];
     }
 
+    private function getStringNameForHistory() {
+        return PluginLinesmanagerUtilform::getForeingkeyName(
+                $this->fields["id"], 
+                $this->attributes['numplan']
+            ) 
+            . " (" 
+            . $this->fields["id"] . ")";
+    }
+    
     /**
      * Actions done after the ADD of the item in the database
      *
@@ -598,6 +605,12 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * */
     function post_addItem() {
         $this->updateContactInformation();
+        
+        // logs
+        $changes[0] = 0;
+        $changes[1] = "";
+        $changes[2] = $this->getStringNameForHistory();
+        Log::history($this->fields["items_id"], $this->fields["itemtype"], $changes, __CLASS__, Log::HISTORY_ADD_SUBITEM);
     }
 
     /**
@@ -618,6 +631,12 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * */
     function post_deleteFromDB() {
         $this->updateContactInformation();
+
+        // logs
+        $changes[0] = 0;
+        $changes[1] = $this->getStringNameForHistory();
+        $changes[2] = "";
+        Log::history($this->fields["items_id"], $this->fields["itemtype"], $changes, __CLASS__, Log::HISTORY_DELETE_SUBITEM);
     }
 
     /**

@@ -51,9 +51,9 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
                 foreach ($_POST['line'] as $line_id) {
                     $result = $line->delete(array('id' => $line_id));
                 }
+            } else {
+                $result = $line->delete($_POST);
             }
-
-            $result = $line->delete($_POST);
         }
 
         // disconnect line from an item
