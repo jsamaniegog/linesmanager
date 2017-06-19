@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-06-16 13:49+0200\n"
-"PO-Revision-Date: 2017-06-16 13:50+0200\n"
+"POT-Creation-Date: 2017-06-19 10:21+0200\n"
+"PO-Revision-Date: 2017-06-19 11:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_n:1,2\n"
@@ -107,7 +107,7 @@ msgstr[0] "Categoría"
 msgstr[1] "Categorías"
 
 #: inc/config.class.php:27 inc/config.class.php:33 inc/config.class.php:50
-#: inc/entity.class.php:44 setup.php:60
+#: inc/entity.class.php:44 setup.php:61
 msgid "Lines Manager"
 msgstr "Gestor de líneas"
 
@@ -118,6 +118,14 @@ msgstr "Automatizar descripción en función de el nombre y los apellidos: "
 #: inc/config.class.php:58
 msgid "Automate user id based on entity and number: "
 msgstr "Automatizar ID de usuario en función de la entidad y el número: "
+
+#: inc/config.class.php:63
+msgid ""
+"Fill contact information of the asset (the fields alternate username and "
+"number): "
+msgstr ""
+"Rellenar información de contacto de el activo (los campos usuario "
+"alternativo y número): "
 
 #: inc/ddi.class.php:39 inc/line.class.php:124 inc/range.class.php:39
 #: inc/range.class.php:160
@@ -212,19 +220,19 @@ msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:417
-msgid "Log"
+#: inc/line.class.php:413
+msgid "Historical"
 msgstr ""
 
-#: inc/line.class.php:432
+#: inc/line.class.php:428
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:543
+#: inc/line.class.php:539
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:550
+#: inc/line.class.php:546
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
@@ -422,11 +430,11 @@ msgstr "Filtrar valores usados"
 msgid "New item"
 msgstr ""
 
-#: setup.php:74
+#: setup.php:75
 msgid "This plugin requires GLPI >= 0.90"
 msgstr "Este complemento requiere GLPI >= 0.90"
 
-#: setup.php:95
+#: setup.php:96
 msgid "Installed / not configured"
 msgstr "Instalado / no configurado"
 

@@ -638,6 +638,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * This function update the contact information of the itemtype liked.
      */
     function updateContactInformation($history = 1) {
+        $config_datas = PluginLinesmanagerConfig::getConfigData();
+        if ($config_datas['fill_contact_information'] != 1) {
+            return;
+        }
+        
         global $DB;
 
         if (isset($this->fields['itemtype'])
@@ -758,6 +763,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param type $history
      */
     function cleanContactInformation($history = 1) {
+        $config_datas = PluginLinesmanagerConfig::getConfigData();
+        if ($config_datas['fill_contact_information'] != 1) {
+            return;
+        }
+        
         global $DB;
         
         if (isset($this->fields['items_id']) and isset($this->fields['itemtype'])) {

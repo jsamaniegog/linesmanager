@@ -59,6 +59,11 @@ class PluginLinesmanagerConfig extends CommonDBTM {
         echo "<td colspan='3'>";
         Dropdown::showYesNo('automate_user_id', $config_data['automate_user_id']);
         echo "</td></tr>";
+        echo "<tr class='tab_bg_2'>";
+        echo "<td>" . __('Fill contact information of the asset (the fields alternate username and number): ', 'linesmanager') . "</td>";
+        echo "<td colspan='3'>";
+        Dropdown::showYesNo('fill_contact_information', $config_data['fill_contact_information']);
+        echo "</td></tr>";
         echo "</table></div>";
         
         echo "<input type='submit' name='update' class='submit' value=\"" . _sx('button', 'Save') . "\">";
@@ -90,6 +95,7 @@ class PluginLinesmanagerConfig extends CommonDBTM {
         try {
             $this->updateConfig($datas, 'automate_description');
             $this->updateConfig($datas, 'automate_user_id');
+            $this->updateConfig($datas, 'fill_contact_information');
         } catch (Exception $e) {
             throw $e;
         }
@@ -99,7 +105,7 @@ class PluginLinesmanagerConfig extends CommonDBTM {
         global $DB;
         
         $query  = "UPDATE glpi_plugin_linesmanager_configs SET ";
-        $query .= "value = '" . $datas[$type] . "'";
+        $query .= "value = '" . $datas[$type] . "' ";
         $query .= "WHERE type = '$type'";
             
         if (!$DB->query($query)) {
