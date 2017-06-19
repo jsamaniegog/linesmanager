@@ -365,10 +365,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
         return $array_ret;
     }
 
-    static function countForItem($id) {
-        return 10;
-    }
-
     /**
      * View parent.
      * @param CommonGLPI $item
@@ -414,7 +410,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // history button
         echo sprintf(
             ' <input class="submit" type="button" value="'
-            . __("Log")
+            . __("Historical")
             . '" name="%1$s" %2$s>', Html::cleanInputText('new'), Html::parseAttributes(
                 array(
                     'name' => 'history',
@@ -591,21 +587,20 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
     private function getStringNameForHistory() {
         return PluginLinesmanagerUtilform::getForeingkeyName(
-                $this->fields["id"], 
-                $this->attributes['numplan']
-            ) 
-            . " (" 
+                $this->fields["id"], $this->attributes['numplan']
+            )
+            . " ("
             . $this->fields["id"] . ")";
     }
-    
+
     /**
      * Actions done after the ADD of the item in the database
      *
      * @return nothing
-     * */
+     */
     function post_addItem() {
         $this->updateContactInformation();
-        
+
         // logs
         $changes[0] = 0;
         $changes[1] = "";
@@ -705,36 +700,98 @@ class PluginLinesmanagerLine extends CommonDropdown {
             }
 
             if ($contact != "" and $contact_num != "") {
-                $query = "SELECT contact, contact_num ";
-                $query .= "FROM " . $itemtype::getTable() . " ";
-                $query .= "WHERE id=" . $this->fields['items_id'];
+                // for logs
+                if ($history == 1) {
+                    $query = "SELECT contact, contact_num ";
+                    $query .= "FROM " . $itemtype::getTable() . " ";
+                    $query .= "WHERE id=" . $this->fields['items_id'];
 
-                $result = $DB->query($query);
-                $data = $result->fetch_assoc();
-                
+                    $result = $DB->query($query);
+                    $data = $result->fetch_assoc();
+                }
+
                 $query = "UPDATE " . $itemtype::getTable() . " ";
                 $query .= "SET contact='$contact', contact_num='$contact_num' ";
                 $query .= "WHERE id=" . $this->fields['items_id'];
 
                 $DB->query($query);
-                
+
                 // logs
                 if ($history == 1) {
-                    $item = new $itemtype();
-
                     if ($data['contact'] != $contact) {
-                        $changes[0] = $item->getSearchOptionByField('field', 'contact')['id'];
-                        $changes[1] = $data['contact'];
-                        $changes[2] = $contact;
-                        Log::history($this->fields['items_id'], $itemtype, $changes);
+                        $this->logHistory(
+                            $itemtype, $this->fields['items_id'], 'contact', $data['contact'], $contact
+                        );
                     }
 
                     if ($data['contact_num'] != $contact_num) {
-                        $changes[0] = $item->getSearchOptionByField('field', 'contact_num')['id'];
-                        $changes[1] = $data['contact_num'];
-                        $changes[2] = $contact_num;
-                        Log::history($this->fields['items_id'], $itemtype, $changes);
+                        $this->logHistory(
+                            $itemtype, $this->fields['items_id'], 'contact_num', $data['contact_num'], $contact
+                        );
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Log history of a field.
+     * @param type $itemtype
+     * @param type $items_id
+     * @param type $field
+     * @param type $old_value
+     * @param type $new_value
+     */
+    private function logHistory($itemtype, $items_id, $field, $old_value, $new_value) {
+        $item = new $itemtype();
+        $search_option_id = $item->getSearchOptionByField('field', $field)['id'];
+
+        $changes[0] = $search_option_id;
+        $changes[1] = $old_value;
+        $changes[2] = $new_value;
+        Log::history($items_id, $itemtype, $changes);
+    }
+
+    /**
+     * Clean the contact information of an asset.
+     * @global type $DB
+     * @param type $history
+     */
+    function cleanContactInformation($history = 1) {
+        global $DB;
+        
+        if (isset($this->fields['items_id']) and isset($this->fields['itemtype'])) {
+            $itemtype = $this->fields['itemtype'];
+            $items_id = $this->fields['items_id'];
+
+            // for logs
+            if ($history == 1) {
+                $query = "SELECT contact, contact_num ";
+                $query .= "FROM " . $itemtype::getTable() . " ";
+                $query .= "WHERE id=" . $items_id;
+
+                $result = $DB->query($query);
+                $data = $result->fetch_assoc();
+            }
+            
+            $query = "UPDATE " . $itemtype::getTable() . " ";
+            $query .= "SET contact='', contact_num='' ";
+            $query .= "WHERE id=" . $items_id;
+
+            $DB->query($query);
+
+            // logs
+            if ($history == 1) {
+                if ($data['contact'] != "") {
+                    $this->logHistory(
+                        $itemtype, $items_id, 'contact', $data['contact'], ""
+                    );
+                }
+
+                if ($data['contact_num'] != "") {
+                    $this->logHistory(
+                        $itemtype, $items_id, 'contact_num', $data['contact_num'], ""
+                    );
                 }
             }
         }

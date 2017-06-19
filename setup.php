@@ -34,7 +34,7 @@ function plugin_init_linesmanager() {
     Plugin::registerClass('PluginLinesmanagerAlgorithm');
     Plugin::registerClass('PluginLinesmanagerUtilform');
     //Plugin::registerClass('PluginLinesmanagerUtilsetup');
-
+    
     /*if (Session::haveRight('plugin_linesmanager_line', UPDATE)) {
         //$PLUGIN_HOOKS['config_page']['linesmanager'] = 'front/config.php';
         // añade menú. ver uso de CommonGLPI::getMenuContent()
@@ -45,7 +45,8 @@ function plugin_init_linesmanager() {
         );
     }*/
 
-    //$PLUGIN_HOOKS['post_show_item']['linesmanager'] = array('PluginLinesmanagerLine', 'post_show_item');
+    $PLUGIN_HOOKS['item_add']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_add_linesmanager_PluginSimcardSimcard_Item';
+    $PLUGIN_HOOKS['item_purge']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_purge_linesmanager_PluginSimcardSimcard_Item';
 
     $PLUGIN_HOOKS['csrf_compliant']['linesmanager'] = true;
     

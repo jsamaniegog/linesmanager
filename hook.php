@@ -57,7 +57,7 @@ function plugin_linesmanager_install() {
                 include_once "inc/$fichero";
             }
         }
-        
+
         $category = new PluginLinesmanagerCategory();
         $input = array(
             '0' => __("Only receive calls", "linesmanager"),
@@ -77,31 +77,31 @@ function plugin_linesmanager_install() {
                     'description' => $value)
             );
         }
-        
+
         $timeperiod = new PluginLinesmanagerTimeperiod();
         $timeperiod->add(array(
             'description' => __('Morning schedule', 'linesmanager'),
-            'time_start'  => '08:00:00',
-            'time_end'    => '15:00:00',
+            'time_start' => '08:00:00',
+            'time_end' => '15:00:00',
             'dayofweek_start' => '1',
-            'dayofweek_end'   => '5'
+            'dayofweek_end' => '5'
         ));
-        
+
         $timeslot = new PluginLinesmanagerTimeslot();
         $timeslot->add(array(
             'description' => __('8h-15h, Mon-Fri, Cat. 6', 'linesmanager'),
-            'timeperiod'  => $timeperiod->getID(),
-            'category'    => '7'
+            'timeperiod' => $timeperiod->getID(),
+            'category' => '7'
         ));
     }
 
     // register a cron for task execution
-    /*$res = CronTask::Register(
-            "PluginLinesmanagerCron", "linesmanager", 86400, array(
-            'comment' => __('Lines manager', 'linesmanager'),
-            'mode' => CronTask::MODE_EXTERNAL
-            )
-    );*/
+    /* $res = CronTask::Register(
+      "PluginLinesmanagerCron", "linesmanager", 86400, array(
+      'comment' => __('Lines manager', 'linesmanager'),
+      'mode' => CronTask::MODE_EXTERNAL
+      )
+      ); */
     //CronTask::Unregister("Linesmanager");
     return true;
 }
@@ -345,23 +345,23 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
     $fk = getItemTypeForTable($searchopt['table']);
     $fk = new $fk();
 
-    /*if (isset($searchopt['foreingkey']) and is_array($searchopt['foreingkey']['field_name'])) {
-        $field_array[] = $searchopt['foreingkey']['field_name'];
-    }
+    /* if (isset($searchopt['foreingkey']) and is_array($searchopt['foreingkey']['field_name'])) {
+      $field_array[] = $searchopt['foreingkey']['field_name'];
+      }
 
-    foreach ($linkfield_array as $lf_key => $linkfield) {
+      foreach ($linkfield_array as $lf_key => $linkfield) {
 
-    }*/
-    
+      } */
+
     $table = $fk::getTable();
     $alias = $searchopt['linkfield'];
-    $alias = ($alias != "") ? "_" . $alias : $alias ;
+    $alias = ($alias != "") ? "_" . $alias : $alias;
     if (is_array($searchopt['field'])) {
         $field_name_array = $searchopt['field'];
     } else {
         $field_name_array[] = $searchopt['field'];
     }
-    
+
     $nott = ($nott === 1) ? " NOT" : "";
 
     if (strtolower($val) === 'null') {
@@ -370,28 +370,25 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         } else {
             $val = "is NULL";
         }
-     
-    } else if($searchtype == 'equals') {
+    } else if ($searchtype == 'equals') {
         $val = "= '$val'";
-        
-    } else if($searchtype == 'notequals') {
+    } else if ($searchtype == 'notequals') {
         $val = "= '$val'";
-        
     } else {
         $val = "like '%$val%'";
     }
-    
+
     $where = $link . " (";
-    
+
     foreach ($field_name_array as $key => $field_name) {
-        
+
         if ($key != 0) {
             $where .= " OR ";
         }
-        
+
         $attribute = $fk->attributes[$field_name];
         $table = $searchopt['table'];
-        
+
         if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
             $table = $fk->attributes[$field_name]['foreingkey']['item'];
             $table = $table::getTable();
@@ -401,6 +398,32 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
 
         $where .= $nott . " " . $table . $alias . "." . $field_name . " $val ";
     }
-    
+
     return $where . ")";
+}
+
+/**
+ * Actions done after the ADD of the item in the database
+ *
+ * @return nothing
+ */
+function plugin_item_add_linesmanager_PluginSimcardSimcard_Item($data) {
+    $line = new PluginLinesmanagerLine();
+    // the id of the simcard
+    $line->fields['items_id'] = $data->fields['plugin_simcard_simcards_id'];
+    $line->fields['itemtype'] = "PluginSimcardSimcard";
+    $line->updateContactInformation();
+}
+
+/**
+ * Actions done after the DELETE of the item in the database
+ *
+ * @return nothing
+ */
+function plugin_item_purge_linesmanager_PluginSimcardSimcard_Item($data) {
+    $line = new PluginLinesmanagerLine();
+    // the id of the linked asset at the simcard
+    $line->fields['items_id'] = $data->fields['items_id'];
+    $line->fields['itemtype'] = $data->fields['itemtype'];
+    $line->cleanContactInformation();
 }
