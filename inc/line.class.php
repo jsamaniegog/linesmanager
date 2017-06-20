@@ -65,6 +65,12 @@ class PluginLinesmanagerLine extends CommonDropdown {
       } */
 
     /**
+     * Number of columns in PDF export with PDF plugin. Must be >= 1.
+     * @var type 
+     */
+    static private $columns_in_pdf = 2;
+    
+    /**
      * Constructor. Load model attributes.
      */
     function __construct() {
@@ -642,7 +648,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         if ($config_datas['fill_contact_information'] != 1) {
             return;
         }
-        
+
         global $DB;
 
         if (isset($this->fields['itemtype'])
@@ -711,8 +717,9 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     $query .= "FROM " . $itemtype::getTable() . " ";
                     $query .= "WHERE id=" . $this->fields['items_id'];
 
-                    $result = $DB->query($query);
-                    $data = $result->fetch_assoc();
+                    if ($result = $DB->query($query)) {
+                        $data = $result->fetch_assoc();
+                    }
                 }
 
                 $query = "UPDATE " . $itemtype::getTable() . " ";
@@ -722,7 +729,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $DB->query($query);
 
                 // logs
-                if ($history == 1) {
+                if ($history == 1 and isset($data)) {
                     if ($data['contact'] != $contact) {
                         $this->logHistory(
                             $itemtype, $this->fields['items_id'], 'contact', $data['contact'], $contact
@@ -767,9 +774,9 @@ class PluginLinesmanagerLine extends CommonDropdown {
         if ($config_datas['fill_contact_information'] != 1) {
             return;
         }
-        
+
         global $DB;
-        
+
         if (isset($this->fields['items_id']) and isset($this->fields['itemtype'])) {
             $itemtype = $this->fields['itemtype'];
             $items_id = $this->fields['items_id'];
@@ -783,7 +790,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $result = $DB->query($query);
                 $data = $result->fetch_assoc();
             }
-            
+
             $query = "UPDATE " . $itemtype::getTable() . " ";
             $query .= "SET contact='', contact_num='' ";
             $query .= "WHERE id=" . $items_id;
@@ -804,6 +811,64 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     );
                 }
             }
+        }
+    }
+
+    static function displayTabContentForPDF(PluginPdfSimplePDF $pdf, CommonGLPI $item, $tab) {
+        switch ($tab) {
+            case '0' :
+                self::pdfLines($pdf, $item);
+                break;
+
+            default :
+                return false;
+        }
+        return true;
+    }
+
+    static function pdfLines($pdf, $item) {
+        $line = new PluginLinesmanagerLine();
+        $condition = "itemtype = '" . $item->getType() . "' AND items_id = " . $item->getID();
+        $records = $line->find($condition);
+
+        //$line->getFromDBByQuery("WHERE itemtype='Phone' AND items_id=" . $item->fields['id']);
+
+        $pdf->setColumnsSize(100);
+
+        $pdf->displayTitle('<b>' . $line->getTypeName(2) . ' (' . (string) count($records) . ')</b>');
+
+        $pdf->setColumnsSize(50, 50);
+
+        foreach ($records as $id => $record) {
+
+            $string = array();
+            $fields_counter = 0;
+            
+            foreach (PluginLinesmanagerUtilform::getFieldsValue($line, $record) as $dbfield_name => $value) {
+
+                $field_name = $line->attributes[$dbfield_name]['name'];
+
+                $css_style = '';
+                if ($dbfield_name == 'numplan' or $dbfield_name == 'linegroup') {
+                    $css_style = 'color:#3366ff;';
+                }
+                
+                $string[] =  ''
+                    . sprintf(
+                        __('<b><i>%1$s:&nbsp;</b></i><span style="' . $css_style . '">%2$s</span>'), $field_name, $value
+                );
+
+                $fields_counter++;
+                
+                if ($fields_counter == self::$columns_in_pdf) {
+                    call_user_func_array(array($pdf, 'displayLine'), $string);
+                    
+                    $string = array();
+                    $fields_counter = 0;
+                }
+            }
+            
+            $pdf->displaySpace();
         }
     }
 

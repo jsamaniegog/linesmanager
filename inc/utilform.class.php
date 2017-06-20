@@ -33,7 +33,7 @@ class PluginLinesmanagerUtilform {
     static function getLoadingDiv() {
         return "<div style='margin-top: 20px;margin-bottom:20px;' class='loadingindicator'>" . __s('Loading...') . "</div></div>";
     }
-    
+
     /**
      * Return javascript to load a form, by ajax, in a div name: div_form_<name>.
      * The file called to load by ajax must be named ajax/show<Name>Form.php
@@ -69,10 +69,10 @@ class PluginLinesmanagerUtilform {
      */
     static function getJsAjaxShowHistory($item, $id, $element = 'div_history') {
         global $CFG_GLPI;
-        
+
         $data['item_type'] = $item::getType();
         $data['items_id'] = -1;
-        
+
         $data = json_encode($data);
 
         return '$.ajax({
@@ -87,7 +87,7 @@ class PluginLinesmanagerUtilform {
             }
         });';
     }
-    
+
     /**
      * Prints a <div> tag to load form by ajax. See getJsAjaxRowClickLoadForm 
      * doc.
@@ -112,7 +112,7 @@ class PluginLinesmanagerUtilform {
      */
     static function showHtmlDivOpen($id, $options = array(), $closeDiv = false) {
         echo "<div id='$id' " . Html::parseAttributes($options) . ">";
-        
+
         if ($closeDiv === true) {
             self::showHtmlDivClose();
         }
@@ -162,17 +162,17 @@ class PluginLinesmanagerUtilform {
     static function showHtmlRowFormFields($attributes, $values, $view_options = array()) {
         // default loops (columns)
         $loops = 2;
-        
+
         if (isset($view_options['columns'])) {
             $loops = $view_options['columns'];
         }
 
         foreach ($attributes as $dbfield_name => $attribute) {
-            
+
             if (!isset($values[$dbfield_name])) {
                 $values[$dbfield_name] = '';
             }
-            
+
             // formating value with sprintf
             if (isset($attribute['string_format'])) {
                 $values[$dbfield_name] = sprintf($attribute['string_format'], $values[$dbfield_name]);
@@ -238,25 +238,24 @@ class PluginLinesmanagerUtilform {
         if ($values["id"] === "" and isset($attribute['default'])) {
             $values[$dbfield_name] = $attribute['default'];
         }
-        
+
         // if is a readOnly field
         if (isset($attribute['readOnly']) and $attribute['readOnly'] === true) {
             $attribute['style'] = "background-color:#F1F1F1;";
         }
-        /*if (isset($attribute['readOnly']) and $attribute['readOnly'] === true) {
+        /* if (isset($attribute['readOnly']) and $attribute['readOnly'] === true) {
 
-            if (self::isForeingkey($attribute)) {
-                $values[$dbfield_name] = self::getForeingKeyName(
-                        $values[$dbfield_name], $attribute
-                );
-            }
+          if (self::isForeingkey($attribute)) {
+          $values[$dbfield_name] = self::getForeingKeyName(
+          $values[$dbfield_name], $attribute
+          );
+          }
 
-            //echo "<span>" . $values[$dbfield_name] . "</span>";
-        } else*/if (self::isForeingkey($attribute)) {
+          //echo "<span>" . $values[$dbfield_name] . "</span>";
+          } else */if (self::isForeingkey($attribute)) {
 
             // if is foreing key
             self::showHtmlForeingkeyDropdown($dbfield_name, $values[$dbfield_name], $attribute);
-
         } elseif (isset($attribute['type'])) {
             // else show by type
             switch ($attribute['type']) {
@@ -286,7 +285,7 @@ class PluginLinesmanagerUtilform {
             echo Html::input($dbfield_name, $options);
         }
     }
-    
+
     /**
      * Dropdown for time selection. (Minutes and seconds will increase by 5 
      * seconds).
@@ -338,11 +337,11 @@ class PluginLinesmanagerUtilform {
         }
 
         $options['value'] = $value;
-        
+
         if (isset($options['display']) and $options['display'] === false) {
             return Dropdown::showFromArray($name, $tab, $options);
         }
-        
+
         Dropdown::showFromArray($name, $tab, $options);
     }
 
@@ -385,26 +384,14 @@ class PluginLinesmanagerUtilform {
             echo "</tr>";
 
             // valores campos
-            foreach ($records as $id => $line) {
-                
-                $css_row = ($line['vip']) ? "background-color:#fff294;" : "" ;
-                
+            foreach ($records as $id => $record) {
+
+                $css_row = ($record['vip']) ? "background-color:#fff294;" : "";
+
                 echo "<tr id='" . $id . "' style='$css_row'>";
-                foreach ($item->attributes as $dbfield_name => $attribute) {
 
-                    if (isset($attribute['hidden']) and $attribute['hidden'])
-                        continue;
-
-                    if (isset($attribute['foreingkey'])) {
-                        $line[$dbfield_name] = self::getForeingkeyName($line[$dbfield_name], $attribute);
-                    }
-
-                    if (isset($attribute['type']) and $attribute['type'] == 'bool') {
-                        $value = ($line[$dbfield_name] == 1) ? __('Yes') : __('No');
-                        echo "<td align=center>" . $value . "</td>";
-                    } else {
-                        echo "<td align=center>" . $line[$dbfield_name] . "</td>";
-                    }
+                foreach (self::getFieldsValue($item, $record) as $value) {
+                    echo "<td align=center>" . $value . "</td>";
                 }
 
                 if ($show_col_buttons) {
@@ -423,6 +410,33 @@ class PluginLinesmanagerUtilform {
         }
 
         echo "</table>";
+    }
+
+    /**
+     * Return an array with the values to show of a record. For example if
+     * the value of a foreingkey return as the indicated name.
+     * @param type $item
+     * @param type $record
+     * @return array Array of values. The field name is the key.
+     */
+    static public function getFieldsValue($item, $record) {
+        $values = array();
+
+        foreach ($item->attributes as $dbfield_name => $attribute) {
+
+            if (isset($attribute['hidden']) and $attribute['hidden'])
+                continue;
+
+            if (isset($attribute['foreingkey'])) {
+                $values[$dbfield_name] = self::getForeingkeyName($record[$dbfield_name], $attribute);
+            } else if (isset($attribute['type']) and $attribute['type'] == 'bool') {
+                $values[$dbfield_name] = ($record[$dbfield_name] == 1) ? __('Yes') : __('No');
+            } else {
+                $values[$dbfield_name] = $record[$dbfield_name];
+            }
+        }
+
+        return $values;
     }
 
     /**
@@ -519,10 +533,10 @@ class PluginLinesmanagerUtilform {
         if (empty($fk->fields)) {
             $fk->getFromDB($item_id);
         }
-        
+
         // the name of the field where we search
         $field_name = $attribute['foreingkey'][$key];
-        
+
         // si el nombre que queremos mostrar es también foreingkey
         if (!is_array($field_name) and self::isForeingkey($fk->attributes[$field_name])) {
             $name = self::getForeingkeyName(
@@ -554,17 +568,18 @@ class PluginLinesmanagerUtilform {
                     if (!isset($options['style'])) {
                         $options['style'] = 'hyphen';
                     }
-                    
+
                     // nombre del campo si precisa
                     switch ($options['style']) {
                         case 'fieldvalue':
-                            if ($name != "") $name .= "<br>";
+                            if ($name != "")
+                                $name .= "<br>";
                             $name .= $fk->attributes[$field]['name'];
                             break;
 
                         default: break;
                     }
-                    
+
                     if ($name != "" and $nametoadd != "") {
                         switch ($options['style']) {
                             case 'fieldvalue':
@@ -629,24 +644,24 @@ class PluginLinesmanagerUtilform {
 
         // filter used values: need belongsTo in foreing key item
         // the value asigned is not filtered
-        /*if (isset($attribute_fk['filterUsedValues']) and $attribute_fk['filterUsedValues'] === true) {
+        /* if (isset($attribute_fk['filterUsedValues']) and $attribute_fk['filterUsedValues'] === true) {
 
-            $attribute_fk['condition'] .= ($attribute_fk['condition'] != "") ? " AND " : " ";
-            $attribute_fk['condition'] .= "((1=1";
+          $attribute_fk['condition'] .= ($attribute_fk['condition'] != "") ? " AND " : " ";
+          $attribute_fk['condition'] .= "((1=1";
 
-            foreach ($fk::$belongsTo as $item) {
-                $attribute_fk['condition'] .= " AND " . $attribute_fk['field_id'] . " NOT IN "
-                    . "(SELECT " . self::getItemName($fk)
-                    . " FROM " . $item::getTable() . ""
-                    . " WHERE " . self::getItemName($fk) . " is not null)";
-            }
+          foreach ($fk::$belongsTo as $item) {
+          $attribute_fk['condition'] .= " AND " . $attribute_fk['field_id'] . " NOT IN "
+          . "(SELECT " . self::getItemName($fk)
+          . " FROM " . $item::getTable() . ""
+          . " WHERE " . self::getItemName($fk) . " is not null)";
+          }
 
-            $attribute_fk['condition'] .= " )";
+          $attribute_fk['condition'] .= " )";
 
-            $attribute_fk['condition'] .= " OR " . $attribute_fk['field_id'] . " = '" . $value . "'";
+          $attribute_fk['condition'] .= " OR " . $attribute_fk['field_id'] . " = '" . $value . "'";
 
-            $attribute_fk['condition'] .= " )";
-        }*/
+          $attribute_fk['condition'] .= " )";
+          } */
 
         $attribute_fk['field_name'] = (is_array($attribute_fk['field_name'])) ?
             implode(",", $attribute_fk['field_name']) :
@@ -696,28 +711,27 @@ class PluginLinesmanagerUtilform {
         // params for ajaxDropdown
         $param = array_merge(
             array(
-                'id' => $value, // need id to filer used values
-                'field' => $name, // need the name of the field to filter used values
-                'value' => $value,  // this is the value to assing to dropdown
-                'valuename' => $name_to_show  // this is the value to show in dropdown
-            ), 
-            $attribute  // params to send ajax load page
+            'id' => $value, // need id to filer used values
+            'field' => $name, // need the name of the field to filter used values
+            'value' => $value, // this is the value to assing to dropdown
+            'valuename' => $name_to_show  // this is the value to show in dropdown
+            ), $attribute  // params to send ajax load page
         );
-        
+
         // id of the dropdown
         $dropdown_id = "dropdown_" . $name . $rand;
         // id of the box that stores the tooltip
         $box_tooltip_id = "box_tooltip_$name$rand";
-        
+
         // onchange event to change tooltip
         $json_attribute = json_encode(array_merge($attribute), JSON_UNESCAPED_UNICODE);
         $param['on_change'] = '$.ajax({
             url:  "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/getTooltip.php",
             success: function(html) {
-                $("#'.$box_tooltip_id.'").html(html);
+                $("#' . $box_tooltip_id . '").html(html);
             },
             method: "POST",
-            data: {value: $("#'.$dropdown_id.'").val(), ' . substr($json_attribute, 1, strlen($json_attribute) - 2) . '}
+            data: {value: $("#' . $dropdown_id . '").val(), ' . substr($json_attribute, 1, strlen($json_attribute) - 2) . '}
         });';
 
         // print ajax dropdown
@@ -726,17 +740,17 @@ class PluginLinesmanagerUtilform {
         );
 
         // showing checkbox to filter used values
-        if (isset($attribute['foreingkey']['showFilterUsedValuesCheckbox']) 
+        if (isset($attribute['foreingkey']['showFilterUsedValuesCheckbox'])
             and $attribute['foreingkey']['showFilterUsedValuesCheckbox'] === true
         ) {
             // inicializate session variable to control filter used values
             $checked = "";
-            $_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$name] = false;
-            
+            $_SESSION['glpi_plugin_linesmanager']['filterUsedValues' . $name] = false;
+
             if (isset($attribute['foreingkey']['filterUsedValues'])
                 and $attribute['foreingkey']['filterUsedValues'] === true) {
                 $checked = "checked";
-                $_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$name] = true;
+                $_SESSION['glpi_plugin_linesmanager']['filterUsedValues' . $name] = true;
             }
 
             //echo "&nbsp;";
@@ -751,20 +765,20 @@ class PluginLinesmanagerUtilform {
             echo "title='" . __("This check box filter used values if it is checked.", "linesmanager") . "' ";
             echo "for='check_" . $name . "'>&nbsp;" . __("Filter used values", "linesmanager");
             echo "</label></div>";
-            echo Html::scriptBlock('$("#check_' . $name.'").change(function() {
+            echo Html::scriptBlock('$("#check_' . $name . '").change(function() {
                 $.ajax({
                     url:  "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/setFilterUsedValues.php",
                     method: "POST",
-                    data: {value: $(this).is(":checked"),field:"'.$name.'"}
+                    data: {value: $(this).is(":checked"),field:"' . $name . '"}
                 });
             });');
         }
-        
+
         // showing tooltip
         if ($fk->canView()) {
-            $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip',array('style' => 'fieldvalue'));
-            
-            $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null ;
+            $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip', array('style' => 'fieldvalue'));
+
+            $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null;
             echo "&nbsp;";
             echo "<span id='$box_tooltip_id'>";
             echo Html::showToolTip($tooltip_to_show, $options);
@@ -784,26 +798,26 @@ class PluginLinesmanagerUtilform {
             echo $output;
         }
     }
-    
+
     /**
      * 
      * @param array $array
      * @return array Array encoded.
      */
-    /*static function utf8arrayencode($array) {
-        
-        foreach ($array as $key => $value) {
-            
-            if (is_array($array[$key])){
-                $array[$key] = self::utf8arrayencode ($attribute[$key]);
-            }
-            
-            $array[$key] = utf8_encode($value);
-        }
-        
-        return $array;
-        
-    }*/
+    /* static function utf8arrayencode($array) {
+
+      foreach ($array as $key => $value) {
+
+      if (is_array($array[$key])){
+      $array[$key] = self::utf8arrayencode ($attribute[$key]);
+      }
+
+      $array[$key] = utf8_encode($value);
+      }
+
+      return $array;
+
+      } */
 
     /**
      * Return array of datas to load ajax dropdown, use this in the file
@@ -825,38 +839,37 @@ class PluginLinesmanagerUtilform {
 
         $field_name_q = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_name);
         $field_id_q = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_id);
-        
+
         $field_name_qt = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_name, $fk::getTable());
         $field_id_qt = PluginLinesmanagerUtilform::getFieldsInQuotationMarksForSql($field_id, $fk::getTable());
-        
+
         $query = "SELECT $field_id_qt, $field_name_qt ";
-        
+
         $query .= "FROM " . $fk::getTable() . " ";
-        
+
         $names = (is_array($attribute['foreingkey']['field_name'])) ?
             $attribute['foreingkey']['field_name'] :
-            array($attribute['foreingkey']['field_name']) ;
+            array($attribute['foreingkey']['field_name']);
         foreach ($names as $name) {
             if (PluginLinesmanagerUtilform::isForeingkey($fk->attributes[$name])) {
                 $fk2 = $fk->attributes[$name]['foreingkey']['item'];
                 $query .= "LEFT JOIN " . $fk2::getTable() . " ON " . $fk2::getTable() . ".id = " . $fk::getTable() . "." . $name . " ";
             }
         }
-        
+
         $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText'], $fk) . ") ";
-        
+
         // filter used values: need belongsTo in foreing key item
         // the value asigned is not filtered
-        if ((isset($attribute['foreingkey']['filterUsedValues']) 
-                and $attribute['foreingkey']['filterUsedValues'] !== "false" )
-            and
-            ( (isset($attribute['foreingkey']['filterUsedValues']) 
-                and $attribute['foreingkey']['filterUsedValues'] === "true"
-                and !isset($attribute['foreingkey']['showFilterUsedValuesCheckbox']) )
-            or (isset($_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$attribute['field']]) 
-                and $_SESSION['glpi_plugin_linesmanager']['filterUsedValues'.$attribute['field']] === true) )
+        if ((isset($attribute['foreingkey']['filterUsedValues'])
+            and $attribute['foreingkey']['filterUsedValues'] !== "false" )
+            and ( (isset($attribute['foreingkey']['filterUsedValues'])
+            and $attribute['foreingkey']['filterUsedValues'] === "true"
+            and ! isset($attribute['foreingkey']['showFilterUsedValuesCheckbox']) )
+            or ( isset($_SESSION['glpi_plugin_linesmanager']['filterUsedValues' . $attribute['field']])
+            and $_SESSION['glpi_plugin_linesmanager']['filterUsedValues' . $attribute['field']] === true) )
         ) {
-            
+
             $attribute['foreingkey']['condition'] .= ($attribute['foreingkey']['condition'] != "") ? " AND " : " ";
             $attribute['foreingkey']['condition'] .= "((1=1";
 
@@ -877,13 +890,13 @@ class PluginLinesmanagerUtilform {
         if (isset($attribute['foreingkey']['condition']) and $attribute['foreingkey']['condition'] != "") {
             $query .= "AND " . $attribute['foreingkey']['condition'] . " ";
         }
-        
+
         if (isset($attribute['foreingkey']['orderby'])) {
             $query .= "ORDER BY " . $attribute['foreingkey']['orderby'] . " ";
         } else {
             $query .= "ORDER BY     $field_name_qt ";
         }
-        
+
         $query .= "LIMIT " . intval(($attribute['page'] - 1) * $attribute['page_limit']) . "," . $attribute['page_limit'];
         $result = $DB->query($query);
 
@@ -913,11 +926,11 @@ class PluginLinesmanagerUtilform {
      * @return string
      */
     static function getFieldsInQuotationMarksForSql($fields, $table_name = "") {
-        
+
         if ($table_name != "") {
             $table_name .= ".";
         }
-        
+
         $string = "";
         if (is_array($fields)) {
             foreach ($fields as $key => $value) {
@@ -936,22 +949,22 @@ class PluginLinesmanagerUtilform {
         $fields = explode(",", $fields_coma_separated);
         $and = false;
         foreach ($fields as $key => $value) {
-            
+
             if ($and) {
                 $string .= " OR";
             }
-            
+
             $value_no_quoted = str_replace("`", "", $value);
             $value = $item::getTable() . "." . $value;
             if ($search_text == "") {
                 $ornull = "OR ($value is null)";
             }
-            
+
             if (PluginLinesmanagerUtilform::isForeingkey($item->attributes[$value_no_quoted])) {
                 $item2 = $item->attributes[$value_no_quoted]['foreingkey']['item'];
                 $value = $item2::getTable() . "." . $item->attributes[$value_no_quoted]['foreingkey']['field_name'];
             }
-            
+
             $string .= " ($value like '$search_text%') $ornull ";
             $and = true;
         }
