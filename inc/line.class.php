@@ -592,11 +592,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
     }
 
     private function getStringNameForHistory() {
-        return PluginLinesmanagerUtilform::getForeingkeyName(
-                $this->fields["id"], $this->attributes['numplan']
-            )
-            . " ("
-            . $this->fields["id"] . ")";
+        return "ID: " . $this->fields["id"] . ", " 
+            . __('Number', 'linesmanager') . ": " 
+            . PluginLinesmanagerUtilform::getForeingkeyName(
+                $this->fields["numplan"], $this->attributes['numplan']
+            );
     }
 
     /**
