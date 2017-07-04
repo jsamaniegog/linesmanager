@@ -738,7 +738,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
                     if ($data['contact_num'] != $contact_num) {
                         $this->logHistory(
-                            $itemtype, $this->fields['items_id'], 'contact_num', $data['contact_num'], $contact
+                            $itemtype, $this->fields['items_id'], 'contact_num', $data['contact_num'], $contact_num
                         );
                     }
                 }
