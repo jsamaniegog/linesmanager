@@ -618,7 +618,7 @@ class PluginLinesmanagerUtilform {
      * @param string $field_name Only if format is array.
      */
     static function getStringFormat($value, $format, $field_name = null) {
-        if (isset($value) and isset($format)) {
+        if (isset($value) and $value != "" and isset($format)) {
             if (is_array($format) and isset($format[$field_name])) {
                 $value = sprintf($format[$field_name], $value);
             } elseif (!is_array($format)) {
