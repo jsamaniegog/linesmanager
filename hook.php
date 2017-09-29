@@ -48,7 +48,7 @@ function plugin_linesmanager_install() {
     global $DB;
 
     if (!TableExists("glpi_plugin_linesmanager_line")) {
-        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/1.0.0.sql");
+        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.1.0.sql");
 
         // hack v0.85 - v0.90 to include needed classes to add the next rows
         include_once "inc/line.class.php";
@@ -113,7 +113,7 @@ function plugin_linesmanager_install() {
 function plugin_linesmanager_uninstall() {
     global $DB;
 
-    $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/uninstall-1.0.0.sql");
+    $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/uninstall-0.1.0.sql");
 
     return true;
 }
