@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+DROP TABLE IF EXISTS `glpi_plugin_linesmanager_configs`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_profiles`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_ranges`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_numplans`;
