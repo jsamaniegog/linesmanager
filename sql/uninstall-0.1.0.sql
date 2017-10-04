@@ -28,3 +28,4 @@ DROP TABLE IF EXISTS `glpi_plugin_linesmanager_linegroups`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_algorithms`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_pickupgroups`;
 DROP TABLE IF EXISTS `glpi_plugin_linesmanager_ddis`;
+DELETE FROM `glpi_logs` WHERE itemtype like 'PluginLinesmanager%';
