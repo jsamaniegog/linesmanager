@@ -31,7 +31,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
     /**
      * Name for profile rights.
-     * @var type 
+     * @var string 
      */
     static $rightname = 'plugin_linesmanager_line';
 
@@ -49,24 +49,13 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
     /**
      * Contains a SQL condition to load numplan combobox.
-     * @var type 
+     * @var string 
      */
     protected $condition_to_load_numplan;
 
     /**
-     * Overwrite parent function.
-     * @param type $options
-     */
-    /* static function dropdown($options=array()) {
-      $class = get_called_class();
-      $options['name'] = $class::$fieldDefaultToShowInDropdown;
-      //parent::dropdown($options);
-      PluginLinesmanagerUtilform::showHtmlInputFieldAccordingType($attribute, $values);
-      } */
-
-    /**
      * Number of columns in PDF export with PDF plugin. Must be >= 1.
-     * @var type 
+     * @var int
      */
     static private $columns_in_pdf = 2;
     
@@ -97,23 +86,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'numplan' => array('name' => __("Number", "linesmanager"),
                 'add' => false,
                 'mandatory' => true,
-                /** possible types:
-                  case 'count' :
-                  case 'number' :
-                  if (!isset($searchopt[$field_num]['min'])
-                  && !isset($searchopt[$field_num]['max'])) {
-                  unset($opt['equals']);
-                  unset($opt['notequals']);
-                  }
-                  case 'bool' :
-                  case 'right' :
-                  case 'itemtypename' :
-                  case 'date' :
-                  case 'datetime' :
-                  case 'date_delay' :
-                 */
                 'type' => 'dropdown',
-                //'checktype'       => 'text';
                 'displaytype' => 'dropdown',
                 'forcegroupby' => true,
                 'massiveaction' => false,
@@ -230,8 +203,34 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'field_name' => array('numplan', 'other'),
                     'field_tooltip' => array('name', 'description')
                 )
+            ),
+            'locations_id' => array(
+                'name' => Location::getTypeName(1),
+                'type' => 'dropdown',
+                'foreingkey' => array(
+                    'item' => 'PluginLinesmanagerLocation',
+                    'field_id' => 'id',
+                    'field_name' => 'completename',
+                    'field_tooltip' => 'comment'
+                ),
+                'hidden' => true
             )
         );
+        
+        /*$tab[$i]['table']          = 'glpi_locations';
+        $tab[$i]['field']          = 'name';
+        $tab[$i]['name']           = Location::getTypeName(1);
+        $tab[$i]['forcegroupby']   = true;
+        $tab[$i]['datatype']       = 'itemlink';
+        $tab[$i]['massiveaction']  = false;
+        $tab[$i]['itemlink_type']  = 'Location';
+        $tab[$i]['joinparams'] = array('jointype' => 'itemtype_item');*/
+        /*$tab[$i]['joinparams']  = array(
+            'beforejoin' => array(
+                'table'      => 'glpi_locations',
+                'joinparams' => array('jointype' => 'itemtype_item')
+            )
+        );*/
     }
 
     /**
@@ -345,6 +344,21 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
             $i++;
         }
+        
+        /*$tab[$i]['table']          = 'glpi_locations';
+        $tab[$i]['field']          = 'name';
+        $tab[$i]['name']           = Location::getTypeName(1);
+        $tab[$i]['forcegroupby']   = true;
+        $tab[$i]['datatype']       = 'itemlink';
+        $tab[$i]['massiveaction']  = false;
+        $tab[$i]['itemlink_type']  = 'Location';
+        $tab[$i]['joinparams'] = array('jointype' => 'itemtype_item');*/
+        /*$tab[$i]['joinparams']  = array(
+            'beforejoin' => array(
+                'table'      => 'glpi_locations',
+                'joinparams' => array('jointype' => 'itemtype_item')
+            )
+        );*/
 
         return $tab;
     }
@@ -421,7 +435,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 array(
                     'name' => 'history',
                     'onClick' => PluginLinesmanagerUtilform::getJsAjaxShowHistory(
-                        get_class($this), "$('#table_lines').attr('selected_id')", "div_history"
+                        get_called_class(), "$('#table_lines').attr('selected_id')", "div_history"
                     )
                 )
             )
@@ -631,8 +645,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @return nothing
      * */
     function post_deleteFromDB() {
-        $this->updateContactInformation();
-
+        $this->updateContactInformation();  // necesary for simcards
+        
         // logs
         $changes[0] = 0;
         $changes[1] = $this->getStringNameForHistory();
@@ -640,6 +654,24 @@ class PluginLinesmanagerLine extends CommonDropdown {
         Log::history($this->fields["items_id"], $this->fields["itemtype"], $changes, __CLASS__, Log::HISTORY_DELETE_SUBITEM);
     }
 
+    /**
+     * This function update the locations_id copied from linked item. This is
+     * a hack field for searching.
+     * @param $item Item modified. Example: Computer, NetworkEquipment...
+     */
+    static function updateLocation(CommonDBTM $item) {
+        $itemtype = get_class($item);
+        if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
+            global $DB;
+        
+            $query = "UPDATE " . self::getTable();
+            $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
+            $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
+            
+            $DB->query($query);
+        }
+    }
+    
     /**
      * This function update the contact information of the itemtype liked.
      */

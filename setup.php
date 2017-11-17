@@ -35,6 +35,12 @@ function plugin_init_linesmanager() {
     Plugin::registerClass('PluginLinesmanagerUtilform');
     //Plugin::registerClass('PluginLinesmanagerUtilsetup');
     
+    foreach (PluginLinesmanagerUtilsetup::getAssets() as $asset) {
+        $PLUGIN_HOOKS['item_update']['linesmanager'][$asset] = 'plugin_post_item_update_linesmanager';
+        //$PLUGIN_HOOKS['item_delete']['linesmanager'][$asset] = 'plugin_post_item_delete_linesmanager';
+        $PLUGIN_HOOKS['item_purge']['linesmanager'][$asset] = 'plugin_post_item_purge_linesmanager';
+    }
+    
     /*if (Session::haveRight('plugin_linesmanager_line', UPDATE)) {
         //$PLUGIN_HOOKS['config_page']['linesmanager'] = 'front/config.php';
         // añade menú. ver uso de CommonGLPI::getMenuContent()

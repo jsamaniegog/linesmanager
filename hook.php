@@ -164,9 +164,8 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
                 }
             }
         }
-
-        return $sopt;
     }
+    
     return $sopt;
 }
 
@@ -255,6 +254,10 @@ function plugin_linesmanager_addLeftJoin($itemtype, $ref_table, $new_table, $lin
     // hack
     if ($linkfield == 'plugin_linesmanager_lines_id')
         return null;
+    
+    if ($new_table == 'glpi_locations') {
+        $stop=1;
+    }
 
     if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
         $itemtype = 'PluginLinesmanagerLine';
@@ -426,4 +429,20 @@ function plugin_item_purge_linesmanager_PluginSimcardSimcard_Item($data) {
     $line->fields['items_id'] = $data->fields['items_id'];
     $line->fields['itemtype'] = $data->fields['itemtype'];
     $line->cleanContactInformation();
+}
+
+function plugin_post_item_update_linesmanager(CommonDBTM $item) {
+    PluginLinesmanagerLine::updateLocation($item);
+}
+
+/*function plugin_post_item_delete_linesmanager(CommonDBTM $item) {
+    PluginLinesmanagerLine::updateLocation($item);
+}*/
+
+function plugin_post_item_purge_linesmanager(CommonDBTM $item) {
+    $line = new PluginLinesmanagerLine();
+    $line->deleteByCriteria(array(
+        'itemtype' => get_class($item),
+        'items_id' => $item->getID()
+    ));
 }
