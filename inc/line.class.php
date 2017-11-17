@@ -213,7 +213,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'field_name' => 'completename',
                     'field_tooltip' => 'comment'
                 ),
-                'hidden' => true
+                'hidden' => true,
+                'getAddSearchOptions' => false
             )
         );
         

@@ -151,6 +151,11 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
 
         $sopt = $line->getSearchOptions($reservedTypeIndex, PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()));
         foreach ($sopt as $key => $value) {
+            
+            if ($sopt[$key]['getAddSearchOptions'] === false) {
+                unset($sopt[$key]);
+            }
+            
             if (PluginLinesmanagerUtilform::isForeingkey($value)) {
                 $sopt[$key]['joinparams'] = array(
                     'beforejoin' => array(
