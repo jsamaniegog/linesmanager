@@ -661,16 +661,67 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @param $item Item modified. Example: Computer, NetworkEquipment...
      */
     static function updateLocation(CommonDBTM $item) {
-        $itemtype = get_class($item);
-        if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
-            global $DB;
+        global $DB;
         
-            $query = "UPDATE " . self::getTable();
-            $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
-            $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
+        $itemtype = get_class($item);
+        
+        $query = "UPDATE " . self::getTable();
+        
+        if ($itemtype == 'PluginSimcardSimcard_Item') {
+            $asset = $item->getField("itemtype");
+            $asset = new $asset();
+            $asset->getFromDB($item->getField("items_id"));
             
-            $DB->query($query);
+            $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+            $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getField("plugin_simcard_simcards_id");
         }
+        
+        // add from linesmanager
+        if ($itemtype == 'PluginLinesmanagerLine') {
+            $item->getFromDB($item->getID());
+            $asset = $item->getField("itemtype");
+            $asset = new $asset();
+            $asset->getFromDB($item->getField("items_id"));
+
+            if ($item->getField("itemtype") == 'PluginSimcardSimcard') {
+                $sim = new PluginSimcardSimcard_Item();
+                $result = $sim->find("plugin_simcard_simcards_id = " . $asset->getID());
+                $result = array_values($result);
+                $asset = new $result[0]['itemtype']();
+                $asset->getFromDB($result[0]['items_id']);
+            }
+            
+            $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+            $query .= " WHERE id=" . $item->getID();
+        }
+        
+        // update from an asset
+        if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
+        
+            if ($itemtype == 'PluginSimcardSimcard') {
+                $sim = new PluginSimcardSimcard_Item();
+                $result = $sim->find("plugin_simcard_simcards_id = " . $item->getID());
+                $result = array_values($result);
+                $asset = new $result[0]['itemtype']();
+                $asset->getFromDB($result[0]['items_id']);
+                
+                $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+                $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getID();
+                
+            } else {    
+                $query2 = "UPDATE `glpi_plugin_linesmanager_lines` l ";
+                $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards` s ON l.itemtype = 'PluginSimcardSimcard' and l.items_id = s.id";
+                $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards_items` si ON s.id = si.plugin_simcard_simcards_id";
+                $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON si.itemtype = '$itemtype' and si.items_id = c.id and c.id = " . $item->getID();
+                $query2 .= " SET l.`locations_id` = c.locations_id;";
+                $DB->query($query2);
+                
+                $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
+                $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
+            }
+        }
+        
+        $DB->query($query);
     }
     
     /**

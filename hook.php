@@ -47,7 +47,7 @@ function plugin_linesmanager_registerMethods() {
 function plugin_linesmanager_install() {
     global $DB;
 
-    if (!TableExists("glpi_plugin_linesmanager_line")) {
+    if (!$DB->tableExists("glpi_plugin_linesmanager_line")) {
         $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.1.0.sql");
 
         // hack v0.85 - v0.90 to include needed classes to add the next rows
@@ -93,6 +93,10 @@ function plugin_linesmanager_install() {
             'timeperiod' => $timeperiod->getID(),
             'category' => '7'
         ));
+    }
+    
+    if (!$DB->fieldExists("glpi_plugin_linesmanager_line", "locations_id")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.2.0.sql");
     }
 
     // register a cron for task execution
@@ -416,6 +420,9 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
  * @return nothing
  */
 function plugin_item_add_linesmanager_PluginSimcardSimcard_Item($data) {
+    
+    PluginLinesmanagerLine::updateLocation($data);
+    
     $line = new PluginLinesmanagerLine();
     // the id of the simcard
     $line->fields['items_id'] = $data->fields['plugin_simcard_simcards_id'];
@@ -434,6 +441,10 @@ function plugin_item_purge_linesmanager_PluginSimcardSimcard_Item($data) {
     $line->fields['items_id'] = $data->fields['items_id'];
     $line->fields['itemtype'] = $data->fields['itemtype'];
     $line->cleanContactInformation();
+}
+
+function plugin_post_item_add_linesmanager(CommonDBTM $item) {
+    PluginLinesmanagerLine::updateLocation($item);
 }
 
 function plugin_post_item_update_linesmanager(CommonDBTM $item) {

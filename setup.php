@@ -33,24 +33,15 @@ function plugin_init_linesmanager() {
     Plugin::registerClass('PluginLinesmanagerLine', array('addtabon' => PluginLinesmanagerUtilsetup::getAssets()));
     Plugin::registerClass('PluginLinesmanagerAlgorithm');
     Plugin::registerClass('PluginLinesmanagerUtilform');
-    //Plugin::registerClass('PluginLinesmanagerUtilsetup');
     
+    // to update location in lines
     foreach (PluginLinesmanagerUtilsetup::getAssets() as $asset) {
         $PLUGIN_HOOKS['item_update']['linesmanager'][$asset] = 'plugin_post_item_update_linesmanager';
-        //$PLUGIN_HOOKS['item_delete']['linesmanager'][$asset] = 'plugin_post_item_delete_linesmanager';
         $PLUGIN_HOOKS['item_purge']['linesmanager'][$asset] = 'plugin_post_item_purge_linesmanager';
     }
+    $PLUGIN_HOOKS['item_add']['linesmanager']['PluginLinesmanagerLine'] = 'plugin_post_item_add_linesmanager';
     
-    /*if (Session::haveRight('plugin_linesmanager_line', UPDATE)) {
-        //$PLUGIN_HOOKS['config_page']['linesmanager'] = 'front/config.php';
-        // añade menú. ver uso de CommonGLPI::getMenuContent()
-        $PLUGIN_HOOKS['menu_toadd']['linesmanager'] = array(
-            'plugin_linemanager' => array(
-                
-            )
-        );
-    }*/
-
+    // simcard plugin
     $PLUGIN_HOOKS['item_add']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_add_linesmanager_PluginSimcardSimcard_Item';
     $PLUGIN_HOOKS['item_purge']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_purge_linesmanager_PluginSimcardSimcard_Item';
 
@@ -65,11 +56,11 @@ function plugin_init_linesmanager() {
  */
 function plugin_version_linesmanager() {
     return array('name' => __('Lines Manager', 'linesmanager'),
-        'version' => '0.1.0',
+        'version' => '0.2.0',
         'author' => 'Javier Samaniego',
         'license' => 'AGPLv3+',
         'homepage' => 'https://github.com/jsamaniegog/linesmanager',
-        'minGlpiVersion' => '0.90');
+        'minGlpiVersion' => '9.2');
 }
 
 /**
