@@ -34,7 +34,7 @@ function plugin_init_linesmanager() {
     Plugin::registerClass('PluginLinesmanagerAlgorithm');
     Plugin::registerClass('PluginLinesmanagerUtilform');
     
-    // to update location in lines
+    // to update location and state in lines
     foreach (PluginLinesmanagerUtilsetup::getAssets() as $asset) {
         $PLUGIN_HOOKS['item_update']['linesmanager'][$asset] = 'plugin_post_item_update_linesmanager';
         $PLUGIN_HOOKS['item_purge']['linesmanager'][$asset] = 'plugin_post_item_purge_linesmanager';
@@ -56,7 +56,7 @@ function plugin_init_linesmanager() {
  */
 function plugin_version_linesmanager() {
     return array('name' => __('Lines Manager', 'linesmanager'),
-        'version' => '0.2.0',
+        'version' => '0.3.0',
         'author' => 'Javier Samaniego',
         'license' => 'AGPLv3+',
         'homepage' => 'https://github.com/jsamaniegog/linesmanager',

@@ -129,7 +129,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'foreingkey' => array(
                     'item' => 'PluginLinesmanagerLinegroup',
                     'field_id' => 'id',
-                    'field_name' => 'numplan',
+                    'field_name' => array('numplan', 'name'),
                     'field_tooltip' => array('name', 'algorithm')
                 )
             ),
@@ -209,6 +209,18 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'type' => 'dropdown',
                 'foreingkey' => array(
                     'item' => 'PluginLinesmanagerLocation',
+                    'field_id' => 'id',
+                    'field_name' => 'completename',
+                    'field_tooltip' => 'comment'
+                ),
+                'hidden' => true,
+                'getAddSearchOptions' => false
+            ),
+            'states_id' => array(
+                'name' => State::getTypeName(1),
+                'type' => 'dropdown',
+                'foreingkey' => array(
+                    'item' => 'PluginLinesmanagerState',
                     'field_id' => 'id',
                     'field_name' => 'completename',
                     'field_tooltip' => 'comment'
@@ -656,11 +668,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
     }
 
     /**
-     * This function update the locations_id copied from linked item. This is
+     * This function update the fields copied from linked item. This is
      * a hack field for searching.
      * @param $item Item modified. Example: Computer, NetworkEquipment...
      */
-    static function updateLocation(CommonDBTM $item) {
+    static function updateFieldsFromParentItem(CommonDBTM $item) {
         global $DB;
         
         $itemtype = get_class($item);
@@ -673,6 +685,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             $asset->getFromDB($item->getField("items_id"));
             
             $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+            $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
             $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getField("plugin_simcard_simcards_id");
         }
         
@@ -692,6 +705,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             }
             
             $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+            $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
             $query .= " WHERE id=" . $item->getID();
         }
         
@@ -706,6 +720,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $asset->getFromDB($result[0]['items_id']);
                 
                 $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
+                $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
                 $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getID();
                 
             } else {    
@@ -713,10 +728,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards` s ON l.itemtype = 'PluginSimcardSimcard' and l.items_id = s.id";
                 $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards_items` si ON s.id = si.plugin_simcard_simcards_id";
                 $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON si.itemtype = '$itemtype' and si.items_id = c.id and c.id = " . $item->getID();
-                $query2 .= " SET l.`locations_id` = c.locations_id;";
+                $query2 .= " SET l.`locations_id` = c.locations_id, l.`states_id` = c.states_id;";
                 $DB->query($query2);
                 
                 $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
+                $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
                 $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
             }
         }

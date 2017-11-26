@@ -98,6 +98,10 @@ function plugin_linesmanager_install() {
     if (!$DB->fieldExists("glpi_plugin_linesmanager_line", "locations_id")) {
         $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.2.0.sql");
     }
+    
+    if (!$DB->fieldExists("glpi_plugin_linesmanager_line", "states_id")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.3.0.sql");
+    }
 
     // register a cron for task execution
     /* $res = CronTask::Register(
@@ -264,10 +268,6 @@ function plugin_linesmanager_addLeftJoin($itemtype, $ref_table, $new_table, $lin
     if ($linkfield == 'plugin_linesmanager_lines_id')
         return null;
     
-    if ($new_table == 'glpi_locations') {
-        $stop=1;
-    }
-
     if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
         $itemtype = 'PluginLinesmanagerLine';
         $ref_table = PluginLinesmanagerLine::getTable();
@@ -352,26 +352,16 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         $item = new $itemtype();
         $tab = $item->getSearchOptions();
     }
-    $searchopt = $tab[$ID];
-
-    $fk = getItemTypeForTable($searchopt['table']);
-    $fk = new $fk();
-
-    /* if (isset($searchopt['foreingkey']) and is_array($searchopt['foreingkey']['field_name'])) {
-      $field_array[] = $searchopt['foreingkey']['field_name'];
-      }
-
-      foreach ($linkfield_array as $lf_key => $linkfield) {
-
-      } */
-
-    $table = $fk::getTable();
-    $alias = $searchopt['linkfield'];
-    $alias = ($alias != "") ? "_" . $alias : $alias;
-    if (is_array($searchopt['field'])) {
-        $field_name_array = $searchopt['field'];
-    } else {
-        $field_name_array[] = $searchopt['field'];
+    
+    $searchoptArray[] = $tab[$ID];
+    
+    // hack to pass several fields to add at where clause
+    if (strstr($searchtype, ";")) {
+        list($searchtype, $fieldsToAdd) = explode(";", $searchtype);
+        $fieldsToAdd = explode(",", $fieldsToAdd);
+        foreach ($fieldsToAdd as $fieldToAdd) {
+            $searchoptArray[] = $tab[$fieldToAdd];
+        }
     }
 
     $nott = ($nott === 1) ? " NOT" : "";
@@ -392,23 +382,45 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
 
     $where = $link . " (";
 
-    foreach ($field_name_array as $key => $field_name) {
+    foreach ($searchoptArray as $key => $searchopt) {
 
+        $fk = getItemTypeForTable($searchopt['table']);
+        $fk = new $fk();
+
+        $table = $fk::getTable();
+        $alias = $searchopt['linkfield'];
+        $alias = ($alias != "") ? "_" . $alias : $alias;
+        
         if ($key != 0) {
             $where .= " OR ";
         }
 
-        $attribute = $fk->attributes[$field_name];
-        $table = $searchopt['table'];
-
-        if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
-            $table = $fk->attributes[$field_name]['foreingkey']['item'];
-            $table = $table::getTable();
-
-            $field_name = $attribute['foreingkey']['field_name'];
+        $field_name = $searchopt['field'];
+        $field_names = array();
+        if (!is_array($field_name)) {
+            $field_names[] = $field_name;
+        } else {
+            $field_names = $field_name;
         }
+        
+        foreach ($field_names as $key_field_name => $field_name) {
+            
+            if ($key_field_name != 0) {
+                $where .= " OR ";
+            }
+            
+            $attribute = $fk->attributes[$field_name];
+            $table = $searchopt['table'];
 
-        $where .= $nott . " " . $table . $alias . "." . $field_name . " $val ";
+            if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
+                $table = $fk->attributes[$field_name]['foreingkey']['item'];
+                $table = $table::getTable();
+
+                $field_name = $attribute['foreingkey']['field_name'];
+            }
+
+            $where .= $nott . " " . $table . $alias . "." . $field_name . " $val ";
+        }
     }
 
     return $where . ")";
@@ -421,7 +433,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
  */
 function plugin_item_add_linesmanager_PluginSimcardSimcard_Item($data) {
     
-    PluginLinesmanagerLine::updateLocation($data);
+    PluginLinesmanagerLine::updateFieldsFromParentItem($data);
     
     $line = new PluginLinesmanagerLine();
     // the id of the simcard
@@ -444,15 +456,15 @@ function plugin_item_purge_linesmanager_PluginSimcardSimcard_Item($data) {
 }
 
 function plugin_post_item_add_linesmanager(CommonDBTM $item) {
-    PluginLinesmanagerLine::updateLocation($item);
+    PluginLinesmanagerLine::updateFieldsFromParentItem($item);
 }
 
 function plugin_post_item_update_linesmanager(CommonDBTM $item) {
-    PluginLinesmanagerLine::updateLocation($item);
+    PluginLinesmanagerLine::updateFieldsFromParentItem($item);
 }
 
 /*function plugin_post_item_delete_linesmanager(CommonDBTM $item) {
-    PluginLinesmanagerLine::updateLocation($item);
+    PluginLinesmanagerLine::updateFieldsFromParentItem($item);
 }*/
 
 function plugin_post_item_purge_linesmanager(CommonDBTM $item) {
