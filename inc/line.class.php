@@ -732,7 +732,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 $DB->query($query2);
                 
                 $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
-                $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
+                $query .= ", " . self::getTable() . ".states_id = " . $item->getField('states_id');
                 $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
             }
         }
