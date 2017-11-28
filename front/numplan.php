@@ -1,7 +1,7 @@
 <?php
 
-/*
- * Copyright (C) 2016 Javier Samaniego García <jsamaniegog@gmail.com>
+/* 
+ * Copyright (C) 2017 Javier Samaniego García <jsamaniegog@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,5 +19,5 @@
 
 include ("../../../inc/includes.php");
 
-$dropdown = new PluginLinesmanagerLine();
+$dropdown = new PluginLinesmanagerNumplan();
 include (GLPI_ROOT . "/front/dropdown.common.php");

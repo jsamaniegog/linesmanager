@@ -34,8 +34,6 @@ class PluginLinesmanagerNumplan extends PluginLinesmanagerLine {
      */
     static $rightname = 'entity';
     
-    static $fieldDefaultToShowInDropdown = 'numero';
-    
     /**
      * Belongs to this tables. Needed for search used and delete.
      * @var type 
@@ -61,15 +59,42 @@ class PluginLinesmanagerNumplan extends PluginLinesmanagerLine {
                 'mandatory' => true,
                 'type' => 'number'
             ),
-            'range' => array('name' => __("Range", "linesmanager"), 'type' => 'integer')
+//            'range' => array(
+//                'name' => __("Range", "linesmanager"), 
+//                'type' => 'integer',
+//                'readOnly' => true,
+//                'foreingkey' => array(
+//                    'item' => 'PluginLinesmanagerRange',
+//                    'field_id' => 'id',
+//                    'field_name' => array('name', 'min_number', 'max_number'),
+//                    'field_tooltip' => array('name', 'description', 'min_number', 'max_number', 'only_pickup')
+//                )
+//            ),
+            'vip' => array('name' => "V.I.P.", 'type' => 'bool')
         );
     }
     
+    static function getTypeName($nb = 1) {
+        return _n('Number', 'Numbers', $nb, 'linesmanager');
+    }
+    
     static function canView() {
-        return false;
+        return true;
     }
     
     static function canCreate() {
         return false;
+    }
+    
+    static function canDelete() {
+        return false;
+    }
+    
+    static function canPurge() {
+        return false;
+    }
+    
+    static function getNameField($options = array()) {
+        return 'number';
     }
 }

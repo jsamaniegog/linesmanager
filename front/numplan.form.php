@@ -20,5 +20,49 @@ global $DB, $CFG_GLPI;
 
 include ("../../../inc/includes.php");
 
-Session::addMessageAfterRedirect(__("No permission", "linesmanager"), false, ERROR);
-HTML::back();
+if (!PluginLinesmanagerLine::canUpdate()) {
+    Session::addMessageAfterRedirect(__("No permission", "linesmanager"), false, ERROR);
+    HTML::back();
+}
+
+$_GET["id"] = (!isset($_GET["id"])) ? -1 : $_GET["id"] ;
+
+$numplan = new PluginLinesmanagerNumplan();
+
+if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
+
+    // check arguments for update and add
+    if (isset($_POST['add'])) {
+        Session::addMessageAfterRedirect(__("The addition and purge must be made from the entity administration", "linesmananger"), false, ERROR);
+        HTML::back();
+    }
+
+    $result = false;
+
+    try {
+        if (isset($_POST['update'])) {
+            $result = $numplan->update($_POST);
+        }
+
+    } catch (Exception $e) {
+        $result = false;
+    }
+
+    if (!$result) {
+        Session::addMessageAfterRedirect(__("Error on save", "linesmanager"), false, ERROR);
+    }
+
+    HTML::back();
+}
+
+Html::header(
+    PluginLinesmanagerNumplan::getTypeName(Session::getPluralNumber()), 
+    $_SERVER['PHP_SELF'], 
+    'config', 
+    'commondropdown',
+    'PluginLinesmanagerNumplan'
+);
+
+$numplan->display(array('id' => $_GET["id"]));
+
+Html::footer();

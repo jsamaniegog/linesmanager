@@ -210,7 +210,11 @@ class PluginLinesmanagerUtilform {
             echo ": ";
             echo "</td><td>";
 
-            self::showHtmlInputFieldAccordingType($attribute, $values, $dbfield_name);
+            if ($attribute['readOnly'] == true) {
+                echo $values[$dbfield_name];
+            } else {
+                self::showHtmlInputFieldAccordingType($attribute, $values, $dbfield_name);
+            }
 
             // close the cell
             echo "</td>";
@@ -591,6 +595,11 @@ class PluginLinesmanagerUtilform {
                         }
                     }
 
+                    // hack for boolean fields
+                    if ($fk->attributes[$field]['type'] == 'bool') {
+                        $nametoadd = ($nametoadd == '0') ? __("No") : __("Yes") ;
+                    }
+                    
                     $name .= $nametoadd;
                 }
 
@@ -642,57 +651,9 @@ class PluginLinesmanagerUtilform {
 
         $fk = new $attribute_fk['item']();
 
-        // filter used values: need belongsTo in foreing key item
-        // the value asigned is not filtered
-        /* if (isset($attribute_fk['filterUsedValues']) and $attribute_fk['filterUsedValues'] === true) {
-
-          $attribute_fk['condition'] .= ($attribute_fk['condition'] != "") ? " AND " : " ";
-          $attribute_fk['condition'] .= "((1=1";
-
-          foreach ($fk::$belongsTo as $item) {
-          $attribute_fk['condition'] .= " AND " . $attribute_fk['field_id'] . " NOT IN "
-          . "(SELECT " . self::getItemName($fk)
-          . " FROM " . $item::getTable() . ""
-          . " WHERE " . self::getItemName($fk) . " is not null)";
-          }
-
-          $attribute_fk['condition'] .= " )";
-
-          $attribute_fk['condition'] .= " OR " . $attribute_fk['field_id'] . " = '" . $value . "'";
-
-          $attribute_fk['condition'] .= " )";
-          } */
-
         $attribute_fk['field_name'] = (is_array($attribute_fk['field_name'])) ?
             implode(",", $attribute_fk['field_name']) :
             $attribute_fk['field_name'];
-
-        /* $records = $fk->find(
-          $attribute_fk['condition'], $attribute_fk['field_name']
-          );
-
-          // value for NULL if it's mandatory field
-          $values = (self::isMandatory($attribute)) ? array() : array("NULL" => Dropdown::EMPTY_VALUE);
-
-          $options = array();
-
-          // recopile values and tooltips(title of the options)
-          foreach ($records as $id => $record) {
-          $fk->fields = $record;
-          $name_to_show = self::getForeingkeyName($id, $attribute, $fk);
-          $values[$record[$attribute_fk['field_id']]] = $name_to_show;
-
-          $tooltip_to_show = self::getForeingkeyName($id, $attribute, $fk, 'field_tooltip');
-          $options['option_tooltips'][$id] = $tooltip_to_show;
-          }
-
-          $options['value'] = ($value === "" and isset($attribute['default'])) ?
-          $attribute['default'] :
-          $value;
-          $options['comments'] = true;
-
-          $rand = Dropdown::showFromArray($name, $values, $options); */
-
 
         // random number
         $rand = mt_rand();
@@ -739,6 +700,30 @@ class PluginLinesmanagerUtilform {
             $name, $dropdown_id, $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/getDropdownValues.php', $param
         );
 
+        // showing tooltip
+        if ($fk->canView()) {
+            $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip', array('style' => 'fieldvalue'));
+
+            $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null;
+            echo "&nbsp;";
+            echo "<span id='$box_tooltip_id'>";
+            echo Html::showToolTip($tooltip_to_show, $options);
+            echo "</span>";
+        }
+
+        // showing add button
+        if ($fk->canCreate()) {
+            $output = "<img alt='' title=\"" . __s('Add') . "\" src='" . $CFG_GLPI["root_doc"]
+                . "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;' "
+                . "onClick=\"" . Html::jsGetElementbyID('add_dropdown' . $rand) . ".dialog('open');\">";
+            $output .= Ajax::
+                createIframeModalWindow(
+                    'add_dropdown' . $rand, $fk->getFormURL(), array('display' => false, 'title' => __('New item'))
+            );
+
+            echo $output;
+        }
+        
         // showing checkbox to filter used values
         if (isset($attribute['foreingkey']['showFilterUsedValuesCheckbox'])
             and $attribute['foreingkey']['showFilterUsedValuesCheckbox'] === true
@@ -773,51 +758,7 @@ class PluginLinesmanagerUtilform {
                 });
             });');
         }
-
-        // showing tooltip
-        if ($fk->canView()) {
-            $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip', array('style' => 'fieldvalue'));
-
-            $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null;
-            echo "&nbsp;";
-            echo "<span id='$box_tooltip_id'>";
-            echo Html::showToolTip($tooltip_to_show, $options);
-            echo "</span>";
-        }
-
-        // showing add button
-        if ($fk->canCreate()) {
-            $output = "<img alt='' title=\"" . __s('Add') . "\" src='" . $CFG_GLPI["root_doc"]
-                . "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;' "
-                . "onClick=\"" . Html::jsGetElementbyID('add_dropdown' . $rand) . ".dialog('open');\">";
-            $output .= Ajax::
-                createIframeModalWindow(
-                    'add_dropdown' . $rand, $fk->getFormURL(), array('display' => false, 'title' => __('New item'))
-            );
-
-            echo $output;
-        }
     }
-
-    /**
-     * 
-     * @param array $array
-     * @return array Array encoded.
-     */
-    /* static function utf8arrayencode($array) {
-
-      foreach ($array as $key => $value) {
-
-      if (is_array($array[$key])){
-      $array[$key] = self::utf8arrayencode ($attribute[$key]);
-      }
-
-      $array[$key] = utf8_encode($value);
-      }
-
-      return $array;
-
-      } */
 
     /**
      * Return array of datas to load ajax dropdown, use this in the file

@@ -84,10 +84,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
         $this->attributes = array(
             'id' => array('name' => 'ID', 'hidden' => true),
             'numplan' => array('name' => __("Number", "linesmanager"),
-                'add' => false,
                 'mandatory' => true,
                 'type' => 'dropdown',
-                'displaytype' => 'dropdown',
                 'forcegroupby' => true,
                 'massiveaction' => false,
                 'foreingkey' => array(
@@ -97,7 +95,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'showFilterUsedValuesCheckbox' => true,
                     'field_id' => 'id',
                     'field_name' => 'number',
-                    'field_tooltip' => 'number'
+                    'field_tooltip' => array('number', 'vip')
                 )
             ),
             'name' => array('name' => __("Name", "linesmanager"), 'mandatory' => true),
@@ -620,7 +618,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
     private function getStringNameForHistory() {
         return "ID: " . $this->fields["id"] . ", " 
-            . __('Number', 'linesmanager') . ": " 
+            . _n('Number', 'Numbers', 1, 'linesmanager') . ": " 
             . PluginLinesmanagerUtilform::getForeingkeyName(
                 $this->fields["numplan"], $this->attributes['numplan']
             );

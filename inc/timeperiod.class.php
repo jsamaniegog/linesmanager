@@ -103,4 +103,8 @@ class PluginLinesmanagerTimeperiod extends PluginLinesmanagerLine {
     static function getTypeName($nb = 1) {
         return _n('Time period', 'Time periods', $nb, 'linesmanager');
     }
+    
+    static function getNameField($options = array()) {
+        return 'description';
+    }
 }

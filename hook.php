@@ -95,12 +95,16 @@ function plugin_linesmanager_install() {
         ));
     }
     
-    if (!$DB->fieldExists("glpi_plugin_linesmanager_line", "locations_id")) {
+    if (!$DB->fieldExists("glpi_plugin_linesmanager_lines", "locations_id")) {
         $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.2.0.sql");
     }
     
-    if (!$DB->fieldExists("glpi_plugin_linesmanager_line", "states_id")) {
+    if (!$DB->fieldExists("glpi_plugin_linesmanager_lines", "states_id")) {
         $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.3.0.sql");
+    }
+    
+    if (!$DB->fieldExists("glpi_plugin_linesmanager_numplans", "vip")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.4.0.sql");
     }
 
     // register a cron for task execution
@@ -132,6 +136,7 @@ function plugin_linesmanager_uninstall() {
 function plugin_linesmanager_getDropdown() {
     return array(
         'PluginLinesmanagerLine' => PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()),
+//        'PluginLinesmanagerNumplan' => PluginLinesmanagerNumplan::getTypeName(Session::getPluralNumber()),
         'PluginLinesmanagerLinegroup' => PluginLinesmanagerLinegroup::getTypeName(Session::getPluralNumber()),
         'PluginLinesmanagerPickupgroup' => PluginLinesmanagerPickupgroup::getTypeName(Session::getPluralNumber()),
         'PluginLinesmanagerCategory' => PluginLinesmanagerCategory::getTypeName(Session::getPluralNumber()),

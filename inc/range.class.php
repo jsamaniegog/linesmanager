@@ -29,7 +29,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
      * model attributes 
      * @var array
      */
-    private $attributes = array();
+    public $attributes = array();
 
     function __construct() {
         parent::__construct();
