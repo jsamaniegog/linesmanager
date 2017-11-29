@@ -14,5 +14,5 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+ALTER TABLE `glpi_plugin_linesmanager_lines` ADD `call_waiting` tinyint(1) NOT NULL DEFAULT '0' AFTER `vip`;
 ALTER TABLE `glpi_plugin_linesmanager_numplans` ADD `vip` tinyint(1) NOT NULL DEFAULT '0' AFTER `range`;

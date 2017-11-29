@@ -119,6 +119,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'loginout' => array('name' => __("Login/Logout", "linesmanager"), 'type' => 'bool'),
             'autoanswer' => array('name' => __("Autoanswer", "linesmanager"), 'type' => 'bool'),
             'autoanswerpass' => array('name' => __("Autoanswer Password", "linesmanager"), 'type' => 'numeric'),
+            'call_waiting' => array('name' => __("Call waiting", "linesmanager"), 'type' => 'bool'),
             'lockcallin' => array('name' => __("Lock callin", "linesmanager"), 'type' => 'bool'),
             'lockcallout' => array('name' => __("Lock callout", "linesmanager"), 'type' => 'bool'),
             'linegroup' => array(

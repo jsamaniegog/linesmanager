@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-11-28 11:37+0100\n"
-"PO-Revision-Date: 2017-11-28 11:43+0100\n"
+"POT-Creation-Date: 2017-11-29 08:08+0100\n"
+"PO-Revision-Date: 2017-11-29 08:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: front/linegroup.form.php:24 front/numplan.form.php:24
 #: front/pickupgroup.form.php:24 front/range.form.php:24
 #: front/timeperiod.form.php:24 front/timeslot.form.php:24
-#: inc/line.class.php:267
+#: inc/line.class.php:268
 msgid "No permission"
 msgstr "Permiso denegado"
 
@@ -138,8 +138,8 @@ msgid "Name"
 msgstr "Nombre"
 
 #: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:86
-#: inc/line.class.php:621 inc/linegroup.class.php:40 inc/numplan.class.php:78
-#: inc/pickupgroup.class.php:42
+#: inc/line.class.php:622 inc/linegroup.class.php:40 inc/numplan.class.php:57
+#: inc/numplan.class.php:78 inc/pickupgroup.class.php:42
 msgid "Number"
 msgid_plural "Numbers"
 msgstr[0] "Número"
@@ -202,48 +202,52 @@ msgid "Autoanswer Password"
 msgstr "Contraseña Contestador"
 
 #: inc/line.class.php:122
+msgid "Call waiting"
+msgstr "Llamada en espera"
+
+#: inc/line.class.php:123
 msgid "Lock callin"
 msgstr "Bloqueo llamadas entrantes"
 
-#: inc/line.class.php:123
+#: inc/line.class.php:124
 msgid "Lock callout"
 msgstr "Bloqueo llamadas salientes"
 
-#: inc/line.class.php:167
+#: inc/line.class.php:168
 msgid "Forward timeout"
 msgstr "Tiempo de espera para desviar"
 
-#: inc/line.class.php:186
+#: inc/line.class.php:187
 msgid "Input DDI"
 msgstr "DDI de entrada"
 
-#: inc/line.class.php:196
+#: inc/line.class.php:197
 msgid "Output DDI"
 msgstr "DDI de salida"
 
-#: inc/line.class.php:284 inc/line.class.php:312
+#: inc/line.class.php:285 inc/line.class.php:313
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:444
+#: inc/line.class.php:445
 msgid "Historical"
 msgstr ""
 
-#: inc/line.class.php:459
+#: inc/line.class.php:460
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:570
+#: inc/line.class.php:571
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:577
+#: inc/line.class.php:578
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
-#: inc/line.class.php:956
+#: inc/line.class.php:957
 #, php-format
 msgid "<b><i>%1$s:&nbsp;</b></i><span style=\""
 msgstr ""
@@ -335,13 +339,13 @@ msgstr ""
 "¿Está seguro que desea eliminar los registros seleccionados?, se eliminarán "
 "todas las líneas con estos números."
 
-#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:433
-#: inc/utilform.class.php:596
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:437
+#: inc/utilform.class.php:600
 msgid "Yes"
 msgstr "Sí"
 
-#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:433
-#: inc/utilform.class.php:596
+#: inc/range.class.php:171 inc/range.class.php:172 inc/utilform.class.php:437
+#: inc/utilform.class.php:600
 msgid "No"
 msgstr "No"
 
@@ -389,58 +393,58 @@ msgid_plural "Time slots"
 msgstr[0] "Franja horaria"
 msgstr[1] "Intervalos de tiempo"
 
-#: inc/utilform.class.php:314 inc/utilform.class.php:320
+#: inc/utilform.class.php:318 inc/utilform.class.php:324
 #, php-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:326 inc/utilform.class.php:328
+#: inc/utilform.class.php:330 inc/utilform.class.php:332
 #, php-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:335
+#: inc/utilform.class.php:339
 #, php-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/utilform.class.php:378
+#: inc/utilform.class.php:382
 msgid "Remove"
 msgstr "Quitar"
 
-#: inc/utilform.class.php:378
+#: inc/utilform.class.php:382
 msgid "Are you sure you want to remove the selected records?."
 msgstr "¿Estás seguro de que deseas quitar los registros seleccionados?"
 
-#: inc/utilform.class.php:381
+#: inc/utilform.class.php:385
 msgid "Delete permanently"
 msgstr ""
 
-#: inc/utilform.class.php:381
+#: inc/utilform.class.php:385
 msgid "Are you sure you want to delete the selected records?."
 msgstr "¿Estás seguro de que deseas eliminar los registros seleccionados?"
 
-#: inc/utilform.class.php:409
+#: inc/utilform.class.php:413
 msgid "not associated records found."
 msgstr "no se encuentran registros asociados."
 
-#: inc/utilform.class.php:717
+#: inc/utilform.class.php:721
 msgid "New item"
 msgstr ""
 
-#: inc/utilform.class.php:740 inc/utilform.class.php:746
+#: inc/utilform.class.php:744 inc/utilform.class.php:750
 msgid "This check box filter used values if it is checked."
 msgstr ""
 "Marque esta casilla para filtrar los valores ya utilizados, desmarque para "
 "ver todos."
 
-#: inc/utilform.class.php:747
+#: inc/utilform.class.php:751
 msgid "Filter used values"
 msgstr "Filtrar valores usados"
 
