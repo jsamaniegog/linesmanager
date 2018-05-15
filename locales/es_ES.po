@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-11-29 08:08+0100\n"
-"PO-Revision-Date: 2017-11-29 08:08+0100\n"
+"POT-Creation-Date: 2018-05-15 09:02+0200\n"
+"PO-Revision-Date: 2018-05-15 09:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_n:1,2\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: front/linegroup.form.php:24 front/numplan.form.php:24
 #: front/pickupgroup.form.php:24 front/range.form.php:24
 #: front/timeperiod.form.php:24 front/timeslot.form.php:24
-#: inc/line.class.php:268
+#: inc/line.class.php:304
 msgid "No permission"
 msgstr "Permiso denegado"
 
@@ -90,7 +90,7 @@ msgstr "Nombre del algoritmo"
 
 #: inc/algorithm.class.php:37 inc/category.class.php:41 inc/ddi.class.php:40
 #: inc/extensionmobility.class.php:46 inc/extensionmobility.class.php:49
-#: inc/line.class.php:103 inc/location.class.php:37 inc/state.class.php:37
+#: inc/line.class.php:124 inc/location.class.php:37 inc/state.class.php:37
 #: inc/timeperiod.class.php:39 inc/timeslot.class.php:39
 msgid "Description"
 msgstr "Descripción"
@@ -120,11 +120,11 @@ msgstr "Gestor de líneas"
 msgid "Automate description based on name and surname: "
 msgstr "Automatizar descripción en función de el nombre y los apellidos: "
 
-#: inc/config.class.php:58
+#: inc/config.class.php:59
 msgid "Automate user id based on entity and number: "
 msgstr "Automatizar ID de usuario en función de la entidad y el número: "
 
-#: inc/config.class.php:63
+#: inc/config.class.php:65
 msgid ""
 "Fill contact information of the asset (the fields alternate username and "
 "number): "
@@ -132,13 +132,21 @@ msgstr ""
 "Rellenar información de contacto de el activo (los campos usuario "
 "alternativo y número): "
 
-#: inc/ddi.class.php:39 inc/line.class.php:101 inc/range.class.php:39
+#: inc/config.class.php:71
+msgid ""
+"Fill line information (name, surname and description) with data of the "
+"selected number: "
+msgstr ""
+"Rellenar información de la línea (nombre, apellidos y descripción) con los "
+"datos del número seleccionado: "
+
+#: inc/ddi.class.php:39 inc/line.class.php:122 inc/range.class.php:39
 #: inc/range.class.php:160
 msgid "Name"
 msgstr "Nombre"
 
-#: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:86
-#: inc/line.class.php:622 inc/linegroup.class.php:40 inc/numplan.class.php:57
+#: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:106
+#: inc/line.class.php:658 inc/linegroup.class.php:40 inc/numplan.class.php:57
 #: inc/numplan.class.php:78 inc/pickupgroup.class.php:42
 msgid "Number"
 msgid_plural "Numbers"
@@ -181,73 +189,73 @@ msgid_plural "Forwards"
 msgstr[0] "Desvío"
 msgstr[1] "Desvíos"
 
-#: inc/line.class.php:102
+#: inc/line.class.php:123
 msgid "Surname"
 msgstr "Apellidos"
 
-#: inc/line.class.php:104
+#: inc/line.class.php:125
 msgid "User ID"
 msgstr "ID de usuario"
 
-#: inc/line.class.php:119
+#: inc/line.class.php:140
 msgid "Login/Logout"
 msgstr "Iniciar/Cerrar Sesión"
 
-#: inc/line.class.php:120
+#: inc/line.class.php:141
 msgid "Autoanswer"
 msgstr "Contestador automático"
 
-#: inc/line.class.php:121
+#: inc/line.class.php:142
 msgid "Autoanswer Password"
 msgstr "Contraseña Contestador"
 
-#: inc/line.class.php:122
+#: inc/line.class.php:143
 msgid "Call waiting"
 msgstr "Llamada en espera"
 
-#: inc/line.class.php:123
+#: inc/line.class.php:144
 msgid "Lock callin"
 msgstr "Bloqueo llamadas entrantes"
 
-#: inc/line.class.php:124
+#: inc/line.class.php:145
 msgid "Lock callout"
 msgstr "Bloqueo llamadas salientes"
 
-#: inc/line.class.php:168
+#: inc/line.class.php:189
 msgid "Forward timeout"
 msgstr "Tiempo de espera para desviar"
 
-#: inc/line.class.php:187
+#: inc/line.class.php:208
 msgid "Input DDI"
 msgstr "DDI de entrada"
 
-#: inc/line.class.php:197
+#: inc/line.class.php:218
 msgid "Output DDI"
 msgstr "DDI de salida"
 
-#: inc/line.class.php:285 inc/line.class.php:313
+#: inc/line.class.php:321 inc/line.class.php:349
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:445
+#: inc/line.class.php:481
 msgid "Historical"
 msgstr ""
 
-#: inc/line.class.php:460
+#: inc/line.class.php:496
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:571
+#: inc/line.class.php:607
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:578
+#: inc/line.class.php:614
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
-#: inc/line.class.php:957
+#: inc/line.class.php:993
 #, php-format
 msgid "<b><i>%1$s:&nbsp;</b></i><span style=\""
 msgstr ""
@@ -434,17 +442,17 @@ msgstr "¿Estás seguro de que deseas eliminar los registros seleccionados?"
 msgid "not associated records found."
 msgstr "no se encuentran registros asociados."
 
-#: inc/utilform.class.php:721
+#: inc/utilform.class.php:725
 msgid "New item"
 msgstr ""
 
-#: inc/utilform.class.php:744 inc/utilform.class.php:750
+#: inc/utilform.class.php:748 inc/utilform.class.php:754
 msgid "This check box filter used values if it is checked."
 msgstr ""
 "Marque esta casilla para filtrar los valores ya utilizados, desmarque para "
 "ver todos."
 
-#: inc/utilform.class.php:751
+#: inc/utilform.class.php:755
 msgid "Filter used values"
 msgstr "Filtrar valores usados"
 

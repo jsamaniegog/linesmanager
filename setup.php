@@ -56,7 +56,7 @@ function plugin_init_linesmanager() {
  */
 function plugin_version_linesmanager() {
     return array('name' => __('Lines Manager', 'linesmanager'),
-        'version' => '0.4.0',
+        'version' => '0.5.0',
         'author' => 'Javier Samaniego',
         'license' => 'AGPLv3+',
         'homepage' => 'https://github.com/jsamaniegog/linesmanager',

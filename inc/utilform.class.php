@@ -694,6 +694,10 @@ class PluginLinesmanagerUtilform {
             method: "POST",
             data: {value: $("#' . $dropdown_id . '").val(), ' . substr($json_attribute, 1, strlen($json_attribute) - 2) . '}
         });';
+        
+        if (isset($attribute_fk['on_change'])) {
+            $param['on_change'] .= $attribute_fk['on_change'];
+        }
 
         // print ajax dropdown
         echo Html::jsAjaxDropdown(

@@ -106,6 +106,10 @@ function plugin_linesmanager_install() {
     if (!$DB->fieldExists("glpi_plugin_linesmanager_numplans", "vip")) {
         $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.4.0.sql");
     }
+    
+    if ($DB->fieldExists("glpi_plugin_linesmanager_numplans", "vip")) {
+        $DB->runFile(GLPI_ROOT . "/plugins/linesmanager/sql/0.5.0.sql");
+    }
 
     // register a cron for task execution
     /* $res = CronTask::Register(

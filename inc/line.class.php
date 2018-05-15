@@ -63,6 +63,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * Constructor. Load model attributes.
      */
     function __construct() {
+        global $CFG_GLPI;
         parent::__construct();
 
         // only show numbers assigned to active entities
@@ -81,6 +82,25 @@ class PluginLinesmanagerLine extends CommonDropdown {
             'columns' => '2'
         );
 
+        $config_datas = PluginLinesmanagerConfig::getConfigData();
+        $on_change_number = '';
+        if ($config_datas['fill_line_information']) {
+            $on_change_number = '$.ajax({
+                        url:  \"' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/copyData.php\",
+                        success: function(data) {
+                            if (data != \"\") {
+                                var obj = jQuery.parseJSON(JSON.stringify(data))
+                                $(\"#form_linesmanager input[name=name]\").val(obj.name);
+                                $(\"#form_linesmanager input[name=surname]\").val(obj.surname);
+                                $(\"#form_linesmanager input[name=description]\").val(obj.description);
+                            }
+                        },
+                        method: \"POST\",
+                        dataType: \"json\",
+                        data: {value: $(this).val()}
+                    });';
+        }
+        
         $this->attributes = array(
             'id' => array('name' => 'ID', 'hidden' => true),
             'numplan' => array('name' => __("Number", "linesmanager"),
@@ -95,7 +115,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'showFilterUsedValuesCheckbox' => true,
                     'field_id' => 'id',
                     'field_name' => 'number',
-                    'field_tooltip' => array('number', 'vip')
+                    'field_tooltip' => array('number', 'vip'),
+                    'on_change' => $on_change_number
                 )
             ),
             'name' => array('name' => __("Name", "linesmanager"), 'mandatory' => true),
@@ -245,6 +266,21 @@ class PluginLinesmanagerLine extends CommonDropdown {
         );*/
     }
 
+    /**
+     * Devuelve los datos de la priemera línea asociada al número indicado.
+     * @global type $DB
+     * @param int $number_id ID of the numplan.
+     * @return array
+     */
+    static function getFirstLineDataByNumber($number_id) {
+        global $DB;
+        $query = "SELECT name, surname, description FROM " . self::getTable() . " l";
+        $query .= " WHERE l.numplan = " . $number_id . " LIMIT 1";
+
+        $result = $DB->query($query);
+        return $result->fetch_assoc();
+    }
+    
     /**
      * Check $_POST arguments, and if haven't rights show a message after redirect
      * and go back.
