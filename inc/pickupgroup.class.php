@@ -37,7 +37,7 @@ class PluginLinesmanagerPickupgroup extends PluginLinesmanagerLine {
         $condition_to_load_numplan = str_replace("only_pickup=0", "only_pickup=1", $this->condition_to_load_numplan);
         
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'numplan' => array(
                 'name' => __("Number", "linesmanager"),
                 'mandatory' => true,

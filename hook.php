@@ -163,11 +163,16 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
 
     $reservedTypeIndex = PluginLinesmanagerUtilsetup::RESERVED_TYPE_RANGE_MIN;
 
+    $sopt_final = array();
+    
     if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets()) and PluginLinesmanagerLine::canView()) {
         $line = new PluginLinesmanagerLine();
 
-        $sopt = $line->getSearchOptions($reservedTypeIndex, PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()));
+        $sopt = $line->rawSearchOptions(1, PluginLinesmanagerLine::getTypeName(Session::getPluralNumber()));
         foreach ($sopt as $key => $value) {
+            if (strstr($sopt[$key]['name'], '- ID') or $sopt[$key]['id'] == 'common') {
+                continue;
+            }
             
             if ($sopt[$key]['getAddSearchOptions'] === false) {
                 unset($sopt[$key]);
@@ -185,10 +190,13 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
                     $sopt[$key]['joinparams'] = array('jointype' => 'itemtype_item');
                 }
             }
+            
+            $sopt_final[$reservedTypeIndex] = $sopt[$key];
+            $reservedTypeIndex++;
         }
     }
     
-    return $sopt;
+    return $sopt_final;
 }
 
 /**
@@ -206,7 +214,7 @@ function plugin_linesmanager_addSelect($itemtype, $ID, $num) {
         $tab = plugin_linesmanager_getAddSearchOptions($itemtype);
     } else {
         $item = new $itemtype();
-        $tab = $item->getSearchOptions();
+        $tab = $item->rawSearchOptions();
     }
     $searchopt = $tab[$ID];
 
@@ -359,7 +367,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         $tab = plugin_linesmanager_getAddSearchOptions($itemtype);
     } else {
         $item = new $itemtype();
-        $tab = $item->getSearchOptions();
+        $tab = $item->rawSearchOptions();
     }
     
     $searchoptArray[] = $tab[$ID];

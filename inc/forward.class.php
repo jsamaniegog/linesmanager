@@ -35,7 +35,7 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
         parent::__construct();
 
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'numplan' => array('name' => __("Number", "linesmanager"),
                 'add' => false,
                 'foreingkey' => array(

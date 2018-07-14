@@ -60,7 +60,7 @@ function plugin_version_linesmanager() {
         'author' => 'Javier Samaniego',
         'license' => 'AGPLv3+',
         'homepage' => 'https://github.com/jsamaniegog/linesmanager',
-        'minGlpiVersion' => '9.2');
+        'minGlpiVersion' => '9.3');
 }
 
 /**

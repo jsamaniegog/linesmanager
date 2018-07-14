@@ -30,6 +30,18 @@
             <num>0.2.0</num>
             <compatibility>9.2</compatibility>
         </version>
+        <version>
+            <num>0.3.0</num>
+            <compatibility>9.2</compatibility>
+        </version>
+        <version>
+            <num>0.4.0</num>
+            <compatibility>9.2</compatibility>
+        </version>
+        <version>
+            <num>0.5.0</num>
+            <compatibility>9.3</compatibility>
+        </version>
     </versions>
     <langs>
         <lang>es_ES</lang>

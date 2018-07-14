@@ -52,7 +52,7 @@ class PluginLinesmanagerNumplan extends PluginLinesmanagerLine {
         // argmunetos para el array number_format: int $decimales, string $sep_dec, string $sep_miles
         
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'number' => array(
                 'name' => __("Number", "linesmanager"),
                 'readOnly' => true,

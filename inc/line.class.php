@@ -339,58 +339,53 @@ class PluginLinesmanagerLine extends CommonDropdown {
     }
 
     /**
-     * View parent.
-     * @return array
+     * {@inheritdoc}
      */
-    function getSearchOptions($i = 1, $prefix = "", $nb = 0) {
+    function rawSearchOptions($i = 1, $prefix = "", $nb = 0) {
 
-        $tab = array();
+        $tab = [];
 
-        $tab['common'] = _n('Line', 'Lines', $nb, 'linesmanager');
+        $tab[] = ['id' => 'common', 'name' => _n('Line', 'Lines', $nb, 'linesmanager')];
 
-        //$i = 1;
         foreach ($this->attributes as $dbfield_name => $attribute) {
-            // hack to don't show ID in asset search
-            if ($i === PluginLinesmanagerUtilsetup::RESERVED_TYPE_RANGE_MIN) {
-                $i++;
-                continue;
-            }
-
-            // first all values that match with tab array
-            $tab[$i] = $attribute;
-
+            $newTab = $attribute;
+            
+            $newTab['id'] = "$i";
+            $i++;
+            
+            $newTab['name'] = $attribute['name'];
             if ($prefix != "") {
-                $tab[$i]['name'] = $prefix . " - " . $tab[$i]['name'];
+                $newTab['name'] = $prefix . " - " . $attribute['name'];
             }
 
             // for dropdowns
             if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {
-
                 // table to get data
-                $tab[$i]['table'] = $attribute['foreingkey']['item']::getTable();
+                $newTab['table'] = $attribute['foreingkey']['item']::getTable();
 
                 // field we want to show
-                $tab[$i]['field'] = $attribute['foreingkey']['field_name'];
+                $newTab['field'] = $attribute['foreingkey']['field_name'];
 
                 // field that contains the id
                 //$tab[$i]['linkfield'] = $attribute['foreingkey']['field_id'];
-                $tab[$i]['linkfield'] = $dbfield_name;
+                $newTab['linkfield'] = $dbfield_name;
 
                 // dropdown conditions
-                $tab[$i]['condition'] = (isset($attribute['foreingkey']['condition'])) ?
+                $newTab['condition'] = (isset($attribute['foreingkey']['condition'])) ?
                     $attribute['foreingkey']['condition'] :
                     "";
             } else {
                 // normal fields
-                $tab[$i]['table'] = $this->getTable();
-                $tab[$i]['field'] = $dbfield_name;
+                $newTab['table'] = $this->getTable();
+                $newTab['field'] = $dbfield_name;
             }
 
             // field datatype (first one is alwais itemlink)
-            $attribute['type'] = (!isset($attribute['type'])) ? 'string' : $attribute['type'];
-            $tab[$i]['datatype'] = ($i == 1) ? "itemlink" : $attribute['type'];
+            $newTab['type'] = (!isset($attribute['type'])) ? 'string' : $attribute['type'];
+            $newTab['datatype'] = ($dbfield_name == 'id') ? 'itemlink' : $attribute['type'];
+            $newTab['massiveaction'] = (isset($attribute['massiveaction'])) ? $attribute['massiveaction'] : false;
 
-            $i++;
+            $tab[] = $newTab;
         }
         
         /*$tab[$i]['table']          = 'glpi_locations';
@@ -407,7 +402,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                 'joinparams' => array('jointype' => 'itemtype_item')
             )
         );*/
-
+     
         return $tab;
     }
 

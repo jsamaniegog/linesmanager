@@ -32,7 +32,7 @@ class PluginLinesmanagerLocation extends PluginLinesmanagerLine {
         parent::__construct();
         
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'completename' => array('name' => self::getTypeName(1)),
             'comment' => array('name' => __("Description", "linesmanager")),
         );

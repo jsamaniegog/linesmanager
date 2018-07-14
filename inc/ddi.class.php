@@ -35,7 +35,7 @@ class PluginLinesmanagerDdi extends PluginLinesmanagerLine {
         parent::__construct();
 
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'name' => array('name' => __("Name", "linesmanager"), 'mandatory' => true),
             'description' => array('name' => __("Description", "linesmanager")),
             'numplan' => array('name' => __("Number", "linesmanager"),

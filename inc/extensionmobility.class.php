@@ -35,7 +35,7 @@ class PluginLinesmanagerExtensionmobility extends PluginLinesmanagerLine {
         parent::__construct();
 
         $this->attributes = array(
-            'id' => array('name' => 'id', 'hidden' => true),
+            'id' => array('name' => 'ID', 'hidden' => true),
             'loginduration' => array(
                 'name' => __("Login duration", "linesmanager"), 
                 'type' => 'specific', 
