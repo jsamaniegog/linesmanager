@@ -360,7 +360,7 @@ class PluginLinesmanagerUtilform {
      */
     static function showHtmlList($table_id, PluginLinesmanagerLine $item, $condition = "", $buttons = array(), $table_options = array(), $js_onclick_row = "") {
 
-        $records = $item->find($condition, "1 DESC");
+        $records = $item->find($condition, "1 ASC");
 
         echo "<table id='$table_id' class='tab_cadre_fixehov' " . Html::parseAttributes($table_options) . ">";
 
