@@ -76,7 +76,7 @@ class PluginLinesmanagerUtilform {
         $data = json_encode($data);
 
         return '$.ajax({
-            url:  "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/showHistory.php",
+            url: "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/showHistory.php",
             success: function(html) {
                 $("#' . $element . '").html(html);
             },
@@ -85,6 +85,26 @@ class PluginLinesmanagerUtilform {
             beforeSend: function( xhr ) {
                 $("#' . $element . '").html("' . self::getLoadingDiv() . '");
             }
+        });';
+    }
+    
+    /**
+     * Javascript to show history of an item in a element like a <div>.
+     * @global type $CFG_GLPI
+     * @param type $data
+     * @param type $element
+     * @return string JavaScript code.
+     */
+    static function getJsAjaxShowHtmlList($item, $id, $order, $sort, $element = 'table_lines') {
+        global $CFG_GLPI;
+
+        return '$.ajax({
+            url: "' . $CFG_GLPI["root_doc"] . '/plugins/linesmanager/ajax/showLineList.php",
+            success: function(html) {
+                $("#'.$element.'").parent().parent().html(html);
+            },
+            method: "POST",
+            data: {item: "' . get_class($item) . '",id: ' . $id . ', order:"'.$order.'", sort:"'.$sort.'"}
         });';
     }
 
@@ -358,9 +378,9 @@ class PluginLinesmanagerUtilform {
      * @param array $table_options HTML table options.
      * @param string $js_onclick_row Javascript that will be executed when a row is clicked
      */
-    static function showHtmlList($table_id, PluginLinesmanagerLine $item, $condition = "", $buttons = array(), $table_options = array(), $js_onclick_row = "") {
+    static function showHtmlList($table_id, CommonDBTM $parentItem, PluginLinesmanagerLine $item, $condition = "", $orderby = "numplan ASC", $buttons = array(), $table_options = array(), $js_onclick_row = "") {
 
-        $records = $item->find($condition, "numplan ASC");
+        $records = $item->find($condition, $orderby);
 
         echo "<table id='$table_id' height='400px' style='overflow: scroll;' class='tab_cadre_fixehov' " . Html::parseAttributes($table_options) . ">";
 
@@ -373,7 +393,21 @@ class PluginLinesmanagerUtilform {
                 if (isset($attribute['hidden']) and $attribute['hidden'])
                     continue;
 
-                echo "<th>" . $attribute['name'] . "</th>";
+                $order = $dbfield_name;
+                $sort = "ASC";
+                
+                list($orderfield, $ordertype) = explode(" ", $orderby);
+                $class = "";
+                
+                if ($orderfield === $dbfield_name) {
+                    $sort = ($ordertype === 'DESC') ? 'ASC' : 'DESC';
+                    $class = "class='order_".$ordertype."'";
+                }
+                
+                echo "<th>"
+                    . "<a href='#' $class onclick='".PluginLinesmanagerUtilform::getJsAjaxShowHtmlList($parentItem, $parentItem->getID(), $order, $sort)."'>"
+                    . $attribute['name'] . "</th>"
+                    . "</a>";
             }
 
             $show_col_buttons = false;

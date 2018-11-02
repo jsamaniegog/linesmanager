@@ -444,10 +444,11 @@ class PluginLinesmanagerLine extends CommonDropdown {
         }
 
         $condition = "itemtype = '" . $item->getType() . "' AND items_id = " . $item->getID();
+        $orderby = (isset($_GET['orderby'])) ? $_GET['orderby'] : "numplan ASC";
 
         // show list of associated records
         PluginLinesmanagerUtilform::showHtmlList(
-            "table_lines", $line, $condition, array('purge'), array(), "$('#div_history').html('');"
+            "table_lines", $item, $line, $condition, $orderby, array('purge'), array(), "$('#div_history').html('');"
         );
 
         echo Html::scriptBlock(
