@@ -150,7 +150,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     'item' => 'PluginLinesmanagerLinegroup',
                     'field_id' => 'id',
                     'field_name' => array('numplan', 'name'),
-                    'field_tooltip' => array('name', 'algorithm')
+                    'field_tooltip' => array('name', 'algorithm', 'forward', 'forwardtimeout', 'timeslot')
                 )
             ),
             'pickupgroup' => array(

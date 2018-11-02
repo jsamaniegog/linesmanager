@@ -362,7 +362,7 @@ class PluginLinesmanagerUtilform {
 
         $records = $item->find($condition, "numplan ASC");
 
-        echo "<table id='$table_id' class='tab_cadre_fixehov' " . Html::parseAttributes($table_options) . ">";
+        echo "<table id='$table_id' height='400px' style='overflow: scroll;' class='tab_cadre_fixehov' " . Html::parseAttributes($table_options) . ">";
 
         if (count($records) > 0) {
             // cabecera campos

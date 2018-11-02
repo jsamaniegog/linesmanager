@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-05-15 09:02+0200\n"
-"PO-Revision-Date: 2018-05-15 09:03+0200\n"
+"POT-Creation-Date: 2018-11-02 12:33+0100\n"
+"PO-Revision-Date: 2018-11-02 12:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_n:1,2\n"
@@ -146,14 +146,14 @@ msgid "Name"
 msgstr "Nombre"
 
 #: inc/ddi.class.php:41 inc/forward.class.php:39 inc/line.class.php:106
-#: inc/line.class.php:658 inc/linegroup.class.php:40 inc/numplan.class.php:57
+#: inc/line.class.php:653 inc/linegroup.class.php:40 inc/numplan.class.php:57
 #: inc/numplan.class.php:78 inc/pickupgroup.class.php:42
 msgid "Number"
 msgid_plural "Numbers"
 msgstr[0] "Número"
 msgstr[1] "Números"
 
-#: inc/ddi.class.php:53 inc/forward.class.php:61
+#: inc/ddi.class.php:53 inc/forward.class.php:67
 msgid "Others"
 msgstr "Otros"
 
@@ -183,11 +183,27 @@ msgid_plural "Extension mobilities"
 msgstr[0] "Extension mobility"
 msgstr[1] "Extension mobility"
 
-#: inc/forward.class.php:72
+#: inc/forward.class.php:52
+msgid "Type"
+msgstr "Tipo"
+
+#: inc/forward.class.php:78
 msgid "Forward"
 msgid_plural "Forwards"
 msgstr[0] "Desvío"
 msgstr[1] "Desvíos"
+
+#: inc/forward.class.php:137
+msgid "All"
+msgstr "Todos"
+
+#: inc/forward.class.php:138
+msgid "Busy"
+msgstr "Ocupados"
+
+#: inc/forward.class.php:139
+msgid "No answer"
+msgstr "Sin respuesta"
 
 #: inc/line.class.php:123
 msgid "Surname"
@@ -221,7 +237,7 @@ msgstr "Bloqueo llamadas entrantes"
 msgid "Lock callout"
 msgstr "Bloqueo llamadas salientes"
 
-#: inc/line.class.php:189
+#: inc/line.class.php:189 inc/linegroup.class.php:79
 msgid "Forward timeout"
 msgstr "Tiempo de espera para desviar"
 
@@ -233,29 +249,29 @@ msgstr "DDI de entrada"
 msgid "Output DDI"
 msgstr "DDI de salida"
 
-#: inc/line.class.php:321 inc/line.class.php:349
+#: inc/line.class.php:321 inc/line.class.php:348
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Línea"
 msgstr[1] "Líneas"
 
-#: inc/line.class.php:481
+#: inc/line.class.php:476
 msgid "Historical"
 msgstr ""
 
-#: inc/line.class.php:496
+#: inc/line.class.php:491
 msgid "New line"
 msgstr "Nueva línea"
 
-#: inc/line.class.php:607
+#: inc/line.class.php:602
 msgid "Mandatory field: "
 msgstr "Campo obligatorio: "
 
-#: inc/line.class.php:614
+#: inc/line.class.php:609
 msgid "Numeric field: "
 msgstr "Campo numérico: "
 
-#: inc/line.class.php:993
+#: inc/line.class.php:988
 #, php-format
 msgid "<b><i>%1$s:&nbsp;</b></i><span style=\""
 msgstr ""
@@ -264,7 +280,7 @@ msgstr ""
 msgid "Group name"
 msgstr "Nombre del grupo"
 
-#: inc/linegroup.class.php:77
+#: inc/linegroup.class.php:106
 msgid "Line group"
 msgid_plural "Line groups"
 msgstr[0] "Grupo de salto"

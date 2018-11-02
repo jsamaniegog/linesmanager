@@ -63,6 +63,35 @@ class PluginLinesmanagerLinegroup extends PluginLinesmanagerLine {
                     'field_name' => 'name',
                     'field_tooltip' => 'description'
                 )
+            ),
+            'forward' => array(
+                'name' => PluginLinesmanagerForward::getTypeName(),
+                'type' => 'dropdown',
+                'foreingkey' => array(
+                    'item' => 'PluginLinesmanagerForward',
+                    'field_id' => 'id',
+                    'field_name' => array('numplan', 'category', 'other'),
+                    'field_tooltip' => array('numplan', 'category', 'other'),
+                    'string_format' => array('category' => PluginLinesmanagerCategory::getTypeName() . ' %s')
+                )
+            ),
+            'forwardtimeout' => array(
+                'name' => __("Forward timeout", "linesmanager"),
+                'type' => 'specific',
+                'specifictype' => 'time',
+                'minutes' => false,
+                'hours' => false
+            ),
+            'timeslot' => array(
+                'name' => PluginLinesmanagerTimeslot::getTypeName(),
+                'type' => 'dropdown',
+                'foreingkey' => array(
+                    'item' => 'PluginLinesmanagerTimeslot',
+                    'field_id' => 'id',
+                    'field_name' => array('timeperiod', 'category'),
+                    'field_tooltip' => array('description', 'timeperiod', 'category'),
+                    'string_format' => array('category' => PluginLinesmanagerCategory::getTypeName() . ' %s')
+                )
             )
         );
     }

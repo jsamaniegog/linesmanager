@@ -48,6 +48,12 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
                     'field_tooltip' => 'number'
                 )
             ),
+            'typeforward' => array(
+                'name' => __("Type", "linesmanager"),
+                'type' => 'specific',
+                'specifictype' => 'enum',
+                'values' => self::getTypes()
+            ),
             'category' => array(
                 'name' => PluginLinesmanagerCategory::getTypeName(),
                 //'default' => 4,
@@ -120,6 +126,18 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
     function prepareInputForUpdate($input) {
         $input['name'] = $this->getNameString($input);
         return $input;
+    }
+
+    /**
+     * Returns the forward types.
+     * @return array
+     */
+    public static function getTypes() {
+        return [
+            'all' => __('All', 'linesmanager'), 
+            'busy' => __('Busy', 'linesmanager'), 
+            'no answer' => __('No answer', 'linesmanager')
+            ];
     }
 
 }
