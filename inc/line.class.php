@@ -832,7 +832,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
             // hack for simcard plugin
             if ($itemtype == 'PluginSimcardSimcard') {
                 $sc = new PluginSimcardSimcard_Item();
-                if ($sc->getFromDBByQuery("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id'])) {
+                if ($sc->getFromDB("WHERE plugin_simcard_simcards_id = " . $this->fields['items_id'])) {
                     $itemtype = $sc->fields['itemtype'];
                     $this->fields['items_id'] = $sc->fields['items_id'];
                 } else {
@@ -962,7 +962,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         $condition = "itemtype = '" . $item->getType() . "' AND items_id = " . $item->getID();
         $records = $line->find($condition);
 
-        //$line->getFromDBByQuery("WHERE itemtype='Phone' AND items_id=" . $item->fields['id']);
+        //$line->getFromDB("WHERE itemtype='Phone' AND items_id=" . $item->fields['id']);
 
         $pdf->setColumnsSize(100);
 
