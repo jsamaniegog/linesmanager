@@ -381,8 +381,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
             }
 
             // field datatype (first one is alwais itemlink)
-            $newTab['type'] = (!isset($attribute['type'])) ? 'string' : $attribute['type'];
-            $newTab['datatype'] = ($dbfield_name == 'id') ? 'itemlink' : $attribute['type'];
+            $newTab['type'] = (empty($attribute['type'])) ? 'string' : $attribute['type'];
+            $newTab['datatype'] = ($dbfield_name == 'id') ? 'itemlink' : $newTab['type'];
             $newTab['massiveaction'] = (isset($attribute['massiveaction'])) ? $attribute['massiveaction'] : false;
 
             $tab[] = $newTab;
@@ -437,7 +437,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      */
     static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
         $line = new PluginLinesmanagerLine();
-
+        
         // opening form
         if (self::canUpdate()) {
             PluginLinesmanagerUtilform::showHtmlFormOpen($line);
@@ -445,15 +445,15 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
         $condition = "itemtype = '" . $item->getType() . "' AND items_id = " . $item->getID();
         $orderby = (isset($_GET['orderby'])) ? $_GET['orderby'] : "numplan ASC";
-
+        
         // show list of associated records
         PluginLinesmanagerUtilform::showHtmlList(
             "table_lines", $item, $line, $condition, $orderby, array('purge'), array(), "$('#div_history').html('');"
         );
 
-        echo Html::scriptBlock(
-            PluginLinesmanagerUtilform::getJsTableDisplayScroll("table_lines", 1690)
-        );
+        // echo Html::scriptBlock(
+        //     PluginLinesmanagerUtilform::getJsTableDisplayScroll("table_lines", 1690)
+        // );
 
         // closing form
         if (self::canUpdate()) {
@@ -462,10 +462,10 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
         // if don't find records show the form to add one
         PluginLinesmanagerUtilform::showHtmlDivToLoadFormByAjax("line", "", false);
-        if (!$line->find($condition, "", 1)) {
+        // if (!$line->find([$condition], [], 1)) {
             $options['item'] = $item;
             $line->showForm(-1, $options);
-        }
+        // }
         PluginLinesmanagerUtilform::showHtmlDivClose();
 
         // div to load the history (logs)
@@ -557,6 +557,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
     private static function showJsInterfaceFunctions($item) {
         $config_datas = PluginLinesmanagerConfig::getConfigData();
 
+        $js = '';
+
         // autocomplete user_id
         if ($config_datas['automate_user_id']) {
             $js = "$('#form_linesmanager[action*=\"line.form.php\"] [name=\"numplan\"]').change(function() {"
@@ -598,7 +600,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
             if (isset($attribute['mandatory'])
                 and $attribute['mandatory'] === true
-                and trim($arguments[$dbfield_name]) == ""
+                and (trim($arguments[$dbfield_name]) == "" or trim($arguments[$dbfield_name]) === "0")
             ) {
                 return __('Mandatory field: ', 'linesmanager') . $attribute['name'];
             }
@@ -689,7 +691,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      * @return nothing
      * */
     function post_deleteFromDB() {
-        $this->updateContactInformation();  // necesary for simcards
+        $this->updateContactInformation();
         
         // logs
         $changes[0] = 0;
@@ -710,16 +712,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
         
         $query = "UPDATE " . self::getTable();
         
-        if ($itemtype == 'PluginSimcardSimcard_Item') {
-            $asset = $item->getField("itemtype");
-            $asset = new $asset();
-            $asset->getFromDB($item->getField("items_id"));
-            
-            $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
-            $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
-            $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getField("plugin_simcard_simcards_id");
-        }
-        
         // add from linesmanager
         if ($itemtype == 'PluginLinesmanagerLine') {
             $item->getFromDB($item->getID());
@@ -727,45 +719,21 @@ class PluginLinesmanagerLine extends CommonDropdown {
             $asset = new $asset();
             $asset->getFromDB($item->getField("items_id"));
 
-            if ($item->getField("itemtype") == 'PluginSimcardSimcard') {
-                $sim = new PluginSimcardSimcard_Item();
-                $result = $sim->find("plugin_simcard_simcards_id = " . $asset->getID());
-                $result = array_values($result);
-                $asset = new $result[0]['itemtype']();
-                $asset->getFromDB($result[0]['items_id']);
-            }
-            
             $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
             $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
             $query .= " WHERE id=" . $item->getID();
         }
         
         // update from an asset
-        if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {
-        
-            if ($itemtype == 'PluginSimcardSimcard') {
-                $sim = new PluginSimcardSimcard_Item();
-                $result = $sim->find("plugin_simcard_simcards_id = " . $item->getID());
-                $result = array_values($result);
-                $asset = new $result[0]['itemtype']();
-                $asset->getFromDB($result[0]['items_id']);
-                
-                $query .= " SET " . self::getTable() . ".locations_id = " . $asset->getField('locations_id');
-                $query .= ", " . self::getTable() . ".states_id = " . $asset->getField('states_id');
-                $query .= " WHERE itemtype='PluginSimcardSimcard' AND items_id=" . $item->getID();
-                
-            } else {    
-                $query2 = "UPDATE `glpi_plugin_linesmanager_lines` l ";
-                $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards` s ON l.itemtype = 'PluginSimcardSimcard' and l.items_id = s.id";
-                $query2 .= " INNER JOIN `glpi_plugin_simcard_simcards_items` si ON s.id = si.plugin_simcard_simcards_id";
-                $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON si.itemtype = '$itemtype' and si.items_id = c.id and c.id = " . $item->getID();
-                $query2 .= " SET l.`locations_id` = c.locations_id, l.`states_id` = c.states_id;";
-                $DB->query($query2);
-                
-                $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
-                $query .= ", " . self::getTable() . ".states_id = " . $item->getField('states_id');
-                $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
-            }
+        if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {   
+            $query2 = "UPDATE `glpi_plugin_linesmanager_lines` l ";
+            $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON si.itemtype = '$itemtype' and si.items_id = c.id and c.id = " . $item->getID();
+            $query2 .= " SET l.`locations_id` = c.locations_id, l.`states_id` = c.states_id;";
+            $DB->query($query2);
+            
+            $query .= " SET " . self::getTable() . ".locations_id = " . $item->getField('locations_id');
+            $query .= ", " . self::getTable() . ".states_id = " . $item->getField('states_id');
+            $query .= " WHERE itemtype='$itemtype' AND items_id=" . $item->getID();
         }
         
         $DB->query($query);
@@ -826,18 +794,6 @@ class PluginLinesmanagerLine extends CommonDropdown {
                     $contact_num .= $data['linegroup'];
 
                     $previous[] = $data['linegroup'];
-                }
-            }
-
-            // hack for simcard plugin
-            if ($itemtype == 'PluginSimcardSimcard') {
-                $sc = new PluginSimcardSimcard_Item();
-                if ($sc->getFromDBByCrit(["plugin_simcard_simcards_id" => $this->fields['items_id']])) {
-                    $itemtype = $sc->fields['itemtype'];
-                    $this->fields['items_id'] = $sc->fields['items_id'];
-                } else {
-                    $contact = "";
-                    $contact_num = "";
                 }
             }
 
@@ -960,7 +916,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
     static function pdfLines($pdf, $item) {
         $line = new PluginLinesmanagerLine();
         $condition = "itemtype = '" . $item->getType() . "' AND items_id = " . $item->getID();
-        $records = $line->find($condition);
+        $records = $line->find([$condition]);
 
         $pdf->setColumnsSize(100);
 
@@ -1001,4 +957,8 @@ class PluginLinesmanagerLine extends CommonDropdown {
         }
     }
 
+    public static function getIcon()
+    {
+        return "ti ti-phone-calling";
+    }
 }

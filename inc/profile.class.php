@@ -65,7 +65,7 @@ class PluginLinesmanagerProfile extends CommonDBTM {
      * @param $closeform           boolean (true by default)
      *
      * */
-    function showForm($profiles_id = 0) {
+    public function showForm($profiles_id = 0, array $options = []) {
         if (!Session::haveRight("profile", READ)) {
             return false;
         }

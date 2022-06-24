@@ -48,6 +48,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
             $result = $ddi->update($_POST);
         }
         if (isset($_POST['add'])) {
+            unset($_POST['id']);
             $result = $ddi->add($_POST);
         }
         if (isset($_POST['purge'])) {

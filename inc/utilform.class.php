@@ -230,7 +230,7 @@ class PluginLinesmanagerUtilform {
             echo ": ";
             echo "</td><td>";
 
-            if ($attribute['readOnly'] == true) {
+            if (isset($attribute['readOnly']) and $attribute['readOnly'] == true) {
                 echo $values[$dbfield_name];
             } else {
                 self::showHtmlInputFieldAccordingType($attribute, $values, $dbfield_name);
@@ -331,7 +331,7 @@ class PluginLinesmanagerUtilform {
         $tab = array();
 
         if (!isset($options['null']) or $options['null'] !== false) {
-            $tab["NULL"] = "----";
+            $tab["0"] = "----";
         }
 
         if (!isset($options['timezero']) or $options['timezero'] !== false) {
@@ -380,74 +380,79 @@ class PluginLinesmanagerUtilform {
      */
     static function showHtmlList($table_id, CommonDBTM $parentItem, PluginLinesmanagerLine $item, $condition = "", $orderby = "numplan ASC", $buttons = array(), $table_options = array(), $js_onclick_row = "") {
 
-        $records = $item->find($condition, $orderby);
+        $records = $item->find([$condition], $orderby);
 
-        echo "<table id='$table_id' height='400px' style='overflow: scroll;' class='tab_cadre_fixehov' " . Html::parseAttributes($table_options) . ">";
+        echo "<div class='asset' style='overflow: auto; margin-bottom: 30px;'>";
+        echo "<div class='card-header main-header d-flex flex-wrap mx-n2 mt-n2 align-items-stretch'>";
+        echo "<h3 class='card-title d-flex align-items-center ps-4'>".$item::getTypeName(Session::getPluralNumber())."</h3>";
+        echo "</div>";
 
-        if (count($records) > 0) {
-            // cabecera campos
-            echo "<tr><th colspan=" . (count($item->attributes) + 1) . " class='noHover'>" . $item::getTypeName(Session::getPluralNumber()) . "</th></tr>";
-            echo "<tr>";
-            foreach ($item->attributes as $dbfield_name => $attribute) {
+        if (count($records) === 0) {
+            return;
+        }
 
-                if (isset($attribute['hidden']) and $attribute['hidden'])
-                    continue;
+        echo "<table id='$table_id' style='font-size: .85em' class='table card-table table-hover table-striped' " . Html::parseAttributes($table_options) . ">";
 
-                $order = $dbfield_name;
-                $sort = "ASC";
-                
-                list($orderfield, $ordertype) = explode(" ", $orderby);
-                $class = "";
-                
-                if ($orderfield === $dbfield_name) {
-                    $sort = ($ordertype === 'DESC') ? 'ASC' : 'DESC';
-                    $class = "class='order_".$ordertype."'";
-                }
-                
-                echo "<th>"
-                    . "<a href='#' $class onclick='".PluginLinesmanagerUtilform::getJsAjaxShowHtmlList($parentItem, $parentItem->getID(), $order, $sort)."'>"
-                    . $attribute['name'] . "</th>"
-                    . "</a>";
+        // cabecera campos
+        echo "<tr>";
+        foreach ($item->attributes as $dbfield_name => $attribute) {
+
+            if (isset($attribute['hidden']) and $attribute['hidden'])
+                continue;
+
+            $order = $dbfield_name;
+            $sort = "ASC";
+            
+            list($orderfield, $ordertype) = explode(" ", $orderby);
+            $class = "";
+            
+            if ($orderfield === $dbfield_name) {
+                $sort = ($ordertype === 'DESC') ? 'ASC' : 'DESC';
+                $class = "class='order_".$ordertype."'";
+            }
+            
+            echo "<th>"
+                . "<a href='#' $class onclick='".PluginLinesmanagerUtilform::getJsAjaxShowHtmlList($parentItem, $parentItem->getID(), $order, $sort)."'>"
+                . $attribute['name'] . "</th>"
+                . "</a>";
+        }
+
+        $show_col_buttons = false;
+        if (in_array('remove', $buttons) and $item->canUpdate()) {
+            $show_col_buttons = true;
+            echo "<th>" . Html::submit(__('Remove', 'linesmanager'), array('name' => 'remove', 'confirm' => __("Are you sure you want to remove the selected records?.", "linesmanager"), 'class' => 'btn btn-outline-warning me-2'));
+        } elseif ((in_array('delete', $buttons) and $item->canDelete()) or ( $item->canPurge() and in_array('purge', $buttons))) {
+            $show_col_buttons = true;
+            echo "<th>" . Html::submit(__('Delete permanently'), array('name' => 'purge', 'confirm' => __("Are you sure you want to delete the selected records?.", "linesmanager"), 'class' => 'btn btn-outline-warning me-2'));
+        }
+
+        echo "</tr>";
+
+        // valores campos
+        foreach ($records as $id => $record) {
+
+            $css_row = ($record['vip']) ? "background-color:#fff294; font-weight: bolder; color: #cca300" : "";
+
+            echo "<tr id='" . $id . "' style='$css_row'>";
+
+            foreach (self::getFieldsValue($item, $record) as $value) {
+                echo "<td align=center>" . $value . "</td>";
             }
 
-            $show_col_buttons = false;
-            if (in_array('remove', $buttons) and $item->canUpdate()) {
-                $show_col_buttons = true;
-                echo "<th>" . Html::submit(__('Remove', 'linesmanager'), array('name' => 'remove', 'confirm' => __("Are you sure you want to remove the selected records?.", "linesmanager")));
-            } elseif ((in_array('delete', $buttons) and $item->canDelete()) or ( $item->canPurge() and in_array('purge', $buttons))) {
-                $show_col_buttons = true;
-                echo "<th>" . Html::submit(__('Delete permanently'), array('name' => 'purge', 'confirm' => __("Are you sure you want to delete the selected records?.", "linesmanager")));
+            if ($show_col_buttons) {
+                echo "<td align=center><input type='checkbox' name='line[]' value='$id'></td></tr>";
             }
 
             echo "</tr>";
-
-            // valores campos
-            foreach ($records as $id => $record) {
-
-                $css_row = ($record['vip']) ? "background-color:#fff294;" : "";
-
-                echo "<tr id='" . $id . "' style='$css_row'>";
-
-                foreach (self::getFieldsValue($item, $record) as $value) {
-                    echo "<td align=center>" . $value . "</td>";
-                }
-
-                if ($show_col_buttons) {
-                    echo "<td align=center><input type='checkbox' name='line[]' value='$id'></td></tr>";
-                }
-
-                echo "</tr>";
-            }
-
-            // javascript to load form when a row of the table is clicked
-            echo Html::scriptBlock(
-                PluginLinesmanagerUtilform::getJsAjaxRowClickLoadForm($table_id, $item, $js_onclick_row)
-            );
-        } else {
-            echo "<tr><th>" . $item::getTypeName(Session::getPluralNumber()) . ': ' . __('not associated records found.', 'linesmanager') . "</th></tr>";
         }
 
+        // javascript to load form when a row of the table is clicked
+        echo Html::scriptBlock(
+            PluginLinesmanagerUtilform::getJsAjaxRowClickLoadForm($table_id, $item, $js_onclick_row)
+        );
+        
         echo "</table>";
+        echo "</div>";
     }
 
     /**
@@ -578,7 +583,7 @@ class PluginLinesmanagerUtilform {
         // si el nombre que queremos mostrar es también foreingkey
         if (!is_array($field_name) and self::isForeingkey($fk->attributes[$field_name])) {
             $name = self::getForeingkeyName(
-                    $fk->fields[$field_name], $fk->attributes[$field_name], null, $key
+                    $fk->fields[$field_name] ?? null, $fk->attributes[$field_name] ?? null, null, $key
             );
 
             // formating value with sprintf
@@ -600,7 +605,7 @@ class PluginLinesmanagerUtilform {
                     $attribute2['foreingkey']["field_name"] = $field;
                     $nametoadd = "";
                     //$nametoadd = self::getForeingkeyName($item_id, $attribute2, $fk, $key);
-                    $nametoadd = self::getForeingkeyName($item_id, $attribute2, $fk, "field_name");
+                    $nametoadd = (string) self::getForeingkeyName($item_id, $attribute2, $fk, "field_name");
 
                     // guión entre nombres
                     if (!isset($options['style'])) {
@@ -630,7 +635,7 @@ class PluginLinesmanagerUtilform {
                     }
 
                     // hack for boolean fields
-                    if ($fk->attributes[$field]['type'] == 'bool') {
+                    if (isset($fk->attributes[$field]['type']) and $fk->attributes[$field]['type'] === 'bool') {
                         $nametoadd = ($nametoadd == '0') ? __("No") : __("Yes") ;
                     }
                     
@@ -643,7 +648,7 @@ class PluginLinesmanagerUtilform {
             // formating value with sprintf
             if (isset($attribute['foreingkey']['string_format'])) {
                 $fk->fields[$field_name] = self::getStringFormat(
-                        $fk->fields[$field_name], $attribute['foreingkey']['string_format'], $field_name
+                        $fk->fields[$field_name] ?? null, $attribute['foreingkey']['string_format'], $field_name
                 );
             }
 
@@ -697,7 +702,7 @@ class PluginLinesmanagerUtilform {
             $attribute['default'] :
             $value;
 
-        $value = ($value === null) ? "NULL" : $value;
+        $value = empty($value) ? "0" : $value;
 
         // name to show 
         $name_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk);
@@ -743,7 +748,6 @@ class PluginLinesmanagerUtilform {
             $tooltip_to_show = PluginLinesmanagerUtilform::getForeingkeyName($value, $attribute, $fk, 'field_tooltip', array('style' => 'fieldvalue'));
 
             $options['link'] = ($fk->canEdit($fk->getID())) ? $fk->getFormURLWithID($value) : null;
-            echo "&nbsp;";
             echo "<span id='$box_tooltip_id'>";
             echo Html::showToolTip($tooltip_to_show, $options);
             echo "</span>";
@@ -751,13 +755,19 @@ class PluginLinesmanagerUtilform {
 
         // showing add button
         if ($fk->canCreate()) {
-            $output = "<img alt='' title=\"" . __s('Add') . "\" src='" . $CFG_GLPI["root_doc"]
-                . "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;' "
-                . "onClick=\"" . Html::jsGetElementbyID('add_dropdown' . $rand) . ".dialog('open');\">";
-            $output .= Ajax::
-                createIframeModalWindow(
-                    'add_dropdown' . $rand, $fk->getFormURL(), array('display' => false, 'title' => __('New item'))
-            );
+            // $output = "<img alt='' title=\"" . __s('Add') . "\" src='" . $CFG_GLPI["root_doc"]
+            //     . "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;' "
+            //     . "onClick=\"" . Html::jsGetElementbyID('add_dropdown' . $rand) . ".dialog('open');\">";
+            // $output .= Ajax::
+            //     createIframeModalWindow(
+            //         'add_dropdown' . $rand, $fk->getFormURL(), array('display' => false, 'title' => __('New item'))
+            // );
+
+            // $output = '<div  class="btn btn-outline-secondary" title="' . __s('Add') . '" data-bs-toggle="modal" data-bs-target="#add_' . $dropdown_id . '">';
+            $output = '<div style="display: inline; vertical-align: middle;" title="' . __s('Add') . '" data-bs-toggle="modal" data-bs-target="#add_' . $dropdown_id . '">';
+            $output .= Ajax::createIframeModalWindow('add_' . $dropdown_id, $fk->getFormURL(), ['display' => false]);
+            $output .= "<span data-bs-toggle='tooltip'><i class='fa-fw ti ti-plus'></i><span class='sr-only'>" . __s('Add') . "</span></span>";
+            $output .= '</div>';
 
             echo $output;
         }
@@ -836,7 +846,7 @@ class PluginLinesmanagerUtilform {
             }
         }
 
-        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText'], $fk) . ") ";
+        $query .= "WHERE (" . PluginLinesmanagerUtilform::getWhereConcatStringForLike($field_name_q, $attribute['searchText'] ?? '', $fk) . ") ";
 
         // filter used values: need belongsTo in foreing key item
         // the value asigned is not filtered
@@ -881,16 +891,16 @@ class PluginLinesmanagerUtilform {
 
         // value for NULL if it's mandatory field
         $datas = ($attribute['page'] == "1" and ! PluginLinesmanagerUtilform::isMandatory($attribute)) ?
-            array(array("id" => "NULL", "text" => Dropdown::EMPTY_VALUE)) :
+            array(array("id" => "0", "text" => Dropdown::EMPTY_VALUE)) :
             array();
 
         if ($DB->numrows($result)) {
-            while ($record = $DB->fetch_assoc($result)) {
+            while ($record = $DB->fetchAssoc($result)) {
                 $fk->fields = $record;
                 $name_to_show = PluginLinesmanagerUtilform::getForeingkeyName($record[$field_id], $attribute, $fk);
 
                 array_push(
-                    $datas, array('id' => $record[$field_id], 'text' => $name_to_show)
+                    $datas, array('id' => $record[$field_id], 'text' => (string) $name_to_show)
                 );
             }
         }

@@ -41,10 +41,6 @@ function plugin_init_linesmanager() {
     }
     $PLUGIN_HOOKS['item_add']['linesmanager']['PluginLinesmanagerLine'] = 'plugin_post_item_add_linesmanager';
     
-    // simcard plugin
-    $PLUGIN_HOOKS['item_add']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_add_linesmanager_PluginSimcardSimcard_Item';
-    $PLUGIN_HOOKS['item_purge']['linesmanager']['PluginSimcardSimcard_Item'] = 'plugin_item_purge_linesmanager_PluginSimcardSimcard_Item';
-
     $PLUGIN_HOOKS['csrf_compliant']['linesmanager'] = true;
     
     $PLUGIN_HOOKS['webservices']['linesmanager'] = 'plugin_linesmanager_registerMethods';
@@ -56,11 +52,11 @@ function plugin_init_linesmanager() {
  */
 function plugin_version_linesmanager() {
     return array('name' => __('Lines Manager', 'linesmanager'),
-        'version' => '0.5.0',
+        'version' => '0.6.0',
         'author' => 'Javier Samaniego',
         'license' => 'AGPLv3+',
         'homepage' => 'https://github.com/jsamaniegog/linesmanager',
-        'minGlpiVersion' => '9.3');
+        'minGlpiVersion' => '10.0');
 }
 
 /**
@@ -68,8 +64,8 @@ function plugin_version_linesmanager() {
  * @return boolean
  */
 function plugin_linesmanager_check_prerequisites() {
-    if (version_compare(GLPI_VERSION, '0.90', 'lt')) {
-        echo __('This plugin requires GLPI >= 0.90', 'linesmanager');
+    if (version_compare(GLPI_VERSION, '10.0.0', 'lt')) {
+        echo __('This plugin requires GLPI >= 10.0.0', 'linesmanager');
         return false;
     }
 

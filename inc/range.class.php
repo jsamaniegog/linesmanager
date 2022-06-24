@@ -76,7 +76,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         }
         
         $ranges = $this->find(
-            $condition, "id", "1"
+            [$condition], "id", "1"
         );
         
         if (count($ranges) != 0) {
@@ -133,7 +133,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
         global $CFG_GLPI;
         
         // WARNING message
-        echo Html::image($CFG_GLPI["root_doc"] . "/pics/warning.png", array('alt' => __('Warning')));
+        echo Html::image($CFG_GLPI["root_doc"] . "/pics/warning.png", array('alt' => __('Warning'), 'style' => 'margin-left: 50px;'));
         echo "<span style='color:orange;font-size:large;vertical-align:super;'> " 
             . __('Be careful, when you save or delete ranges the lines can be deleted.', 'linesmanager') 
             . "</span><br><br>";
@@ -147,7 +147,7 @@ class PluginLinesmanagerRange extends CommonDBTM {
     
     function showRangesList($options) {
         $range = new PluginLinesmanagerRange();
-        $ranges = $range->find("entities_id = " . $options['entities_id'], "min_number");
+        $ranges = $range->find(["entities_id = " . $options['entities_id'], "min_number"]);
         
         $table_id = "table_ranges";
         

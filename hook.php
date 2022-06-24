@@ -174,10 +174,14 @@ function plugin_linesmanager_getAddSearchOptions($itemtype) {
                 continue;
             }
             
-            if ($sopt[$key]['getAddSearchOptions'] === false) {
-                unset($sopt[$key]);
-            }
+            // if (!isset($sopt[$key]['getAddSearchOptions']) or $sopt[$key]['getAddSearchOptions'] === false) {
+            //     unset($sopt[$key]);
+            // }
             
+            if (is_array($sopt[$key]['field'])) {
+                $sopt[$key]['field'] = $sopt[$key]['field'][0];
+            }
+
             if (PluginLinesmanagerUtilform::isForeingkey($value)) {
                 $sopt[$key]['joinparams'] = array(
                     'beforejoin' => array(
@@ -441,35 +445,6 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
     }
 
     return $where . ")";
-}
-
-/**
- * Actions done after the ADD of the item in the database
- *
- * @return nothing
- */
-function plugin_item_add_linesmanager_PluginSimcardSimcard_Item($data) {
-    
-    PluginLinesmanagerLine::updateFieldsFromParentItem($data);
-    
-    $line = new PluginLinesmanagerLine();
-    // the id of the simcard
-    $line->fields['items_id'] = $data->fields['plugin_simcard_simcards_id'];
-    $line->fields['itemtype'] = "PluginSimcardSimcard";
-    $line->updateContactInformation();
-}
-
-/**
- * Actions done after the DELETE of the item in the database
- *
- * @return nothing
- */
-function plugin_item_purge_linesmanager_PluginSimcardSimcard_Item($data) {
-    $line = new PluginLinesmanagerLine();
-    // the id of the linked asset at the simcard
-    $line->fields['items_id'] = $data->fields['items_id'];
-    $line->fields['itemtype'] = $data->fields['itemtype'];
-    $line->cleanContactInformation();
 }
 
 function plugin_post_item_add_linesmanager(CommonDBTM $item) {

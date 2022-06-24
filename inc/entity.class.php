@@ -37,7 +37,6 @@ class PluginLinesmanagerEntity extends CommonDBTM {
     }
 
     function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
-
         $array_ret = array();
         if ($item->getID() > -1) {
             if (Session::haveRight("entity", READ)) {
@@ -50,7 +49,7 @@ class PluginLinesmanagerEntity extends CommonDBTM {
     static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
         if ($item->getID() > -1) {
             $pmEntity = new PluginLinesmanagerEntity();
-            $pmEntity->showForm($item->fields);
+            $pmEntity->showForm($item->getID());
         }
 
         return true;
@@ -65,10 +64,10 @@ class PluginLinesmanagerEntity extends CommonDBTM {
      * @return bool true if form is ok
      *
      * */
-    function showForm($options = array()) {
+    public function showForm($ID, array $options = []) {
         $range = new PluginLinesmanagerRange();
         
-        $range->showFormTab(array('entities_id' => $options['id']));
+        $range->showFormTab(array('entities_id' => $ID ?? 0));
         
         // boton para mostrar el formulario de añadir elemento
         echo sprintf(

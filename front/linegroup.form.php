@@ -48,6 +48,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
             $result = $linegroup->update($_POST);
         }
         if (isset($_POST['add'])) {
+            unset($_POST['id']);
             $result = $linegroup->add($_POST);
         }
         if (isset($_POST['purge'])) {

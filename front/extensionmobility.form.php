@@ -48,6 +48,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
             $result = $extensionmobility->update($_POST);
         }
         if (isset($_POST['add'])) {
+            unset($_POST['id']);
             $result = $extensionmobility->add($_POST);
         }
         if (isset($_POST['purge'])) {

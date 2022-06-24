@@ -48,6 +48,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
             $result = $timeperiod->update($_POST);
         }
         if (isset($_POST['add'])) {
+            unset($_POST['id']);
             $result = $timeperiod->add($_POST);
         }
         if (isset($_POST['purge'])) {

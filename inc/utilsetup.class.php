@@ -34,14 +34,7 @@ class PluginLinesmanagerUtilsetup {
      * @return array Array of assets (class name).
      */
     static function getAssets() {
-        $assets = array('Computer', 'Phone', 'Peripheral', 'NetworkEquipment', 'Software');
-        
-        $plugin = new Plugin();
-        if ($plugin->isActivated('Simcard')) {
-            $assets[] = 'PluginSimcardSimcard';
-        }
-        
-        return $assets;
+        return array('Computer', 'Phone', 'Peripheral', 'NetworkEquipment', 'Software', 'Item_DeviceSimcard');
     }
 
 }

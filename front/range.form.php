@@ -58,9 +58,9 @@ if (isset($_POST['update']) or isset($_POST['add']) or isset($_POST['purge'])) {
 
             // buscamos y eliminamos los números fuera del rango
             $numplans_to_delete = $numplan->find(
-                "`range` = " . $range->getID() 
+                ["`range` = " . $range->getID() 
                 . " AND (number < " . $_POST['min_number']
-                . " OR number > " . $_POST['max_number'] . ")"
+                . " OR number > " . $_POST['max_number'] . ")"]
             );
             foreach ($numplans_to_delete as $id => $data) {
                 $numplan->delete(array('id'  => $id));

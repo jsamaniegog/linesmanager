@@ -48,6 +48,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
             $result = $timeslot->update($_POST);
         }
         if (isset($_POST['add'])) {
+            unset($_POST['id']);
             $result = $timeslot->add($_POST);
         }
         if (isset($_POST['purge'])) {

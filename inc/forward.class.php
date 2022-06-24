@@ -41,7 +41,6 @@ class PluginLinesmanagerForward extends PluginLinesmanagerLine {
                 'foreingkey' => array(
                     'item' => 'PluginLinesmanagerNumplan',
                     'condition' => $this->condition_to_load_numplan,
-                    'filterUsedValues' => true,
                     'field_id' => 'id',
                     'filterUsedValues' => false,
                     'field_name' => 'number',

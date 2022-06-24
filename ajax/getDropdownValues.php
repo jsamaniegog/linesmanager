@@ -20,13 +20,14 @@ $AJAX_INCLUDE = 1;
 include ('../../../inc/includes.php');
 
 // Send UTF8 Headers
-header("Content-Type: text/html; charset=UTF-8");
+//header("Content-Type: text/html; charset=UTF-8");
+header("Content-Type: application/json; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();
 
 foreach (filter_input_array(INPUT_POST) as $key => $value) {
-    $_REQUEST[$key] = str_replace("\\", "", $value);
+    $_REQUEST[$key] = (is_array($value)) ? $value : str_replace("\\", "", $value);
 }
 
 $datas = PluginLinesmanagerUtilform::getDatasToLoadAjaxDropdown(filter_input_array(INPUT_POST));
