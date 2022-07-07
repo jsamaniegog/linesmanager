@@ -80,16 +80,7 @@ function plugin_linesmanager_check_prerequisites() {
  * @return boolean
  */
 function plugin_linesmanager_check_config($verbose = false) {
-    // check here
-    if (true) {
-        return true;
-    }
-
-    if ($verbose) {
-        echo __('Installed / not configured', 'linesmanager');
-    }
-
-    return false;
+    return true;
 }
 
 ?>
