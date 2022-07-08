@@ -562,7 +562,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // autocomplete user_id
         if ($config_datas['automate_user_id']) {
             $js = "$('#form_linesmanager[action*=\"line.form.php\"] [name=\"numplan\"]').change(function() {"
-                . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id']) . "' + $(this).select2('data').text);"
+                . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id'] ?? 0) . "' + $(this).select2('data').text);"
                 . "});";
         }
 
@@ -584,7 +584,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
     static function getUserIdPrefix($entities_id) {
         $entity = new Entity();
         $entity->getFromDB($entities_id);
-        list($user_id_prefix) = explode("(", $entity->fields['name']);
+        list($user_id_prefix) = explode("(", $entity->fields['name'] ?? '');
         return substr(str_replace(" ", "", $user_id_prefix), 0, 10);
     }
 
