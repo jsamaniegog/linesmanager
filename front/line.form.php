@@ -50,7 +50,7 @@ if (PluginLinesmanagerLine::checkPostArgumentsPermissions()) {
         }
         if (isset($_POST['purge'])) {
 
-            if (is_array($_POST['line'])) {
+            if (isset($_POST['line']) and is_array($_POST['line'])) {
                 foreach ($_POST['line'] as $line_id) {
                     $result = $line->delete(array('id' => $line_id));
                 }
