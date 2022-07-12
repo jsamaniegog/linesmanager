@@ -409,7 +409,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
         $fk = new $fk();
 
         $table = $fk::getTable();
-        $alias = $searchopt['linkfield'];
+        $alias = $searchopt['linkfield'] ?? '';
         $alias = ($alias != "") ? "_" . $alias : $alias;
         
         if ($key != 0) {
@@ -430,7 +430,7 @@ function plugin_linesmanager_addWhere($link, $nott, $itemtype, $ID, $val, $searc
                 $where .= " OR ";
             }
             
-            $attribute = $fk->attributes[$field_name];
+            $attribute = $fk->attributes[$field_name] ?? null;
             $table = $searchopt['table'];
 
             if (PluginLinesmanagerUtilform::isForeingkey($attribute)) {

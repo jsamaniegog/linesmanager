@@ -565,7 +565,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // autocomplete user_id
         if ($config_datas['automate_user_id']) {
             $js = "$('#form_linesmanager[action*=\"line.form.php\"] [name=\"numplan\"]').change(function() {"
-                . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id'] ?? 0) . "' + $(this).select2('data').text);"
+                . "    $('#form_linesmanager input[name=\"user_id\"]').val('" . self::getUserIdPrefix($item->fields['entities_id'] ?? 0) . "' + $('select[name=numplan] option:selected').text());"
                 . "});";
         }
 
@@ -820,13 +820,13 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
                 // logs
                 if ($history == 1 and isset($data)) {
-                    if ($data['contact'] != $contact) {
+                    if (isset($data['contact']) and $data['contact'] != $contact) {
                         $this->logHistory(
                             $itemtype, $this->fields['items_id'], 'contact', $data['contact'], $contact
                         );
                     }
 
-                    if ($data['contact_num'] != $contact_num) {
+                    if (isset($data['contact_num']) and $data['contact_num'] != $contact_num) {
                         $this->logHistory(
                             $itemtype, $this->fields['items_id'], 'contact_num', $data['contact_num'], $contact_num
                         );
@@ -846,7 +846,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
      */
     private function logHistory($itemtype, $items_id, $field, $old_value, $new_value) {
         $item = new $itemtype();
-        $search_option_id = $item->getSearchOptionByField('field', $field)['id'];
+        $search_option_id = $item->getSearchOptionByField('field', $field)['id'] ?? null;
 
         $changes[0] = $search_option_id;
         $changes[1] = $old_value;
