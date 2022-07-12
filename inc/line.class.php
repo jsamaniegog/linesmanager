@@ -365,6 +365,9 @@ class PluginLinesmanagerLine extends CommonDropdown {
 
                 // field we want to show
                 $newTab['field'] = $attribute['foreingkey']['field_name'];
+                $newTab['field'] = (is_array($attribute['foreingkey']['field_name'])) 
+                    ? $attribute['foreingkey']['field_name'][0]
+                    : $attribute['foreingkey']['field_name'];
 
                 // field that contains the id
                 //$tab[$i]['linkfield'] = $attribute['foreingkey']['field_id'];
