@@ -730,7 +730,7 @@ class PluginLinesmanagerLine extends CommonDropdown {
         // update from an asset
         if (in_array($itemtype, PluginLinesmanagerUtilsetup::getAssets())) {   
             $query2 = "UPDATE `glpi_plugin_linesmanager_lines` l ";
-            $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON si.itemtype = '$itemtype' and si.items_id = c.id and c.id = " . $item->getID();
+            $query2 .= " INNER JOIN `glpi_" . strtolower($itemtype) . "s` c ON l.itemtype = '$itemtype' and l.items_id = c.id and c.id = " . $item->getID();
             $query2 .= " SET l.`locations_id` = c.locations_id, l.`states_id` = c.states_id;";
             $DB->query($query2);
             
